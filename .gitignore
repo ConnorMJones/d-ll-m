@@ -1,0 +1,17 @@
+/target
+**/*cache.db
+target/
+.env
+bak/
+*.profraw
+*bak
+**/*.bak
+flamegraph.svg
+perf.data
+perf.data.old
+*.csv
+.notes
+.worktrees/
+/tmp
+/temp
+.claude/*.local.json

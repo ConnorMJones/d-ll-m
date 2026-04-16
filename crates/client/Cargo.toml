@@ -1,0 +1,7 @@
+[package]
+name = "dllm-client"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+dllm.workspace = true
