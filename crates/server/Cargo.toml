@@ -3,5 +3,9 @@ name = "dllm-server"
 version.workspace = true
 edition.workspace = true
 
+[lib]
+crate-type = ["cdylib"]
+
 [dependencies]
 dllm.workspace = true
+spacetimedb.workspace = true
