@@ -3,6 +3,7 @@ use super::report::ImportReport;
 mod items;
 mod monsters;
 mod other;
+mod references;
 mod spells;
 pub(crate) mod support;
 
@@ -28,6 +29,17 @@ pub fn seed_all(conn: &DbConnection, data_dir: &Path) -> ImportReport {
             other::seed_languages(conn, data_dir),
             other::seed_senses(conn, data_dir),
             other::seed_skills(conn, data_dir),
+            references::seed_objects(conn, data_dir),
+            references::seed_vehicles(conn, data_dir),
+            references::seed_deities(conn, data_dir),
+            references::seed_rewards(conn, data_dir),
+            references::seed_trap_hazards(conn, data_dir),
+            references::seed_char_creation_options(conn, data_dir),
+            references::seed_psionics(conn, data_dir),
+            references::seed_recipes(conn, data_dir),
+            references::seed_cults_boons(conn, data_dir),
+            references::seed_decks(conn, data_dir),
+            references::seed_variant_rules(conn, data_dir),
         ],
     }
 }

@@ -458,3 +458,276 @@ pub fn seed_dnd5e_subclass_feature(
         });
     Ok(())
 }
+
+#[spacetimedb::reducer]
+#[allow(clippy::too_many_arguments)]
+pub fn seed_dnd5e_object(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    size: Vec<String>,
+    object_type: Option<String>,
+    ac: Option<u16>,
+    hp: Option<u16>,
+    description: String,
+    action_description: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_object().insert(Dnd5eObject {
+        id: 0,
+        name,
+        source,
+        size,
+        object_type,
+        ac,
+        hp,
+        description,
+        action_description,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+#[allow(clippy::too_many_arguments)]
+pub fn seed_dnd5e_vehicle(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    vehicle_type: String,
+    size: Vec<String>,
+    terrain: Vec<String>,
+    crew_capacity: Option<u16>,
+    passenger_capacity: Option<u16>,
+    pace: Option<u16>,
+    ac: Option<u16>,
+    hp: Option<u16>,
+    description: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_vehicle().insert(Dnd5eVehicle {
+        id: 0,
+        name,
+        source,
+        vehicle_type,
+        size,
+        terrain,
+        crew_capacity,
+        passenger_capacity,
+        pace,
+        ac,
+        hp,
+        description,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+#[allow(clippy::too_many_arguments)]
+pub fn seed_dnd5e_deity(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    pantheon: Option<String>,
+    alignment: Vec<String>,
+    category: Option<String>,
+    domains: Vec<String>,
+    province: Option<String>,
+    title: Option<String>,
+    symbol: Option<String>,
+    description: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_deity().insert(Dnd5eDeity {
+        id: 0,
+        name,
+        source,
+        pantheon,
+        alignment,
+        category,
+        domains,
+        province,
+        title,
+        symbol,
+        description,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+pub fn seed_dnd5e_reward(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    reward_type: Option<String>,
+    description: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_reward().insert(Dnd5eReward {
+        id: 0,
+        name,
+        source,
+        reward_type,
+        description,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+#[allow(clippy::too_many_arguments)]
+pub fn seed_dnd5e_trap_hazard(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    kind: String,
+    trap_hazard_type: Option<String>,
+    trigger: String,
+    effect: String,
+    countermeasures: String,
+    description: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_trap_hazard().insert(Dnd5eTrapHazard {
+        id: 0,
+        name,
+        source,
+        kind,
+        trap_hazard_type,
+        trigger,
+        effect,
+        countermeasures,
+        description,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+pub fn seed_dnd5e_char_creation_option(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    option_types: Vec<String>,
+    description: String,
+) -> Result<(), String> {
+    ctx.db
+        .dnd5e_char_creation_option()
+        .insert(Dnd5eCharCreationOption {
+            id: 0,
+            name,
+            source,
+            option_types,
+            description,
+        });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+#[allow(clippy::too_many_arguments)]
+pub fn seed_dnd5e_psionic(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    kind: String,
+    order_name: Option<String>,
+    focus: Option<String>,
+    description: String,
+    modes: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_psionic().insert(Dnd5ePsionic {
+        id: 0,
+        name,
+        source,
+        kind,
+        order_name,
+        focus,
+        description,
+        modes,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+#[allow(clippy::too_many_arguments)]
+pub fn seed_dnd5e_recipe(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    recipe_type: Option<String>,
+    dish_types: Vec<String>,
+    diet: Option<String>,
+    serves: Option<String>,
+    ingredients: String,
+    instructions: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_recipe().insert(Dnd5eRecipe {
+        id: 0,
+        name,
+        source,
+        recipe_type,
+        dish_types,
+        diet,
+        serves,
+        ingredients,
+        instructions,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+#[allow(clippy::too_many_arguments)]
+pub fn seed_dnd5e_cult_boon(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    kind: String,
+    subtype: Option<String>,
+    goal: Option<String>,
+    cultists: Option<String>,
+    signature_spells: Option<String>,
+    ability_text: Option<String>,
+    description: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_cult_boon().insert(Dnd5eCultBoon {
+        id: 0,
+        name,
+        source,
+        kind,
+        subtype,
+        goal,
+        cultists,
+        signature_spells,
+        ability_text,
+        description,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+pub fn seed_dnd5e_deck(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    cards: Vec<String>,
+    description: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_deck().insert(Dnd5eDeck {
+        id: 0,
+        name,
+        source,
+        cards,
+        description,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+pub fn seed_dnd5e_variant_rule(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    rule_type: Option<String>,
+    description: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_variant_rule().insert(Dnd5eVariantRule {
+        id: 0,
+        name,
+        source,
+        rule_type,
+        description,
+    });
+    Ok(())
+}

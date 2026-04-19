@@ -20,12 +20,20 @@ pub mod dnd_5_e_action_table;
 pub mod dnd_5_e_action_type;
 pub mod dnd_5_e_background_table;
 pub mod dnd_5_e_background_type;
+pub mod dnd_5_e_char_creation_option_table;
+pub mod dnd_5_e_char_creation_option_type;
 pub mod dnd_5_e_class_feature_table;
 pub mod dnd_5_e_class_feature_type;
 pub mod dnd_5_e_class_table;
 pub mod dnd_5_e_class_type;
 pub mod dnd_5_e_condition_table;
 pub mod dnd_5_e_condition_type;
+pub mod dnd_5_e_cult_boon_table;
+pub mod dnd_5_e_cult_boon_type;
+pub mod dnd_5_e_deck_table;
+pub mod dnd_5_e_deck_type;
+pub mod dnd_5_e_deity_table;
+pub mod dnd_5_e_deity_type;
 pub mod dnd_5_e_feat_table;
 pub mod dnd_5_e_feat_type;
 pub mod dnd_5_e_item_table;
@@ -34,10 +42,18 @@ pub mod dnd_5_e_language_table;
 pub mod dnd_5_e_language_type;
 pub mod dnd_5_e_monster_table;
 pub mod dnd_5_e_monster_type;
+pub mod dnd_5_e_object_table;
+pub mod dnd_5_e_object_type;
 pub mod dnd_5_e_optional_feature_table;
 pub mod dnd_5_e_optional_feature_type;
+pub mod dnd_5_e_psionic_table;
+pub mod dnd_5_e_psionic_type;
 pub mod dnd_5_e_race_table;
 pub mod dnd_5_e_race_type;
+pub mod dnd_5_e_recipe_table;
+pub mod dnd_5_e_recipe_type;
+pub mod dnd_5_e_reward_table;
+pub mod dnd_5_e_reward_type;
 pub mod dnd_5_e_sense_table;
 pub mod dnd_5_e_sense_type;
 pub mod dnd_5_e_skill_table;
@@ -48,6 +64,12 @@ pub mod dnd_5_e_subclass_feature_table;
 pub mod dnd_5_e_subclass_feature_type;
 pub mod dnd_5_e_subclass_table;
 pub mod dnd_5_e_subclass_type;
+pub mod dnd_5_e_trap_hazard_table;
+pub mod dnd_5_e_trap_hazard_type;
+pub mod dnd_5_e_variant_rule_table;
+pub mod dnd_5_e_variant_rule_type;
+pub mod dnd_5_e_vehicle_table;
+pub mod dnd_5_e_vehicle_type;
 pub mod feat_category_type;
 pub mod feat_prereq_type;
 pub mod item_rarity_type;
@@ -63,20 +85,31 @@ pub mod pact_boon_type;
 pub mod race_type;
 pub mod seed_dnd_5_e_action_reducer;
 pub mod seed_dnd_5_e_background_reducer;
+pub mod seed_dnd_5_e_char_creation_option_reducer;
 pub mod seed_dnd_5_e_class_feature_reducer;
 pub mod seed_dnd_5_e_class_reducer;
 pub mod seed_dnd_5_e_condition_reducer;
+pub mod seed_dnd_5_e_cult_boon_reducer;
+pub mod seed_dnd_5_e_deck_reducer;
+pub mod seed_dnd_5_e_deity_reducer;
 pub mod seed_dnd_5_e_feat_reducer;
 pub mod seed_dnd_5_e_item_reducer;
 pub mod seed_dnd_5_e_language_reducer;
 pub mod seed_dnd_5_e_monster_reducer;
+pub mod seed_dnd_5_e_object_reducer;
 pub mod seed_dnd_5_e_optional_feature_reducer;
+pub mod seed_dnd_5_e_psionic_reducer;
 pub mod seed_dnd_5_e_race_reducer;
+pub mod seed_dnd_5_e_recipe_reducer;
+pub mod seed_dnd_5_e_reward_reducer;
 pub mod seed_dnd_5_e_sense_reducer;
 pub mod seed_dnd_5_e_skill_reducer;
 pub mod seed_dnd_5_e_spell_reducer;
 pub mod seed_dnd_5_e_subclass_feature_reducer;
 pub mod seed_dnd_5_e_subclass_reducer;
+pub mod seed_dnd_5_e_trap_hazard_reducer;
+pub mod seed_dnd_5_e_variant_rule_reducer;
+pub mod seed_dnd_5_e_vehicle_reducer;
 pub mod send_message_reducer;
 pub mod set_name_reducer;
 pub mod skill_choice_type;
@@ -104,12 +137,20 @@ pub use dnd_5_e_action_table::*;
 pub use dnd_5_e_action_type::Dnd5EAction;
 pub use dnd_5_e_background_table::*;
 pub use dnd_5_e_background_type::Dnd5EBackground;
+pub use dnd_5_e_char_creation_option_table::*;
+pub use dnd_5_e_char_creation_option_type::Dnd5ECharCreationOption;
 pub use dnd_5_e_class_feature_table::*;
 pub use dnd_5_e_class_feature_type::Dnd5EClassFeature;
 pub use dnd_5_e_class_table::*;
 pub use dnd_5_e_class_type::Dnd5EClass;
 pub use dnd_5_e_condition_table::*;
 pub use dnd_5_e_condition_type::Dnd5ECondition;
+pub use dnd_5_e_cult_boon_table::*;
+pub use dnd_5_e_cult_boon_type::Dnd5ECultBoon;
+pub use dnd_5_e_deck_table::*;
+pub use dnd_5_e_deck_type::Dnd5EDeck;
+pub use dnd_5_e_deity_table::*;
+pub use dnd_5_e_deity_type::Dnd5EDeity;
 pub use dnd_5_e_feat_table::*;
 pub use dnd_5_e_feat_type::Dnd5EFeat;
 pub use dnd_5_e_item_table::*;
@@ -118,10 +159,18 @@ pub use dnd_5_e_language_table::*;
 pub use dnd_5_e_language_type::Dnd5ELanguage;
 pub use dnd_5_e_monster_table::*;
 pub use dnd_5_e_monster_type::Dnd5EMonster;
+pub use dnd_5_e_object_table::*;
+pub use dnd_5_e_object_type::Dnd5EObject;
 pub use dnd_5_e_optional_feature_table::*;
 pub use dnd_5_e_optional_feature_type::Dnd5EOptionalFeature;
+pub use dnd_5_e_psionic_table::*;
+pub use dnd_5_e_psionic_type::Dnd5EPsionic;
 pub use dnd_5_e_race_table::*;
 pub use dnd_5_e_race_type::Dnd5ERace;
+pub use dnd_5_e_recipe_table::*;
+pub use dnd_5_e_recipe_type::Dnd5ERecipe;
+pub use dnd_5_e_reward_table::*;
+pub use dnd_5_e_reward_type::Dnd5EReward;
 pub use dnd_5_e_sense_table::*;
 pub use dnd_5_e_sense_type::Dnd5ESense;
 pub use dnd_5_e_skill_table::*;
@@ -132,6 +181,12 @@ pub use dnd_5_e_subclass_feature_table::*;
 pub use dnd_5_e_subclass_feature_type::Dnd5ESubclassFeature;
 pub use dnd_5_e_subclass_table::*;
 pub use dnd_5_e_subclass_type::Dnd5ESubclass;
+pub use dnd_5_e_trap_hazard_table::*;
+pub use dnd_5_e_trap_hazard_type::Dnd5ETrapHazard;
+pub use dnd_5_e_variant_rule_table::*;
+pub use dnd_5_e_variant_rule_type::Dnd5EVariantRule;
+pub use dnd_5_e_vehicle_table::*;
+pub use dnd_5_e_vehicle_type::Dnd5EVehicle;
 pub use feat_category_type::FeatCategory;
 pub use feat_prereq_type::FeatPrereq;
 pub use item_rarity_type::ItemRarity;
@@ -147,20 +202,31 @@ pub use pact_boon_type::PactBoon;
 pub use race_type::Race;
 pub use seed_dnd_5_e_action_reducer::seed_dnd_5_e_action;
 pub use seed_dnd_5_e_background_reducer::seed_dnd_5_e_background;
+pub use seed_dnd_5_e_char_creation_option_reducer::seed_dnd_5_e_char_creation_option;
 pub use seed_dnd_5_e_class_feature_reducer::seed_dnd_5_e_class_feature;
 pub use seed_dnd_5_e_class_reducer::seed_dnd_5_e_class;
 pub use seed_dnd_5_e_condition_reducer::seed_dnd_5_e_condition;
+pub use seed_dnd_5_e_cult_boon_reducer::seed_dnd_5_e_cult_boon;
+pub use seed_dnd_5_e_deck_reducer::seed_dnd_5_e_deck;
+pub use seed_dnd_5_e_deity_reducer::seed_dnd_5_e_deity;
 pub use seed_dnd_5_e_feat_reducer::seed_dnd_5_e_feat;
 pub use seed_dnd_5_e_item_reducer::seed_dnd_5_e_item;
 pub use seed_dnd_5_e_language_reducer::seed_dnd_5_e_language;
 pub use seed_dnd_5_e_monster_reducer::seed_dnd_5_e_monster;
+pub use seed_dnd_5_e_object_reducer::seed_dnd_5_e_object;
 pub use seed_dnd_5_e_optional_feature_reducer::seed_dnd_5_e_optional_feature;
+pub use seed_dnd_5_e_psionic_reducer::seed_dnd_5_e_psionic;
 pub use seed_dnd_5_e_race_reducer::seed_dnd_5_e_race;
+pub use seed_dnd_5_e_recipe_reducer::seed_dnd_5_e_recipe;
+pub use seed_dnd_5_e_reward_reducer::seed_dnd_5_e_reward;
 pub use seed_dnd_5_e_sense_reducer::seed_dnd_5_e_sense;
 pub use seed_dnd_5_e_skill_reducer::seed_dnd_5_e_skill;
 pub use seed_dnd_5_e_spell_reducer::seed_dnd_5_e_spell;
 pub use seed_dnd_5_e_subclass_feature_reducer::seed_dnd_5_e_subclass_feature;
 pub use seed_dnd_5_e_subclass_reducer::seed_dnd_5_e_subclass;
+pub use seed_dnd_5_e_trap_hazard_reducer::seed_dnd_5_e_trap_hazard;
+pub use seed_dnd_5_e_variant_rule_reducer::seed_dnd_5_e_variant_rule;
+pub use seed_dnd_5_e_vehicle_reducer::seed_dnd_5_e_vehicle;
 pub use send_message_reducer::send_message;
 pub use set_name_reducer::set_name;
 pub use skill_choice_type::SkillChoice;
@@ -196,6 +262,12 @@ pub enum Reducer {
         language_proficiencies: Vec<LanguageGrant>,
         description: String,
     },
+    SeedDnd5ECharCreationOption {
+        name: String,
+        source: String,
+        option_types: Vec<String>,
+        description: String,
+    },
     SeedDnd5EClass {
         name: String,
         source: String,
@@ -221,6 +293,35 @@ pub enum Reducer {
     SeedDnd5ECondition {
         name: String,
         source: String,
+        description: String,
+    },
+    SeedDnd5ECultBoon {
+        name: String,
+        source: String,
+        kind: String,
+        subtype: Option<String>,
+        goal: Option<String>,
+        cultists: Option<String>,
+        signature_spells: Option<String>,
+        ability_text: Option<String>,
+        description: String,
+    },
+    SeedDnd5EDeck {
+        name: String,
+        source: String,
+        cards: Vec<String>,
+        description: String,
+    },
+    SeedDnd5EDeity {
+        name: String,
+        source: String,
+        pantheon: Option<String>,
+        alignment: Vec<String>,
+        category: Option<String>,
+        domains: Vec<String>,
+        province: Option<String>,
+        title: Option<String>,
+        symbol: Option<String>,
         description: String,
     },
     SeedDnd5EFeat {
@@ -269,12 +370,31 @@ pub enum Reducer {
         cha_score: u8,
         description: String,
     },
+    SeedDnd5EObject {
+        name: String,
+        source: String,
+        size: Vec<String>,
+        object_type: Option<String>,
+        ac: Option<u16>,
+        hp: Option<u16>,
+        description: String,
+        action_description: String,
+    },
     SeedDnd5EOptionalFeature {
         name: String,
         source: String,
         feature_types: Vec<OptionalFeatureType>,
         prerequisite: Option<OptionalFeaturePrereq>,
         description: String,
+    },
+    SeedDnd5EPsionic {
+        name: String,
+        source: String,
+        kind: String,
+        order_name: Option<String>,
+        focus: Option<String>,
+        description: String,
+        modes: String,
     },
     SeedDnd5ERace {
         name: String,
@@ -283,6 +403,22 @@ pub enum Reducer {
         speed: Speed,
         ability_bonuses: Vec<AbilityGrant>,
         language_proficiencies: Vec<LanguageGrant>,
+        description: String,
+    },
+    SeedDnd5ERecipe {
+        name: String,
+        source: String,
+        recipe_type: Option<String>,
+        dish_types: Vec<String>,
+        diet: Option<String>,
+        serves: Option<String>,
+        ingredients: String,
+        instructions: String,
+    },
+    SeedDnd5EReward {
+        name: String,
+        source: String,
+        reward_type: Option<String>,
         description: String,
     },
     SeedDnd5ESense {
@@ -328,6 +464,35 @@ pub enum Reducer {
         level: u8,
         description: String,
     },
+    SeedDnd5ETrapHazard {
+        name: String,
+        source: String,
+        kind: String,
+        trap_hazard_type: Option<String>,
+        trigger: String,
+        effect: String,
+        countermeasures: String,
+        description: String,
+    },
+    SeedDnd5EVariantRule {
+        name: String,
+        source: String,
+        rule_type: Option<String>,
+        description: String,
+    },
+    SeedDnd5EVehicle {
+        name: String,
+        source: String,
+        vehicle_type: String,
+        size: Vec<String>,
+        terrain: Vec<String>,
+        crew_capacity: Option<u16>,
+        passenger_capacity: Option<u16>,
+        pace: Option<u16>,
+        ac: Option<u16>,
+        hp: Option<u16>,
+        description: String,
+    },
     SendMessage {
         text: String,
     },
@@ -345,20 +510,31 @@ impl __sdk::Reducer for Reducer {
         match self {
             Reducer::SeedDnd5EAction { .. } => "seed_dnd_5_e_action",
             Reducer::SeedDnd5EBackground { .. } => "seed_dnd_5_e_background",
+            Reducer::SeedDnd5ECharCreationOption { .. } => "seed_dnd_5_e_char_creation_option",
             Reducer::SeedDnd5EClass { .. } => "seed_dnd_5_e_class",
             Reducer::SeedDnd5EClassFeature { .. } => "seed_dnd_5_e_class_feature",
             Reducer::SeedDnd5ECondition { .. } => "seed_dnd_5_e_condition",
+            Reducer::SeedDnd5ECultBoon { .. } => "seed_dnd_5_e_cult_boon",
+            Reducer::SeedDnd5EDeck { .. } => "seed_dnd_5_e_deck",
+            Reducer::SeedDnd5EDeity { .. } => "seed_dnd_5_e_deity",
             Reducer::SeedDnd5EFeat { .. } => "seed_dnd_5_e_feat",
             Reducer::SeedDnd5EItem { .. } => "seed_dnd_5_e_item",
             Reducer::SeedDnd5ELanguage { .. } => "seed_dnd_5_e_language",
             Reducer::SeedDnd5EMonster { .. } => "seed_dnd_5_e_monster",
+            Reducer::SeedDnd5EObject { .. } => "seed_dnd_5_e_object",
             Reducer::SeedDnd5EOptionalFeature { .. } => "seed_dnd_5_e_optional_feature",
+            Reducer::SeedDnd5EPsionic { .. } => "seed_dnd_5_e_psionic",
             Reducer::SeedDnd5ERace { .. } => "seed_dnd_5_e_race",
+            Reducer::SeedDnd5ERecipe { .. } => "seed_dnd_5_e_recipe",
+            Reducer::SeedDnd5EReward { .. } => "seed_dnd_5_e_reward",
             Reducer::SeedDnd5ESense { .. } => "seed_dnd_5_e_sense",
             Reducer::SeedDnd5ESkill { .. } => "seed_dnd_5_e_skill",
             Reducer::SeedDnd5ESpell { .. } => "seed_dnd_5_e_spell",
             Reducer::SeedDnd5ESubclass { .. } => "seed_dnd_5_e_subclass",
             Reducer::SeedDnd5ESubclassFeature { .. } => "seed_dnd_5_e_subclass_feature",
+            Reducer::SeedDnd5ETrapHazard { .. } => "seed_dnd_5_e_trap_hazard",
+            Reducer::SeedDnd5EVariantRule { .. } => "seed_dnd_5_e_variant_rule",
+            Reducer::SeedDnd5EVehicle { .. } => "seed_dnd_5_e_vehicle",
             Reducer::SendMessage { .. } => "send_message",
             Reducer::SetName { .. } => "set_name",
             _ => unreachable!(),
@@ -393,6 +569,19 @@ impl __sdk::Reducer for Reducer {
                 language_proficiencies: language_proficiencies.clone(),
                 description: description.clone(),
             }),
+            Reducer::SeedDnd5ECharCreationOption {
+                name,
+                source,
+                option_types,
+                description,
+            } => __sats::bsatn::to_vec(
+                &seed_dnd_5_e_char_creation_option_reducer::SeedDnd5ECharCreationOptionArgs {
+                    name: name.clone(),
+                    source: source.clone(),
+                    option_types: option_types.clone(),
+                    description: description.clone(),
+                },
+            ),
             Reducer::SeedDnd5EClass {
                 name,
                 source,
@@ -444,6 +633,61 @@ impl __sdk::Reducer for Reducer {
             } => __sats::bsatn::to_vec(&seed_dnd_5_e_condition_reducer::SeedDnd5EConditionArgs {
                 name: name.clone(),
                 source: source.clone(),
+                description: description.clone(),
+            }),
+            Reducer::SeedDnd5ECultBoon {
+                name,
+                source,
+                kind,
+                subtype,
+                goal,
+                cultists,
+                signature_spells,
+                ability_text,
+                description,
+            } => __sats::bsatn::to_vec(&seed_dnd_5_e_cult_boon_reducer::SeedDnd5ECultBoonArgs {
+                name: name.clone(),
+                source: source.clone(),
+                kind: kind.clone(),
+                subtype: subtype.clone(),
+                goal: goal.clone(),
+                cultists: cultists.clone(),
+                signature_spells: signature_spells.clone(),
+                ability_text: ability_text.clone(),
+                description: description.clone(),
+            }),
+            Reducer::SeedDnd5EDeck {
+                name,
+                source,
+                cards,
+                description,
+            } => __sats::bsatn::to_vec(&seed_dnd_5_e_deck_reducer::SeedDnd5EDeckArgs {
+                name: name.clone(),
+                source: source.clone(),
+                cards: cards.clone(),
+                description: description.clone(),
+            }),
+            Reducer::SeedDnd5EDeity {
+                name,
+                source,
+                pantheon,
+                alignment,
+                category,
+                domains,
+                province,
+                title,
+                symbol,
+                description,
+            } => __sats::bsatn::to_vec(&seed_dnd_5_e_deity_reducer::SeedDnd5EDeityArgs {
+                name: name.clone(),
+                source: source.clone(),
+                pantheon: pantheon.clone(),
+                alignment: alignment.clone(),
+                category: category.clone(),
+                domains: domains.clone(),
+                province: province.clone(),
+                title: title.clone(),
+                symbol: symbol.clone(),
                 description: description.clone(),
             }),
             Reducer::SeedDnd5EFeat {
@@ -534,6 +778,25 @@ impl __sdk::Reducer for Reducer {
                 cha_score: cha_score.clone(),
                 description: description.clone(),
             }),
+            Reducer::SeedDnd5EObject {
+                name,
+                source,
+                size,
+                object_type,
+                ac,
+                hp,
+                description,
+                action_description,
+            } => __sats::bsatn::to_vec(&seed_dnd_5_e_object_reducer::SeedDnd5EObjectArgs {
+                name: name.clone(),
+                source: source.clone(),
+                size: size.clone(),
+                object_type: object_type.clone(),
+                ac: ac.clone(),
+                hp: hp.clone(),
+                description: description.clone(),
+                action_description: action_description.clone(),
+            }),
             Reducer::SeedDnd5EOptionalFeature {
                 name,
                 source,
@@ -549,6 +812,23 @@ impl __sdk::Reducer for Reducer {
                     description: description.clone(),
                 },
             ),
+            Reducer::SeedDnd5EPsionic {
+                name,
+                source,
+                kind,
+                order_name,
+                focus,
+                description,
+                modes,
+            } => __sats::bsatn::to_vec(&seed_dnd_5_e_psionic_reducer::SeedDnd5EPsionicArgs {
+                name: name.clone(),
+                source: source.clone(),
+                kind: kind.clone(),
+                order_name: order_name.clone(),
+                focus: focus.clone(),
+                description: description.clone(),
+                modes: modes.clone(),
+            }),
             Reducer::SeedDnd5ERace {
                 name,
                 source,
@@ -564,6 +844,36 @@ impl __sdk::Reducer for Reducer {
                 speed: speed.clone(),
                 ability_bonuses: ability_bonuses.clone(),
                 language_proficiencies: language_proficiencies.clone(),
+                description: description.clone(),
+            }),
+            Reducer::SeedDnd5ERecipe {
+                name,
+                source,
+                recipe_type,
+                dish_types,
+                diet,
+                serves,
+                ingredients,
+                instructions,
+            } => __sats::bsatn::to_vec(&seed_dnd_5_e_recipe_reducer::SeedDnd5ERecipeArgs {
+                name: name.clone(),
+                source: source.clone(),
+                recipe_type: recipe_type.clone(),
+                dish_types: dish_types.clone(),
+                diet: diet.clone(),
+                serves: serves.clone(),
+                ingredients: ingredients.clone(),
+                instructions: instructions.clone(),
+            }),
+            Reducer::SeedDnd5EReward {
+                name,
+                source,
+                reward_type,
+                description,
+            } => __sats::bsatn::to_vec(&seed_dnd_5_e_reward_reducer::SeedDnd5ERewardArgs {
+                name: name.clone(),
+                source: source.clone(),
+                reward_type: reward_type.clone(),
                 description: description.clone(),
             }),
             Reducer::SeedDnd5ESense {
@@ -649,6 +959,65 @@ impl __sdk::Reducer for Reducer {
                     description: description.clone(),
                 },
             ),
+            Reducer::SeedDnd5ETrapHazard {
+                name,
+                source,
+                kind,
+                trap_hazard_type,
+                trigger,
+                effect,
+                countermeasures,
+                description,
+            } => {
+                __sats::bsatn::to_vec(&seed_dnd_5_e_trap_hazard_reducer::SeedDnd5ETrapHazardArgs {
+                    name: name.clone(),
+                    source: source.clone(),
+                    kind: kind.clone(),
+                    trap_hazard_type: trap_hazard_type.clone(),
+                    trigger: trigger.clone(),
+                    effect: effect.clone(),
+                    countermeasures: countermeasures.clone(),
+                    description: description.clone(),
+                })
+            }
+            Reducer::SeedDnd5EVariantRule {
+                name,
+                source,
+                rule_type,
+                description,
+            } => __sats::bsatn::to_vec(
+                &seed_dnd_5_e_variant_rule_reducer::SeedDnd5EVariantRuleArgs {
+                    name: name.clone(),
+                    source: source.clone(),
+                    rule_type: rule_type.clone(),
+                    description: description.clone(),
+                },
+            ),
+            Reducer::SeedDnd5EVehicle {
+                name,
+                source,
+                vehicle_type,
+                size,
+                terrain,
+                crew_capacity,
+                passenger_capacity,
+                pace,
+                ac,
+                hp,
+                description,
+            } => __sats::bsatn::to_vec(&seed_dnd_5_e_vehicle_reducer::SeedDnd5EVehicleArgs {
+                name: name.clone(),
+                source: source.clone(),
+                vehicle_type: vehicle_type.clone(),
+                size: size.clone(),
+                terrain: terrain.clone(),
+                crew_capacity: crew_capacity.clone(),
+                passenger_capacity: passenger_capacity.clone(),
+                pace: pace.clone(),
+                ac: ac.clone(),
+                hp: hp.clone(),
+                description: description.clone(),
+            }),
             Reducer::SendMessage { text } => {
                 __sats::bsatn::to_vec(&send_message_reducer::SendMessageArgs { text: text.clone() })
             }
@@ -666,20 +1035,31 @@ impl __sdk::Reducer for Reducer {
 pub struct DbUpdate {
     dnd_5_e_action: __sdk::TableUpdate<Dnd5EAction>,
     dnd_5_e_background: __sdk::TableUpdate<Dnd5EBackground>,
+    dnd_5_e_char_creation_option: __sdk::TableUpdate<Dnd5ECharCreationOption>,
     dnd_5_e_class: __sdk::TableUpdate<Dnd5EClass>,
     dnd_5_e_class_feature: __sdk::TableUpdate<Dnd5EClassFeature>,
     dnd_5_e_condition: __sdk::TableUpdate<Dnd5ECondition>,
+    dnd_5_e_cult_boon: __sdk::TableUpdate<Dnd5ECultBoon>,
+    dnd_5_e_deck: __sdk::TableUpdate<Dnd5EDeck>,
+    dnd_5_e_deity: __sdk::TableUpdate<Dnd5EDeity>,
     dnd_5_e_feat: __sdk::TableUpdate<Dnd5EFeat>,
     dnd_5_e_item: __sdk::TableUpdate<Dnd5EItem>,
     dnd_5_e_language: __sdk::TableUpdate<Dnd5ELanguage>,
     dnd_5_e_monster: __sdk::TableUpdate<Dnd5EMonster>,
+    dnd_5_e_object: __sdk::TableUpdate<Dnd5EObject>,
     dnd_5_e_optional_feature: __sdk::TableUpdate<Dnd5EOptionalFeature>,
+    dnd_5_e_psionic: __sdk::TableUpdate<Dnd5EPsionic>,
     dnd_5_e_race: __sdk::TableUpdate<Dnd5ERace>,
+    dnd_5_e_recipe: __sdk::TableUpdate<Dnd5ERecipe>,
+    dnd_5_e_reward: __sdk::TableUpdate<Dnd5EReward>,
     dnd_5_e_sense: __sdk::TableUpdate<Dnd5ESense>,
     dnd_5_e_skill: __sdk::TableUpdate<Dnd5ESkill>,
     dnd_5_e_spell: __sdk::TableUpdate<Dnd5ESpell>,
     dnd_5_e_subclass: __sdk::TableUpdate<Dnd5ESubclass>,
     dnd_5_e_subclass_feature: __sdk::TableUpdate<Dnd5ESubclassFeature>,
+    dnd_5_e_trap_hazard: __sdk::TableUpdate<Dnd5ETrapHazard>,
+    dnd_5_e_variant_rule: __sdk::TableUpdate<Dnd5EVariantRule>,
+    dnd_5_e_vehicle: __sdk::TableUpdate<Dnd5EVehicle>,
     message: __sdk::TableUpdate<Message>,
     user: __sdk::TableUpdate<User>,
 }
@@ -696,6 +1076,9 @@ impl TryFrom<__ws::v2::TransactionUpdate> for DbUpdate {
                 "dnd_5_e_background" => db_update
                     .dnd_5_e_background
                     .append(dnd_5_e_background_table::parse_table_update(table_update)?),
+                "dnd_5_e_char_creation_option" => db_update.dnd_5_e_char_creation_option.append(
+                    dnd_5_e_char_creation_option_table::parse_table_update(table_update)?,
+                ),
                 "dnd_5_e_class" => db_update
                     .dnd_5_e_class
                     .append(dnd_5_e_class_table::parse_table_update(table_update)?),
@@ -705,6 +1088,15 @@ impl TryFrom<__ws::v2::TransactionUpdate> for DbUpdate {
                 "dnd_5_e_condition" => db_update
                     .dnd_5_e_condition
                     .append(dnd_5_e_condition_table::parse_table_update(table_update)?),
+                "dnd_5_e_cult_boon" => db_update
+                    .dnd_5_e_cult_boon
+                    .append(dnd_5_e_cult_boon_table::parse_table_update(table_update)?),
+                "dnd_5_e_deck" => db_update
+                    .dnd_5_e_deck
+                    .append(dnd_5_e_deck_table::parse_table_update(table_update)?),
+                "dnd_5_e_deity" => db_update
+                    .dnd_5_e_deity
+                    .append(dnd_5_e_deity_table::parse_table_update(table_update)?),
                 "dnd_5_e_feat" => db_update
                     .dnd_5_e_feat
                     .append(dnd_5_e_feat_table::parse_table_update(table_update)?),
@@ -717,12 +1109,24 @@ impl TryFrom<__ws::v2::TransactionUpdate> for DbUpdate {
                 "dnd_5_e_monster" => db_update
                     .dnd_5_e_monster
                     .append(dnd_5_e_monster_table::parse_table_update(table_update)?),
+                "dnd_5_e_object" => db_update
+                    .dnd_5_e_object
+                    .append(dnd_5_e_object_table::parse_table_update(table_update)?),
                 "dnd_5_e_optional_feature" => db_update.dnd_5_e_optional_feature.append(
                     dnd_5_e_optional_feature_table::parse_table_update(table_update)?,
                 ),
+                "dnd_5_e_psionic" => db_update
+                    .dnd_5_e_psionic
+                    .append(dnd_5_e_psionic_table::parse_table_update(table_update)?),
                 "dnd_5_e_race" => db_update
                     .dnd_5_e_race
                     .append(dnd_5_e_race_table::parse_table_update(table_update)?),
+                "dnd_5_e_recipe" => db_update
+                    .dnd_5_e_recipe
+                    .append(dnd_5_e_recipe_table::parse_table_update(table_update)?),
+                "dnd_5_e_reward" => db_update
+                    .dnd_5_e_reward
+                    .append(dnd_5_e_reward_table::parse_table_update(table_update)?),
                 "dnd_5_e_sense" => db_update
                     .dnd_5_e_sense
                     .append(dnd_5_e_sense_table::parse_table_update(table_update)?),
@@ -738,6 +1142,15 @@ impl TryFrom<__ws::v2::TransactionUpdate> for DbUpdate {
                 "dnd_5_e_subclass_feature" => db_update.dnd_5_e_subclass_feature.append(
                     dnd_5_e_subclass_feature_table::parse_table_update(table_update)?,
                 ),
+                "dnd_5_e_trap_hazard" => db_update
+                    .dnd_5_e_trap_hazard
+                    .append(dnd_5_e_trap_hazard_table::parse_table_update(table_update)?),
+                "dnd_5_e_variant_rule" => db_update.dnd_5_e_variant_rule.append(
+                    dnd_5_e_variant_rule_table::parse_table_update(table_update)?,
+                ),
+                "dnd_5_e_vehicle" => db_update
+                    .dnd_5_e_vehicle
+                    .append(dnd_5_e_vehicle_table::parse_table_update(table_update)?),
                 "message" => db_update
                     .message
                     .append(message_table::parse_table_update(table_update)?),
@@ -776,6 +1189,12 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.dnd_5_e_background = cache
             .apply_diff_to_table::<Dnd5EBackground>("dnd_5_e_background", &self.dnd_5_e_background)
             .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_char_creation_option = cache
+            .apply_diff_to_table::<Dnd5ECharCreationOption>(
+                "dnd_5_e_char_creation_option",
+                &self.dnd_5_e_char_creation_option,
+            )
+            .with_updates_by_pk(|row| &row.id);
         diff.dnd_5_e_class = cache
             .apply_diff_to_table::<Dnd5EClass>("dnd_5_e_class", &self.dnd_5_e_class)
             .with_updates_by_pk(|row| &row.id);
@@ -787,6 +1206,15 @@ impl __sdk::DbUpdate for DbUpdate {
             .with_updates_by_pk(|row| &row.id);
         diff.dnd_5_e_condition = cache
             .apply_diff_to_table::<Dnd5ECondition>("dnd_5_e_condition", &self.dnd_5_e_condition)
+            .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_cult_boon = cache
+            .apply_diff_to_table::<Dnd5ECultBoon>("dnd_5_e_cult_boon", &self.dnd_5_e_cult_boon)
+            .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_deck = cache
+            .apply_diff_to_table::<Dnd5EDeck>("dnd_5_e_deck", &self.dnd_5_e_deck)
+            .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_deity = cache
+            .apply_diff_to_table::<Dnd5EDeity>("dnd_5_e_deity", &self.dnd_5_e_deity)
             .with_updates_by_pk(|row| &row.id);
         diff.dnd_5_e_feat = cache
             .apply_diff_to_table::<Dnd5EFeat>("dnd_5_e_feat", &self.dnd_5_e_feat)
@@ -800,14 +1228,26 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.dnd_5_e_monster = cache
             .apply_diff_to_table::<Dnd5EMonster>("dnd_5_e_monster", &self.dnd_5_e_monster)
             .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_object = cache
+            .apply_diff_to_table::<Dnd5EObject>("dnd_5_e_object", &self.dnd_5_e_object)
+            .with_updates_by_pk(|row| &row.id);
         diff.dnd_5_e_optional_feature = cache
             .apply_diff_to_table::<Dnd5EOptionalFeature>(
                 "dnd_5_e_optional_feature",
                 &self.dnd_5_e_optional_feature,
             )
             .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_psionic = cache
+            .apply_diff_to_table::<Dnd5EPsionic>("dnd_5_e_psionic", &self.dnd_5_e_psionic)
+            .with_updates_by_pk(|row| &row.id);
         diff.dnd_5_e_race = cache
             .apply_diff_to_table::<Dnd5ERace>("dnd_5_e_race", &self.dnd_5_e_race)
+            .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_recipe = cache
+            .apply_diff_to_table::<Dnd5ERecipe>("dnd_5_e_recipe", &self.dnd_5_e_recipe)
+            .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_reward = cache
+            .apply_diff_to_table::<Dnd5EReward>("dnd_5_e_reward", &self.dnd_5_e_reward)
             .with_updates_by_pk(|row| &row.id);
         diff.dnd_5_e_sense = cache
             .apply_diff_to_table::<Dnd5ESense>("dnd_5_e_sense", &self.dnd_5_e_sense)
@@ -826,6 +1266,21 @@ impl __sdk::DbUpdate for DbUpdate {
                 "dnd_5_e_subclass_feature",
                 &self.dnd_5_e_subclass_feature,
             )
+            .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_trap_hazard = cache
+            .apply_diff_to_table::<Dnd5ETrapHazard>(
+                "dnd_5_e_trap_hazard",
+                &self.dnd_5_e_trap_hazard,
+            )
+            .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_variant_rule = cache
+            .apply_diff_to_table::<Dnd5EVariantRule>(
+                "dnd_5_e_variant_rule",
+                &self.dnd_5_e_variant_rule,
+            )
+            .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_vehicle = cache
+            .apply_diff_to_table::<Dnd5EVehicle>("dnd_5_e_vehicle", &self.dnd_5_e_vehicle)
             .with_updates_by_pk(|row| &row.id);
         diff.message = cache
             .apply_diff_to_table::<Message>("message", &self.message)
@@ -846,6 +1301,9 @@ impl __sdk::DbUpdate for DbUpdate {
                 "dnd_5_e_background" => db_update
                     .dnd_5_e_background
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_char_creation_option" => db_update
+                    .dnd_5_e_char_creation_option
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "dnd_5_e_class" => db_update
                     .dnd_5_e_class
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
@@ -854,6 +1312,15 @@ impl __sdk::DbUpdate for DbUpdate {
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "dnd_5_e_condition" => db_update
                     .dnd_5_e_condition
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_cult_boon" => db_update
+                    .dnd_5_e_cult_boon
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_deck" => db_update
+                    .dnd_5_e_deck
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_deity" => db_update
+                    .dnd_5_e_deity
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "dnd_5_e_feat" => db_update
                     .dnd_5_e_feat
@@ -867,11 +1334,23 @@ impl __sdk::DbUpdate for DbUpdate {
                 "dnd_5_e_monster" => db_update
                     .dnd_5_e_monster
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_object" => db_update
+                    .dnd_5_e_object
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "dnd_5_e_optional_feature" => db_update
                     .dnd_5_e_optional_feature
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_psionic" => db_update
+                    .dnd_5_e_psionic
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "dnd_5_e_race" => db_update
                     .dnd_5_e_race
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_recipe" => db_update
+                    .dnd_5_e_recipe
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_reward" => db_update
+                    .dnd_5_e_reward
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "dnd_5_e_sense" => db_update
                     .dnd_5_e_sense
@@ -887,6 +1366,15 @@ impl __sdk::DbUpdate for DbUpdate {
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "dnd_5_e_subclass_feature" => db_update
                     .dnd_5_e_subclass_feature
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_trap_hazard" => db_update
+                    .dnd_5_e_trap_hazard
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_variant_rule" => db_update
+                    .dnd_5_e_variant_rule
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_vehicle" => db_update
+                    .dnd_5_e_vehicle
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "message" => db_update
                     .message
@@ -913,6 +1401,9 @@ impl __sdk::DbUpdate for DbUpdate {
                 "dnd_5_e_background" => db_update
                     .dnd_5_e_background
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_char_creation_option" => db_update
+                    .dnd_5_e_char_creation_option
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "dnd_5_e_class" => db_update
                     .dnd_5_e_class
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
@@ -921,6 +1412,15 @@ impl __sdk::DbUpdate for DbUpdate {
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "dnd_5_e_condition" => db_update
                     .dnd_5_e_condition
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_cult_boon" => db_update
+                    .dnd_5_e_cult_boon
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_deck" => db_update
+                    .dnd_5_e_deck
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_deity" => db_update
+                    .dnd_5_e_deity
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "dnd_5_e_feat" => db_update
                     .dnd_5_e_feat
@@ -934,11 +1434,23 @@ impl __sdk::DbUpdate for DbUpdate {
                 "dnd_5_e_monster" => db_update
                     .dnd_5_e_monster
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_object" => db_update
+                    .dnd_5_e_object
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "dnd_5_e_optional_feature" => db_update
                     .dnd_5_e_optional_feature
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_psionic" => db_update
+                    .dnd_5_e_psionic
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "dnd_5_e_race" => db_update
                     .dnd_5_e_race
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_recipe" => db_update
+                    .dnd_5_e_recipe
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_reward" => db_update
+                    .dnd_5_e_reward
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "dnd_5_e_sense" => db_update
                     .dnd_5_e_sense
@@ -954,6 +1466,15 @@ impl __sdk::DbUpdate for DbUpdate {
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "dnd_5_e_subclass_feature" => db_update
                     .dnd_5_e_subclass_feature
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_trap_hazard" => db_update
+                    .dnd_5_e_trap_hazard
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_variant_rule" => db_update
+                    .dnd_5_e_variant_rule
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_vehicle" => db_update
+                    .dnd_5_e_vehicle
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "message" => db_update
                     .message
@@ -978,20 +1499,31 @@ impl __sdk::DbUpdate for DbUpdate {
 pub struct AppliedDiff<'r> {
     dnd_5_e_action: __sdk::TableAppliedDiff<'r, Dnd5EAction>,
     dnd_5_e_background: __sdk::TableAppliedDiff<'r, Dnd5EBackground>,
+    dnd_5_e_char_creation_option: __sdk::TableAppliedDiff<'r, Dnd5ECharCreationOption>,
     dnd_5_e_class: __sdk::TableAppliedDiff<'r, Dnd5EClass>,
     dnd_5_e_class_feature: __sdk::TableAppliedDiff<'r, Dnd5EClassFeature>,
     dnd_5_e_condition: __sdk::TableAppliedDiff<'r, Dnd5ECondition>,
+    dnd_5_e_cult_boon: __sdk::TableAppliedDiff<'r, Dnd5ECultBoon>,
+    dnd_5_e_deck: __sdk::TableAppliedDiff<'r, Dnd5EDeck>,
+    dnd_5_e_deity: __sdk::TableAppliedDiff<'r, Dnd5EDeity>,
     dnd_5_e_feat: __sdk::TableAppliedDiff<'r, Dnd5EFeat>,
     dnd_5_e_item: __sdk::TableAppliedDiff<'r, Dnd5EItem>,
     dnd_5_e_language: __sdk::TableAppliedDiff<'r, Dnd5ELanguage>,
     dnd_5_e_monster: __sdk::TableAppliedDiff<'r, Dnd5EMonster>,
+    dnd_5_e_object: __sdk::TableAppliedDiff<'r, Dnd5EObject>,
     dnd_5_e_optional_feature: __sdk::TableAppliedDiff<'r, Dnd5EOptionalFeature>,
+    dnd_5_e_psionic: __sdk::TableAppliedDiff<'r, Dnd5EPsionic>,
     dnd_5_e_race: __sdk::TableAppliedDiff<'r, Dnd5ERace>,
+    dnd_5_e_recipe: __sdk::TableAppliedDiff<'r, Dnd5ERecipe>,
+    dnd_5_e_reward: __sdk::TableAppliedDiff<'r, Dnd5EReward>,
     dnd_5_e_sense: __sdk::TableAppliedDiff<'r, Dnd5ESense>,
     dnd_5_e_skill: __sdk::TableAppliedDiff<'r, Dnd5ESkill>,
     dnd_5_e_spell: __sdk::TableAppliedDiff<'r, Dnd5ESpell>,
     dnd_5_e_subclass: __sdk::TableAppliedDiff<'r, Dnd5ESubclass>,
     dnd_5_e_subclass_feature: __sdk::TableAppliedDiff<'r, Dnd5ESubclassFeature>,
+    dnd_5_e_trap_hazard: __sdk::TableAppliedDiff<'r, Dnd5ETrapHazard>,
+    dnd_5_e_variant_rule: __sdk::TableAppliedDiff<'r, Dnd5EVariantRule>,
+    dnd_5_e_vehicle: __sdk::TableAppliedDiff<'r, Dnd5EVehicle>,
     message: __sdk::TableAppliedDiff<'r, Message>,
     user: __sdk::TableAppliedDiff<'r, User>,
     __unused: std::marker::PhantomData<&'r ()>,
@@ -1017,6 +1549,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.dnd_5_e_background,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<Dnd5ECharCreationOption>(
+            "dnd_5_e_char_creation_option",
+            &self.dnd_5_e_char_creation_option,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<Dnd5EClass>(
             "dnd_5_e_class",
             &self.dnd_5_e_class,
@@ -1030,6 +1567,21 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         callbacks.invoke_table_row_callbacks::<Dnd5ECondition>(
             "dnd_5_e_condition",
             &self.dnd_5_e_condition,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<Dnd5ECultBoon>(
+            "dnd_5_e_cult_boon",
+            &self.dnd_5_e_cult_boon,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<Dnd5EDeck>(
+            "dnd_5_e_deck",
+            &self.dnd_5_e_deck,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<Dnd5EDeity>(
+            "dnd_5_e_deity",
+            &self.dnd_5_e_deity,
             event,
         );
         callbacks.invoke_table_row_callbacks::<Dnd5EFeat>(
@@ -1052,14 +1604,34 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.dnd_5_e_monster,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<Dnd5EObject>(
+            "dnd_5_e_object",
+            &self.dnd_5_e_object,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<Dnd5EOptionalFeature>(
             "dnd_5_e_optional_feature",
             &self.dnd_5_e_optional_feature,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<Dnd5EPsionic>(
+            "dnd_5_e_psionic",
+            &self.dnd_5_e_psionic,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<Dnd5ERace>(
             "dnd_5_e_race",
             &self.dnd_5_e_race,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<Dnd5ERecipe>(
+            "dnd_5_e_recipe",
+            &self.dnd_5_e_recipe,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<Dnd5EReward>(
+            "dnd_5_e_reward",
+            &self.dnd_5_e_reward,
             event,
         );
         callbacks.invoke_table_row_callbacks::<Dnd5ESense>(
@@ -1085,6 +1657,21 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         callbacks.invoke_table_row_callbacks::<Dnd5ESubclassFeature>(
             "dnd_5_e_subclass_feature",
             &self.dnd_5_e_subclass_feature,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<Dnd5ETrapHazard>(
+            "dnd_5_e_trap_hazard",
+            &self.dnd_5_e_trap_hazard,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<Dnd5EVariantRule>(
+            "dnd_5_e_variant_rule",
+            &self.dnd_5_e_variant_rule,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<Dnd5EVehicle>(
+            "dnd_5_e_vehicle",
+            &self.dnd_5_e_vehicle,
             event,
         );
         callbacks.invoke_table_row_callbacks::<Message>("message", &self.message, event);
@@ -1751,40 +2338,62 @@ impl __sdk::SpacetimeModule for RemoteModule {
     fn register_tables(client_cache: &mut __sdk::ClientCache<Self>) {
         dnd_5_e_action_table::register_table(client_cache);
         dnd_5_e_background_table::register_table(client_cache);
+        dnd_5_e_char_creation_option_table::register_table(client_cache);
         dnd_5_e_class_table::register_table(client_cache);
         dnd_5_e_class_feature_table::register_table(client_cache);
         dnd_5_e_condition_table::register_table(client_cache);
+        dnd_5_e_cult_boon_table::register_table(client_cache);
+        dnd_5_e_deck_table::register_table(client_cache);
+        dnd_5_e_deity_table::register_table(client_cache);
         dnd_5_e_feat_table::register_table(client_cache);
         dnd_5_e_item_table::register_table(client_cache);
         dnd_5_e_language_table::register_table(client_cache);
         dnd_5_e_monster_table::register_table(client_cache);
+        dnd_5_e_object_table::register_table(client_cache);
         dnd_5_e_optional_feature_table::register_table(client_cache);
+        dnd_5_e_psionic_table::register_table(client_cache);
         dnd_5_e_race_table::register_table(client_cache);
+        dnd_5_e_recipe_table::register_table(client_cache);
+        dnd_5_e_reward_table::register_table(client_cache);
         dnd_5_e_sense_table::register_table(client_cache);
         dnd_5_e_skill_table::register_table(client_cache);
         dnd_5_e_spell_table::register_table(client_cache);
         dnd_5_e_subclass_table::register_table(client_cache);
         dnd_5_e_subclass_feature_table::register_table(client_cache);
+        dnd_5_e_trap_hazard_table::register_table(client_cache);
+        dnd_5_e_variant_rule_table::register_table(client_cache);
+        dnd_5_e_vehicle_table::register_table(client_cache);
         message_table::register_table(client_cache);
         user_table::register_table(client_cache);
     }
     const ALL_TABLE_NAMES: &'static [&'static str] = &[
         "dnd_5_e_action",
         "dnd_5_e_background",
+        "dnd_5_e_char_creation_option",
         "dnd_5_e_class",
         "dnd_5_e_class_feature",
         "dnd_5_e_condition",
+        "dnd_5_e_cult_boon",
+        "dnd_5_e_deck",
+        "dnd_5_e_deity",
         "dnd_5_e_feat",
         "dnd_5_e_item",
         "dnd_5_e_language",
         "dnd_5_e_monster",
+        "dnd_5_e_object",
         "dnd_5_e_optional_feature",
+        "dnd_5_e_psionic",
         "dnd_5_e_race",
+        "dnd_5_e_recipe",
+        "dnd_5_e_reward",
         "dnd_5_e_sense",
         "dnd_5_e_skill",
         "dnd_5_e_spell",
         "dnd_5_e_subclass",
         "dnd_5_e_subclass_feature",
+        "dnd_5_e_trap_hazard",
+        "dnd_5_e_variant_rule",
+        "dnd_5_e_vehicle",
         "message",
         "user",
     ];

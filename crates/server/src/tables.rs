@@ -253,3 +253,157 @@ pub struct Dnd5eSubclassFeature {
     pub level: u8,
     pub description: String,
 }
+
+#[spacetimedb::table(accessor = dnd5e_object, public)]
+pub struct Dnd5eObject {
+    #[primary_key]
+    #[auto_inc]
+    pub id: u64,
+    pub name: String,
+    pub source: String,
+    pub size: Vec<String>,
+    pub object_type: Option<String>,
+    pub ac: Option<u16>,
+    pub hp: Option<u16>,
+    pub description: String,
+    pub action_description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_vehicle, public)]
+pub struct Dnd5eVehicle {
+    #[primary_key]
+    #[auto_inc]
+    pub id: u64,
+    pub name: String,
+    pub source: String,
+    pub vehicle_type: String,
+    pub size: Vec<String>,
+    pub terrain: Vec<String>,
+    pub crew_capacity: Option<u16>,
+    pub passenger_capacity: Option<u16>,
+    pub pace: Option<u16>,
+    pub ac: Option<u16>,
+    pub hp: Option<u16>,
+    pub description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_deity, public)]
+pub struct Dnd5eDeity {
+    #[primary_key]
+    #[auto_inc]
+    pub id: u64,
+    pub name: String,
+    pub source: String,
+    pub pantheon: Option<String>,
+    pub alignment: Vec<String>,
+    pub category: Option<String>,
+    pub domains: Vec<String>,
+    pub province: Option<String>,
+    pub title: Option<String>,
+    pub symbol: Option<String>,
+    pub description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_reward, public)]
+pub struct Dnd5eReward {
+    #[primary_key]
+    #[auto_inc]
+    pub id: u64,
+    pub name: String,
+    pub source: String,
+    pub reward_type: Option<String>,
+    pub description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_trap_hazard, public)]
+pub struct Dnd5eTrapHazard {
+    #[primary_key]
+    #[auto_inc]
+    pub id: u64,
+    pub name: String,
+    pub source: String,
+    pub kind: String,
+    pub trap_hazard_type: Option<String>,
+    pub trigger: String,
+    pub effect: String,
+    pub countermeasures: String,
+    pub description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_char_creation_option, public)]
+pub struct Dnd5eCharCreationOption {
+    #[primary_key]
+    #[auto_inc]
+    pub id: u64,
+    pub name: String,
+    pub source: String,
+    pub option_types: Vec<String>,
+    pub description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_psionic, public)]
+pub struct Dnd5ePsionic {
+    #[primary_key]
+    #[auto_inc]
+    pub id: u64,
+    pub name: String,
+    pub source: String,
+    pub kind: String,
+    pub order_name: Option<String>,
+    pub focus: Option<String>,
+    pub description: String,
+    pub modes: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_recipe, public)]
+pub struct Dnd5eRecipe {
+    #[primary_key]
+    #[auto_inc]
+    pub id: u64,
+    pub name: String,
+    pub source: String,
+    pub recipe_type: Option<String>,
+    pub dish_types: Vec<String>,
+    pub diet: Option<String>,
+    pub serves: Option<String>,
+    pub ingredients: String,
+    pub instructions: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_cult_boon, public)]
+pub struct Dnd5eCultBoon {
+    #[primary_key]
+    #[auto_inc]
+    pub id: u64,
+    pub name: String,
+    pub source: String,
+    pub kind: String,
+    pub subtype: Option<String>,
+    pub goal: Option<String>,
+    pub cultists: Option<String>,
+    pub signature_spells: Option<String>,
+    pub ability_text: Option<String>,
+    pub description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_deck, public)]
+pub struct Dnd5eDeck {
+    #[primary_key]
+    #[auto_inc]
+    pub id: u64,
+    pub name: String,
+    pub source: String,
+    pub cards: Vec<String>,
+    pub description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_variant_rule, public)]
+pub struct Dnd5eVariantRule {
+    #[primary_key]
+    #[auto_inc]
+    pub id: u64,
+    pub name: String,
+    pub source: String,
+    pub rule_type: Option<String>,
+    pub description: String,
+}

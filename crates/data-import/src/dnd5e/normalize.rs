@@ -5,9 +5,11 @@ use super::seed::support::{
     parse_race_speed, parse_skill_grants, parse_tool_grants,
 };
 use super::types::{
-    RawAction, RawActionTime, RawBackground, RawClass, RawClassFeature, RawCondition, RawFeat,
-    RawItem, RawLanguage, RawMonster, RawOptionalFeature, RawRace, RawSense, RawSkill, RawSpell,
-    RawSubclass, RawSubclassFeature,
+    RawAction, RawActionTime, RawBackground, RawCharCreationOption, RawClass, RawClassFeature,
+    RawCondition, RawCultBoon, RawDeck, RawDeity, RawFeat, RawItem, RawLanguage, RawMonster,
+    RawObject, RawOptionalFeature, RawPsionic, RawPsionicMode, RawRace, RawRecipe, RawReward,
+    RawSense, RawSkill, RawSpell, RawSubclass, RawSubclassFeature, RawTrapHazard, RawVariantRule,
+    RawVehicle,
 };
 use dllm_core::dnd5e as dnd;
 
@@ -186,6 +188,127 @@ pub struct ImportSubclassFeature {
     pub subclass_short_name: String,
     pub subclass_source: String,
     pub level: u8,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportObject {
+    pub name: String,
+    pub source: String,
+    pub size: Vec<String>,
+    pub object_type: Option<String>,
+    pub ac: Option<u16>,
+    pub hp: Option<u16>,
+    pub description: String,
+    pub action_description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportVehicle {
+    pub name: String,
+    pub source: String,
+    pub vehicle_type: String,
+    pub size: Vec<String>,
+    pub terrain: Vec<String>,
+    pub crew_capacity: Option<u16>,
+    pub passenger_capacity: Option<u16>,
+    pub pace: Option<u16>,
+    pub ac: Option<u16>,
+    pub hp: Option<u16>,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportDeity {
+    pub name: String,
+    pub source: String,
+    pub pantheon: Option<String>,
+    pub alignment: Vec<String>,
+    pub category: Option<String>,
+    pub domains: Vec<String>,
+    pub province: Option<String>,
+    pub title: Option<String>,
+    pub symbol: Option<String>,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportReward {
+    pub name: String,
+    pub source: String,
+    pub kind: Option<String>,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportTrapHazard {
+    pub name: String,
+    pub source: String,
+    pub kind: String,
+    pub trap_hazard_type: Option<String>,
+    pub trigger: String,
+    pub effect: String,
+    pub countermeasures: String,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportCharCreationOption {
+    pub name: String,
+    pub source: String,
+    pub option_types: Vec<String>,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportPsionic {
+    pub name: String,
+    pub source: String,
+    pub kind: String,
+    pub order: Option<String>,
+    pub focus: Option<String>,
+    pub description: String,
+    pub modes: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportRecipe {
+    pub name: String,
+    pub source: String,
+    pub kind: Option<String>,
+    pub dish_types: Vec<String>,
+    pub diet: Option<String>,
+    pub serves: Option<String>,
+    pub ingredients: String,
+    pub instructions: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportCultBoon {
+    pub name: String,
+    pub source: String,
+    pub kind: String,
+    pub subtype: Option<String>,
+    pub goal: Option<String>,
+    pub cultists: Option<String>,
+    pub signature_spells: Option<String>,
+    pub ability_text: Option<String>,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportDeck {
+    pub name: String,
+    pub source: String,
+    pub cards: Vec<String>,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportVariantRule {
+    pub name: String,
+    pub source: String,
+    pub rule_type: Option<String>,
     pub description: String,
 }
 
@@ -487,12 +610,215 @@ pub fn normalize_subclass_feature(
     }
 }
 
+pub fn normalize_object(raw: RawObject, report: &mut SectionReport) -> ImportObject {
+    let item_name = format!("{} [{}]", raw.name, raw.source);
+    let description = normalize_description(&item_name, &raw.entries, report);
+    let action_description =
+        normalize_named_entries(&item_name, "action entries", &raw.action_entries, report);
+
+    ImportObject {
+        name: raw.name,
+        source: raw.source,
+        size: raw.size,
+        object_type: raw.object_type,
+        ac: raw.ac,
+        hp: raw.hp,
+        description,
+        action_description,
+    }
+}
+
+pub fn normalize_vehicle(raw: RawVehicle, report: &mut SectionReport) -> ImportVehicle {
+    let item_name = format!("{} [{}]", raw.name, raw.source);
+    let description = normalize_description(&item_name, &raw.entries, report);
+
+    ImportVehicle {
+        name: raw.name,
+        source: raw.source,
+        vehicle_type: raw.vehicle_type,
+        size: raw.size.map(|size| size.into_vec()).unwrap_or_default(),
+        terrain: raw.terrain,
+        crew_capacity: raw.cap_crew,
+        passenger_capacity: raw.cap_passenger,
+        pace: raw.pace,
+        ac: raw.ac,
+        hp: raw.hp,
+        description,
+    }
+}
+
+pub fn normalize_deity(raw: RawDeity, report: &mut SectionReport) -> ImportDeity {
+    let item_name = format!("{} [{}]", raw.name, raw.source);
+    let description = normalize_description(&item_name, &raw.entries, report);
+
+    ImportDeity {
+        name: raw.name,
+        source: raw.source,
+        pantheon: raw.pantheon,
+        alignment: raw.alignment,
+        category: raw.category,
+        domains: raw.domains,
+        province: raw.province,
+        title: raw.title,
+        symbol: raw.symbol,
+        description,
+    }
+}
+
+pub fn normalize_reward(raw: RawReward, report: &mut SectionReport) -> ImportReward {
+    let item_name = format!("{} [{}]", raw.name, raw.source);
+    let description = normalize_description(&item_name, &raw.entries, report);
+
+    ImportReward {
+        name: raw.name,
+        source: raw.source,
+        kind: raw.kind,
+        description,
+    }
+}
+
+pub fn normalize_trap_hazard(
+    raw: RawTrapHazard,
+    kind: &str,
+    report: &mut SectionReport,
+) -> ImportTrapHazard {
+    let item_name = format!("{} [{}]", raw.name, raw.source);
+    let description = normalize_description(&item_name, &raw.entries, report);
+
+    ImportTrapHazard {
+        name: raw.name,
+        source: raw.source,
+        kind: kind.to_string(),
+        trap_hazard_type: raw.trap_hazard_type,
+        trigger: join_text_blocks(&raw.trigger),
+        effect: join_text_blocks(&raw.effect),
+        countermeasures: join_text_blocks(&raw.countermeasures),
+        description,
+    }
+}
+
+pub fn normalize_char_creation_option(
+    raw: RawCharCreationOption,
+    report: &mut SectionReport,
+) -> ImportCharCreationOption {
+    let item_name = format!("{} [{}]", raw.name, raw.source);
+    let description = normalize_description(&item_name, &raw.entries, report);
+
+    ImportCharCreationOption {
+        name: raw.name,
+        source: raw.source,
+        option_types: raw.option_type,
+        description,
+    }
+}
+
+pub fn normalize_psionic(raw: RawPsionic, report: &mut SectionReport) -> ImportPsionic {
+    let item_name = format!("{} [{}]", raw.name, raw.source);
+    let description = normalize_description(&item_name, &raw.entries, report);
+
+    ImportPsionic {
+        name: raw.name,
+        source: raw.source,
+        kind: raw.kind,
+        order: raw.order,
+        focus: raw.focus,
+        description,
+        modes: format_psionic_modes(&item_name, &raw.modes, report),
+    }
+}
+
+pub fn normalize_recipe(raw: RawRecipe, _report: &mut SectionReport) -> ImportRecipe {
+    ImportRecipe {
+        name: raw.name,
+        source: raw.source,
+        kind: raw.kind,
+        dish_types: raw.dish_types,
+        diet: raw.diet,
+        serves: format_recipe_serves(raw.serves),
+        ingredients: raw
+            .ingredients
+            .into_iter()
+            .map(|ingredient| ingredient.into_text())
+            .collect::<Vec<_>>()
+            .join("\n"),
+        instructions: raw.instructions.join("\n\n"),
+    }
+}
+
+pub fn normalize_cult_boon(
+    raw: RawCultBoon,
+    kind: &str,
+    report: &mut SectionReport,
+) -> ImportCultBoon {
+    let item_name = format!("{} [{}]", raw.name, raw.source);
+    let description = normalize_description(&item_name, &raw.entries, report);
+
+    ImportCultBoon {
+        name: raw.name,
+        source: raw.source,
+        kind: kind.to_string(),
+        subtype: raw.kind,
+        goal: raw.goal.map(|value| value.entry),
+        cultists: raw.cultists.map(|value| value.entry),
+        signature_spells: raw.signature_spells.map(|value| value.entry),
+        ability_text: raw.ability_text.map(|value| value.entry),
+        description,
+    }
+}
+
+pub fn normalize_deck(raw: RawDeck, report: &mut SectionReport) -> ImportDeck {
+    let item_name = format!("{} [{}]", raw.name, raw.source);
+    let description = normalize_description(&item_name, &raw.entries, report);
+
+    ImportDeck {
+        name: raw.name,
+        source: raw.source,
+        cards: raw
+            .cards
+            .into_iter()
+            .map(|card| card.into_summary())
+            .collect(),
+        description,
+    }
+}
+
+pub fn normalize_variant_rule(
+    raw: RawVariantRule,
+    report: &mut SectionReport,
+) -> ImportVariantRule {
+    let item_name = format!("{} [{}]", raw.name, raw.source);
+    let description = normalize_description(&item_name, &raw.entries, report);
+
+    ImportVariantRule {
+        name: raw.name,
+        source: raw.source,
+        rule_type: raw.rule_type,
+        description,
+    }
+}
+
 fn normalize_description(item_name: &str, entries: &[Entry], report: &mut SectionReport) -> String {
     let (description, unsupported_entries) = entries_to_string(entries);
     if unsupported_entries > 0 {
         report.warn(
             Some(item_name.to_string()),
             format!("description contained {unsupported_entries} unsupported entry variant(s)"),
+        );
+    }
+    description
+}
+
+fn normalize_named_entries(
+    item_name: &str,
+    section_name: &str,
+    entries: &[Entry],
+    report: &mut SectionReport,
+) -> String {
+    let (description, unsupported_entries) = entries_to_string(entries);
+    if unsupported_entries > 0 {
+        report.warn(
+            Some(item_name.to_string()),
+            format!("{section_name} contained {unsupported_entries} unsupported entry variant(s)"),
         );
     }
     description
@@ -511,4 +837,68 @@ fn format_action_time(times: &[RawActionTime]) -> String {
         })
         .collect::<Vec<_>>()
         .join(", ")
+}
+
+fn join_text_blocks(values: &[String]) -> String {
+    values.join("\n\n")
+}
+
+fn format_recipe_serves(serves: Option<super::types::RawRecipeServes>) -> Option<String> {
+    let serves = serves?;
+    let range = match (serves.exact, serves.min, serves.max) {
+        (Some(exact), _, _) => exact.to_string(),
+        (None, Some(min), Some(max)) => format!("{min}-{max}"),
+        (None, Some(min), None) => min.to_string(),
+        (None, None, Some(max)) => max.to_string(),
+        (None, None, None) => String::new(),
+    };
+
+    let mut parts = Vec::new();
+    if !range.is_empty() {
+        parts.push(range);
+    }
+    if let Some(note) = serves.note {
+        parts.push(note);
+    }
+
+    (!parts.is_empty()).then(|| parts.join(" "))
+}
+
+fn format_psionic_modes(
+    item_name: &str,
+    modes: &[RawPsionicMode],
+    report: &mut SectionReport,
+) -> String {
+    modes
+        .iter()
+        .filter_map(|mode| format_psionic_mode(item_name, mode, report))
+        .collect::<Vec<_>>()
+        .join("\n\n")
+}
+
+fn format_psionic_mode(
+    item_name: &str,
+    mode: &RawPsionicMode,
+    report: &mut SectionReport,
+) -> Option<String> {
+    let body = normalize_named_entries(item_name, "psionic modes", &mode.entries, report);
+    let submodes = mode
+        .submodes
+        .iter()
+        .filter_map(|submode| format_psionic_mode(item_name, submode, report))
+        .collect::<Vec<_>>()
+        .join("\n\n");
+
+    let mut parts = Vec::new();
+    if let Some(name) = mode.name.as_ref() {
+        parts.push(name.clone());
+    }
+    if !body.is_empty() {
+        parts.push(body);
+    }
+    if !submodes.is_empty() {
+        parts.push(submodes);
+    }
+
+    (!parts.is_empty()).then(|| parts.join("\n"))
 }
