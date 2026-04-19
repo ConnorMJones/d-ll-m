@@ -9,9 +9,14 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 pub mod ability_bonus_type;
 pub mod ability_choice_type;
 pub mod ability_grant_type;
+pub mod ability_score_type;
 pub mod ability_type;
+pub mod class_level_prereq_type;
+pub mod class_type;
 pub mod creature_size_type;
 pub mod creature_type_type;
+pub mod dnd_5_e_action_table;
+pub mod dnd_5_e_action_type;
 pub mod dnd_5_e_background_table;
 pub mod dnd_5_e_background_type;
 pub mod dnd_5_e_condition_table;
@@ -20,13 +25,22 @@ pub mod dnd_5_e_feat_table;
 pub mod dnd_5_e_feat_type;
 pub mod dnd_5_e_item_table;
 pub mod dnd_5_e_item_type;
+pub mod dnd_5_e_language_table;
+pub mod dnd_5_e_language_type;
 pub mod dnd_5_e_monster_table;
 pub mod dnd_5_e_monster_type;
+pub mod dnd_5_e_optional_feature_table;
+pub mod dnd_5_e_optional_feature_type;
 pub mod dnd_5_e_race_table;
 pub mod dnd_5_e_race_type;
+pub mod dnd_5_e_sense_table;
+pub mod dnd_5_e_sense_type;
+pub mod dnd_5_e_skill_table;
+pub mod dnd_5_e_skill_type;
 pub mod dnd_5_e_spell_table;
 pub mod dnd_5_e_spell_type;
 pub mod feat_category_type;
+pub mod feat_prereq_type;
 pub mod item_rarity_type;
 pub mod item_type_type;
 pub mod language_choice_type;
@@ -34,12 +48,21 @@ pub mod language_grant_type;
 pub mod language_type;
 pub mod message_table;
 pub mod message_type;
+pub mod optional_feature_prereq_type;
+pub mod optional_feature_type_type;
+pub mod pact_boon_type;
+pub mod race_type;
+pub mod seed_dnd_5_e_action_reducer;
 pub mod seed_dnd_5_e_background_reducer;
 pub mod seed_dnd_5_e_condition_reducer;
 pub mod seed_dnd_5_e_feat_reducer;
 pub mod seed_dnd_5_e_item_reducer;
+pub mod seed_dnd_5_e_language_reducer;
 pub mod seed_dnd_5_e_monster_reducer;
+pub mod seed_dnd_5_e_optional_feature_reducer;
 pub mod seed_dnd_5_e_race_reducer;
+pub mod seed_dnd_5_e_sense_reducer;
+pub mod seed_dnd_5_e_skill_reducer;
 pub mod seed_dnd_5_e_spell_reducer;
 pub mod send_message_reducer;
 pub mod set_name_reducer;
@@ -52,13 +75,19 @@ pub mod string_choice_type;
 pub mod tool_grant_type;
 pub mod user_table;
 pub mod user_type;
+pub mod warlock_patron_type;
 
 pub use ability_bonus_type::AbilityBonus;
 pub use ability_choice_type::AbilityChoice;
 pub use ability_grant_type::AbilityGrant;
+pub use ability_score_type::AbilityScore;
 pub use ability_type::Ability;
+pub use class_level_prereq_type::ClassLevelPrereq;
+pub use class_type::Class;
 pub use creature_size_type::CreatureSize;
 pub use creature_type_type::CreatureType;
+pub use dnd_5_e_action_table::*;
+pub use dnd_5_e_action_type::Dnd5EAction;
 pub use dnd_5_e_background_table::*;
 pub use dnd_5_e_background_type::Dnd5EBackground;
 pub use dnd_5_e_condition_table::*;
@@ -67,13 +96,22 @@ pub use dnd_5_e_feat_table::*;
 pub use dnd_5_e_feat_type::Dnd5EFeat;
 pub use dnd_5_e_item_table::*;
 pub use dnd_5_e_item_type::Dnd5EItem;
+pub use dnd_5_e_language_table::*;
+pub use dnd_5_e_language_type::Dnd5ELanguage;
 pub use dnd_5_e_monster_table::*;
 pub use dnd_5_e_monster_type::Dnd5EMonster;
+pub use dnd_5_e_optional_feature_table::*;
+pub use dnd_5_e_optional_feature_type::Dnd5EOptionalFeature;
 pub use dnd_5_e_race_table::*;
 pub use dnd_5_e_race_type::Dnd5ERace;
+pub use dnd_5_e_sense_table::*;
+pub use dnd_5_e_sense_type::Dnd5ESense;
+pub use dnd_5_e_skill_table::*;
+pub use dnd_5_e_skill_type::Dnd5ESkill;
 pub use dnd_5_e_spell_table::*;
 pub use dnd_5_e_spell_type::Dnd5ESpell;
 pub use feat_category_type::FeatCategory;
+pub use feat_prereq_type::FeatPrereq;
 pub use item_rarity_type::ItemRarity;
 pub use item_type_type::ItemType;
 pub use language_choice_type::LanguageChoice;
@@ -81,12 +119,21 @@ pub use language_grant_type::LanguageGrant;
 pub use language_type::Language;
 pub use message_table::*;
 pub use message_type::Message;
+pub use optional_feature_prereq_type::OptionalFeaturePrereq;
+pub use optional_feature_type_type::OptionalFeatureType;
+pub use pact_boon_type::PactBoon;
+pub use race_type::Race;
+pub use seed_dnd_5_e_action_reducer::seed_dnd_5_e_action;
 pub use seed_dnd_5_e_background_reducer::seed_dnd_5_e_background;
 pub use seed_dnd_5_e_condition_reducer::seed_dnd_5_e_condition;
 pub use seed_dnd_5_e_feat_reducer::seed_dnd_5_e_feat;
 pub use seed_dnd_5_e_item_reducer::seed_dnd_5_e_item;
+pub use seed_dnd_5_e_language_reducer::seed_dnd_5_e_language;
 pub use seed_dnd_5_e_monster_reducer::seed_dnd_5_e_monster;
+pub use seed_dnd_5_e_optional_feature_reducer::seed_dnd_5_e_optional_feature;
 pub use seed_dnd_5_e_race_reducer::seed_dnd_5_e_race;
+pub use seed_dnd_5_e_sense_reducer::seed_dnd_5_e_sense;
+pub use seed_dnd_5_e_skill_reducer::seed_dnd_5_e_skill;
 pub use seed_dnd_5_e_spell_reducer::seed_dnd_5_e_spell;
 pub use send_message_reducer::send_message;
 pub use set_name_reducer::set_name;
@@ -99,6 +146,7 @@ pub use string_choice_type::StringChoice;
 pub use tool_grant_type::ToolGrant;
 pub use user_table::*;
 pub use user_type::User;
+pub use warlock_patron_type::WarlockPatron;
 
 #[derive(Clone, PartialEq, Debug)]
 
@@ -108,6 +156,12 @@ pub use user_type::User;
 /// to indicate which reducer caused the event.
 
 pub enum Reducer {
+    SeedDnd5EAction {
+        name: String,
+        source: String,
+        time: String,
+        description: String,
+    },
     SeedDnd5EBackground {
         name: String,
         source: String,
@@ -125,7 +179,7 @@ pub enum Reducer {
         name: String,
         source: String,
         category: Option<FeatCategory>,
-        prerequisite: Option<String>,
+        prerequisite: Option<FeatPrereq>,
         description: String,
     },
     SeedDnd5EItem {
@@ -137,6 +191,14 @@ pub enum Reducer {
         value_cp: Option<u32>,
         wondrous: bool,
         attunement: Option<String>,
+        description: String,
+    },
+    SeedDnd5ELanguage {
+        name: String,
+        source: String,
+        kind: Option<String>,
+        script: Option<String>,
+        origin: Option<String>,
         description: String,
     },
     SeedDnd5EMonster {
@@ -159,6 +221,13 @@ pub enum Reducer {
         cha_score: u8,
         description: String,
     },
+    SeedDnd5EOptionalFeature {
+        name: String,
+        source: String,
+        feature_types: Vec<OptionalFeatureType>,
+        prerequisite: Option<OptionalFeaturePrereq>,
+        description: String,
+    },
     SeedDnd5ERace {
         name: String,
         source: String,
@@ -166,6 +235,17 @@ pub enum Reducer {
         speed: Speed,
         ability_bonuses: Vec<AbilityGrant>,
         language_proficiencies: Vec<LanguageGrant>,
+        description: String,
+    },
+    SeedDnd5ESense {
+        name: String,
+        source: String,
+        description: String,
+    },
+    SeedDnd5ESkill {
+        name: String,
+        source: String,
+        ability: Ability,
         description: String,
     },
     SeedDnd5ESpell {
@@ -193,12 +273,17 @@ impl __sdk::InModule for Reducer {
 impl __sdk::Reducer for Reducer {
     fn reducer_name(&self) -> &'static str {
         match self {
+            Reducer::SeedDnd5EAction { .. } => "seed_dnd_5_e_action",
             Reducer::SeedDnd5EBackground { .. } => "seed_dnd_5_e_background",
             Reducer::SeedDnd5ECondition { .. } => "seed_dnd_5_e_condition",
             Reducer::SeedDnd5EFeat { .. } => "seed_dnd_5_e_feat",
             Reducer::SeedDnd5EItem { .. } => "seed_dnd_5_e_item",
+            Reducer::SeedDnd5ELanguage { .. } => "seed_dnd_5_e_language",
             Reducer::SeedDnd5EMonster { .. } => "seed_dnd_5_e_monster",
+            Reducer::SeedDnd5EOptionalFeature { .. } => "seed_dnd_5_e_optional_feature",
             Reducer::SeedDnd5ERace { .. } => "seed_dnd_5_e_race",
+            Reducer::SeedDnd5ESense { .. } => "seed_dnd_5_e_sense",
+            Reducer::SeedDnd5ESkill { .. } => "seed_dnd_5_e_skill",
             Reducer::SeedDnd5ESpell { .. } => "seed_dnd_5_e_spell",
             Reducer::SendMessage { .. } => "send_message",
             Reducer::SetName { .. } => "set_name",
@@ -208,6 +293,17 @@ impl __sdk::Reducer for Reducer {
     #[allow(clippy::clone_on_copy)]
     fn args_bsatn(&self) -> Result<Vec<u8>, __sats::bsatn::EncodeError> {
         match self {
+            Reducer::SeedDnd5EAction {
+                name,
+                source,
+                time,
+                description,
+            } => __sats::bsatn::to_vec(&seed_dnd_5_e_action_reducer::SeedDnd5EActionArgs {
+                name: name.clone(),
+                source: source.clone(),
+                time: time.clone(),
+                description: description.clone(),
+            }),
             Reducer::SeedDnd5EBackground {
                 name,
                 source,
@@ -266,6 +362,21 @@ impl __sdk::Reducer for Reducer {
                 attunement: attunement.clone(),
                 description: description.clone(),
             }),
+            Reducer::SeedDnd5ELanguage {
+                name,
+                source,
+                kind,
+                script,
+                origin,
+                description,
+            } => __sats::bsatn::to_vec(&seed_dnd_5_e_language_reducer::SeedDnd5ELanguageArgs {
+                name: name.clone(),
+                source: source.clone(),
+                kind: kind.clone(),
+                script: script.clone(),
+                origin: origin.clone(),
+                description: description.clone(),
+            }),
             Reducer::SeedDnd5EMonster {
                 name,
                 source,
@@ -305,6 +416,21 @@ impl __sdk::Reducer for Reducer {
                 cha_score: cha_score.clone(),
                 description: description.clone(),
             }),
+            Reducer::SeedDnd5EOptionalFeature {
+                name,
+                source,
+                feature_types,
+                prerequisite,
+                description,
+            } => __sats::bsatn::to_vec(
+                &seed_dnd_5_e_optional_feature_reducer::SeedDnd5EOptionalFeatureArgs {
+                    name: name.clone(),
+                    source: source.clone(),
+                    feature_types: feature_types.clone(),
+                    prerequisite: prerequisite.clone(),
+                    description: description.clone(),
+                },
+            ),
             Reducer::SeedDnd5ERace {
                 name,
                 source,
@@ -320,6 +446,26 @@ impl __sdk::Reducer for Reducer {
                 speed: speed.clone(),
                 ability_bonuses: ability_bonuses.clone(),
                 language_proficiencies: language_proficiencies.clone(),
+                description: description.clone(),
+            }),
+            Reducer::SeedDnd5ESense {
+                name,
+                source,
+                description,
+            } => __sats::bsatn::to_vec(&seed_dnd_5_e_sense_reducer::SeedDnd5ESenseArgs {
+                name: name.clone(),
+                source: source.clone(),
+                description: description.clone(),
+            }),
+            Reducer::SeedDnd5ESkill {
+                name,
+                source,
+                ability,
+                description,
+            } => __sats::bsatn::to_vec(&seed_dnd_5_e_skill_reducer::SeedDnd5ESkillArgs {
+                name: name.clone(),
+                source: source.clone(),
+                ability: ability.clone(),
                 description: description.clone(),
             }),
             Reducer::SeedDnd5ESpell {
@@ -356,12 +502,17 @@ impl __sdk::Reducer for Reducer {
 #[allow(non_snake_case)]
 #[doc(hidden)]
 pub struct DbUpdate {
+    dnd_5_e_action: __sdk::TableUpdate<Dnd5EAction>,
     dnd_5_e_background: __sdk::TableUpdate<Dnd5EBackground>,
     dnd_5_e_condition: __sdk::TableUpdate<Dnd5ECondition>,
     dnd_5_e_feat: __sdk::TableUpdate<Dnd5EFeat>,
     dnd_5_e_item: __sdk::TableUpdate<Dnd5EItem>,
+    dnd_5_e_language: __sdk::TableUpdate<Dnd5ELanguage>,
     dnd_5_e_monster: __sdk::TableUpdate<Dnd5EMonster>,
+    dnd_5_e_optional_feature: __sdk::TableUpdate<Dnd5EOptionalFeature>,
     dnd_5_e_race: __sdk::TableUpdate<Dnd5ERace>,
+    dnd_5_e_sense: __sdk::TableUpdate<Dnd5ESense>,
+    dnd_5_e_skill: __sdk::TableUpdate<Dnd5ESkill>,
     dnd_5_e_spell: __sdk::TableUpdate<Dnd5ESpell>,
     message: __sdk::TableUpdate<Message>,
     user: __sdk::TableUpdate<User>,
@@ -373,6 +524,9 @@ impl TryFrom<__ws::v2::TransactionUpdate> for DbUpdate {
         let mut db_update = DbUpdate::default();
         for table_update in __sdk::transaction_update_iter_table_updates(raw) {
             match &table_update.table_name[..] {
+                "dnd_5_e_action" => db_update
+                    .dnd_5_e_action
+                    .append(dnd_5_e_action_table::parse_table_update(table_update)?),
                 "dnd_5_e_background" => db_update
                     .dnd_5_e_background
                     .append(dnd_5_e_background_table::parse_table_update(table_update)?),
@@ -385,12 +539,24 @@ impl TryFrom<__ws::v2::TransactionUpdate> for DbUpdate {
                 "dnd_5_e_item" => db_update
                     .dnd_5_e_item
                     .append(dnd_5_e_item_table::parse_table_update(table_update)?),
+                "dnd_5_e_language" => db_update
+                    .dnd_5_e_language
+                    .append(dnd_5_e_language_table::parse_table_update(table_update)?),
                 "dnd_5_e_monster" => db_update
                     .dnd_5_e_monster
                     .append(dnd_5_e_monster_table::parse_table_update(table_update)?),
+                "dnd_5_e_optional_feature" => db_update.dnd_5_e_optional_feature.append(
+                    dnd_5_e_optional_feature_table::parse_table_update(table_update)?,
+                ),
                 "dnd_5_e_race" => db_update
                     .dnd_5_e_race
                     .append(dnd_5_e_race_table::parse_table_update(table_update)?),
+                "dnd_5_e_sense" => db_update
+                    .dnd_5_e_sense
+                    .append(dnd_5_e_sense_table::parse_table_update(table_update)?),
+                "dnd_5_e_skill" => db_update
+                    .dnd_5_e_skill
+                    .append(dnd_5_e_skill_table::parse_table_update(table_update)?),
                 "dnd_5_e_spell" => db_update
                     .dnd_5_e_spell
                     .append(dnd_5_e_spell_table::parse_table_update(table_update)?),
@@ -426,6 +592,9 @@ impl __sdk::DbUpdate for DbUpdate {
     ) -> AppliedDiff<'_> {
         let mut diff = AppliedDiff::default();
 
+        diff.dnd_5_e_action = cache
+            .apply_diff_to_table::<Dnd5EAction>("dnd_5_e_action", &self.dnd_5_e_action)
+            .with_updates_by_pk(|row| &row.id);
         diff.dnd_5_e_background = cache
             .apply_diff_to_table::<Dnd5EBackground>("dnd_5_e_background", &self.dnd_5_e_background)
             .with_updates_by_pk(|row| &row.id);
@@ -438,11 +607,26 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.dnd_5_e_item = cache
             .apply_diff_to_table::<Dnd5EItem>("dnd_5_e_item", &self.dnd_5_e_item)
             .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_language = cache
+            .apply_diff_to_table::<Dnd5ELanguage>("dnd_5_e_language", &self.dnd_5_e_language)
+            .with_updates_by_pk(|row| &row.id);
         diff.dnd_5_e_monster = cache
             .apply_diff_to_table::<Dnd5EMonster>("dnd_5_e_monster", &self.dnd_5_e_monster)
             .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_optional_feature = cache
+            .apply_diff_to_table::<Dnd5EOptionalFeature>(
+                "dnd_5_e_optional_feature",
+                &self.dnd_5_e_optional_feature,
+            )
+            .with_updates_by_pk(|row| &row.id);
         diff.dnd_5_e_race = cache
             .apply_diff_to_table::<Dnd5ERace>("dnd_5_e_race", &self.dnd_5_e_race)
+            .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_sense = cache
+            .apply_diff_to_table::<Dnd5ESense>("dnd_5_e_sense", &self.dnd_5_e_sense)
+            .with_updates_by_pk(|row| &row.id);
+        diff.dnd_5_e_skill = cache
+            .apply_diff_to_table::<Dnd5ESkill>("dnd_5_e_skill", &self.dnd_5_e_skill)
             .with_updates_by_pk(|row| &row.id);
         diff.dnd_5_e_spell = cache
             .apply_diff_to_table::<Dnd5ESpell>("dnd_5_e_spell", &self.dnd_5_e_spell)
@@ -460,6 +644,9 @@ impl __sdk::DbUpdate for DbUpdate {
         let mut db_update = DbUpdate::default();
         for table_rows in raw.tables {
             match &table_rows.table[..] {
+                "dnd_5_e_action" => db_update
+                    .dnd_5_e_action
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "dnd_5_e_background" => db_update
                     .dnd_5_e_background
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
@@ -472,11 +659,23 @@ impl __sdk::DbUpdate for DbUpdate {
                 "dnd_5_e_item" => db_update
                     .dnd_5_e_item
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_language" => db_update
+                    .dnd_5_e_language
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "dnd_5_e_monster" => db_update
                     .dnd_5_e_monster
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_optional_feature" => db_update
+                    .dnd_5_e_optional_feature
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "dnd_5_e_race" => db_update
                     .dnd_5_e_race
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_sense" => db_update
+                    .dnd_5_e_sense
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "dnd_5_e_skill" => db_update
+                    .dnd_5_e_skill
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "dnd_5_e_spell" => db_update
                     .dnd_5_e_spell
@@ -500,6 +699,9 @@ impl __sdk::DbUpdate for DbUpdate {
         let mut db_update = DbUpdate::default();
         for table_rows in raw.tables {
             match &table_rows.table[..] {
+                "dnd_5_e_action" => db_update
+                    .dnd_5_e_action
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "dnd_5_e_background" => db_update
                     .dnd_5_e_background
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
@@ -512,11 +714,23 @@ impl __sdk::DbUpdate for DbUpdate {
                 "dnd_5_e_item" => db_update
                     .dnd_5_e_item
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_language" => db_update
+                    .dnd_5_e_language
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "dnd_5_e_monster" => db_update
                     .dnd_5_e_monster
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_optional_feature" => db_update
+                    .dnd_5_e_optional_feature
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "dnd_5_e_race" => db_update
                     .dnd_5_e_race
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_sense" => db_update
+                    .dnd_5_e_sense
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "dnd_5_e_skill" => db_update
+                    .dnd_5_e_skill
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "dnd_5_e_spell" => db_update
                     .dnd_5_e_spell
@@ -542,12 +756,17 @@ impl __sdk::DbUpdate for DbUpdate {
 #[allow(non_snake_case)]
 #[doc(hidden)]
 pub struct AppliedDiff<'r> {
+    dnd_5_e_action: __sdk::TableAppliedDiff<'r, Dnd5EAction>,
     dnd_5_e_background: __sdk::TableAppliedDiff<'r, Dnd5EBackground>,
     dnd_5_e_condition: __sdk::TableAppliedDiff<'r, Dnd5ECondition>,
     dnd_5_e_feat: __sdk::TableAppliedDiff<'r, Dnd5EFeat>,
     dnd_5_e_item: __sdk::TableAppliedDiff<'r, Dnd5EItem>,
+    dnd_5_e_language: __sdk::TableAppliedDiff<'r, Dnd5ELanguage>,
     dnd_5_e_monster: __sdk::TableAppliedDiff<'r, Dnd5EMonster>,
+    dnd_5_e_optional_feature: __sdk::TableAppliedDiff<'r, Dnd5EOptionalFeature>,
     dnd_5_e_race: __sdk::TableAppliedDiff<'r, Dnd5ERace>,
+    dnd_5_e_sense: __sdk::TableAppliedDiff<'r, Dnd5ESense>,
+    dnd_5_e_skill: __sdk::TableAppliedDiff<'r, Dnd5ESkill>,
     dnd_5_e_spell: __sdk::TableAppliedDiff<'r, Dnd5ESpell>,
     message: __sdk::TableAppliedDiff<'r, Message>,
     user: __sdk::TableAppliedDiff<'r, User>,
@@ -564,6 +783,11 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
         event: &EventContext,
         callbacks: &mut __sdk::DbCallbacks<RemoteModule>,
     ) {
+        callbacks.invoke_table_row_callbacks::<Dnd5EAction>(
+            "dnd_5_e_action",
+            &self.dnd_5_e_action,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<Dnd5EBackground>(
             "dnd_5_e_background",
             &self.dnd_5_e_background,
@@ -584,14 +808,34 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             &self.dnd_5_e_item,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<Dnd5ELanguage>(
+            "dnd_5_e_language",
+            &self.dnd_5_e_language,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<Dnd5EMonster>(
             "dnd_5_e_monster",
             &self.dnd_5_e_monster,
             event,
         );
+        callbacks.invoke_table_row_callbacks::<Dnd5EOptionalFeature>(
+            "dnd_5_e_optional_feature",
+            &self.dnd_5_e_optional_feature,
+            event,
+        );
         callbacks.invoke_table_row_callbacks::<Dnd5ERace>(
             "dnd_5_e_race",
             &self.dnd_5_e_race,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<Dnd5ESense>(
+            "dnd_5_e_sense",
+            &self.dnd_5_e_sense,
+            event,
+        );
+        callbacks.invoke_table_row_callbacks::<Dnd5ESkill>(
+            "dnd_5_e_skill",
+            &self.dnd_5_e_skill,
             event,
         );
         callbacks.invoke_table_row_callbacks::<Dnd5ESpell>(
@@ -856,19 +1100,19 @@ impl __sdk::SubscriptionHandle for SubscriptionHandle {
 /// either a [`DbConnection`] or an [`EventContext`] and operate on either.
 pub trait RemoteDbContext:
     __sdk::DbContext<
-    DbView = RemoteTables,
-    Reducers = RemoteReducers,
-    SubscriptionBuilder = __sdk::SubscriptionBuilder<RemoteModule>,
->
+        DbView = RemoteTables,
+        Reducers = RemoteReducers,
+        SubscriptionBuilder = __sdk::SubscriptionBuilder<RemoteModule>,
+    >
 {
 }
 impl<
-        Ctx: __sdk::DbContext<
+    Ctx: __sdk::DbContext<
             DbView = RemoteTables,
             Reducers = RemoteReducers,
             SubscriptionBuilder = __sdk::SubscriptionBuilder<RemoteModule>,
         >,
-    > RemoteDbContext for Ctx
+> RemoteDbContext for Ctx
 {
 }
 
@@ -1261,23 +1505,33 @@ impl __sdk::SpacetimeModule for RemoteModule {
     type QueryBuilder = __sdk::QueryBuilder;
 
     fn register_tables(client_cache: &mut __sdk::ClientCache<Self>) {
+        dnd_5_e_action_table::register_table(client_cache);
         dnd_5_e_background_table::register_table(client_cache);
         dnd_5_e_condition_table::register_table(client_cache);
         dnd_5_e_feat_table::register_table(client_cache);
         dnd_5_e_item_table::register_table(client_cache);
+        dnd_5_e_language_table::register_table(client_cache);
         dnd_5_e_monster_table::register_table(client_cache);
+        dnd_5_e_optional_feature_table::register_table(client_cache);
         dnd_5_e_race_table::register_table(client_cache);
+        dnd_5_e_sense_table::register_table(client_cache);
+        dnd_5_e_skill_table::register_table(client_cache);
         dnd_5_e_spell_table::register_table(client_cache);
         message_table::register_table(client_cache);
         user_table::register_table(client_cache);
     }
     const ALL_TABLE_NAMES: &'static [&'static str] = &[
+        "dnd_5_e_action",
         "dnd_5_e_background",
         "dnd_5_e_condition",
         "dnd_5_e_feat",
         "dnd_5_e_item",
+        "dnd_5_e_language",
         "dnd_5_e_monster",
+        "dnd_5_e_optional_feature",
         "dnd_5_e_race",
+        "dnd_5_e_sense",
+        "dnd_5_e_skill",
         "dnd_5_e_spell",
         "message",
         "user",

@@ -10,6 +10,8 @@ edition = "2024"
 dllm = { path = "crates/dllm" }
 dllm-client = { path = "crates/client" }
 dllm-server = { path = "crates/server" }
+data-import = { path = "crates/data-import" }
+spacetime = { path = "crates/spacetime" }
 
 clap = { version = "4.6.1", features = ["derive"] }
 spacetimedb = "2.1.0"

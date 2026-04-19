@@ -4,6 +4,7 @@
 #![allow(unused, clippy::all)]
 use super::dnd_5_e_feat_type::Dnd5EFeat;
 use super::feat_category_type::FeatCategory;
+use super::feat_prereq_type::FeatPrereq;
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 /// Table handle for the table `dnd_5_e_feat`.

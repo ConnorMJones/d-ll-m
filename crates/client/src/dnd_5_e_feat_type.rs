@@ -5,6 +5,7 @@
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 use super::feat_category_type::FeatCategory;
+use super::feat_prereq_type::FeatPrereq;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -13,7 +14,7 @@ pub struct Dnd5EFeat {
     pub name: String,
     pub source: String,
     pub category: Option<FeatCategory>,
-    pub prerequisite: Option<String>,
+    pub prerequisite: Option<FeatPrereq>,
     pub description: String,
 }
 
@@ -29,7 +30,7 @@ pub struct Dnd5EFeatCols {
     pub name: __sdk::__query_builder::Col<Dnd5EFeat, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EFeat, String>,
     pub category: __sdk::__query_builder::Col<Dnd5EFeat, Option<FeatCategory>>,
-    pub prerequisite: __sdk::__query_builder::Col<Dnd5EFeat, Option<String>>,
+    pub prerequisite: __sdk::__query_builder::Col<Dnd5EFeat, Option<FeatPrereq>>,
     pub description: __sdk::__query_builder::Col<Dnd5EFeat, String>,
 }
 

@@ -1,6 +1,7 @@
 use dllm::dnd5e::{
-    Ability, AbilityGrant, CreatureSize, CreatureType, FeatCategory, ItemRarity, ItemType,
-    LanguageGrant, SkillGrant, Speed, SpellSchool, ToolGrant,
+    Ability, AbilityGrant, CreatureSize, CreatureType, FeatCategory, FeatPrereq, ItemRarity,
+    ItemType, LanguageGrant, OptionalFeaturePrereq, OptionalFeatureType, SkillGrant, Speed,
+    SpellSchool, ToolGrant,
 };
 use spacetimedb::{ReducerContext, Table};
 
@@ -91,7 +92,7 @@ pub struct Dnd5eFeat {
     source: String,
     #[index(btree)]
     category: Option<FeatCategory>,
-    prerequisite: Option<String>,
+    prerequisite: Option<FeatPrereq>,
     description: String,
 }
 
@@ -130,6 +131,63 @@ pub struct Dnd5eRace {
     speed: Speed,
     ability_bonuses: Vec<AbilityGrant>,
     language_proficiencies: Vec<LanguageGrant>,
+    description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_optional_feature, public)]
+pub struct Dnd5eOptionalFeature {
+    #[primary_key]
+    #[auto_inc]
+    id: u64,
+    name: String,
+    source: String,
+    feature_types: Vec<OptionalFeatureType>,
+    prerequisite: Option<OptionalFeaturePrereq>,
+    description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_action, public)]
+pub struct Dnd5eAction {
+    #[primary_key]
+    #[auto_inc]
+    id: u64,
+    name: String,
+    source: String,
+    time: String,
+    description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_language, public)]
+pub struct Dnd5eLanguage {
+    #[primary_key]
+    #[auto_inc]
+    id: u64,
+    name: String,
+    source: String,
+    kind: Option<String>,
+    script: Option<String>,
+    origin: Option<String>,
+    description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_sense, public)]
+pub struct Dnd5eSense {
+    #[primary_key]
+    #[auto_inc]
+    id: u64,
+    name: String,
+    source: String,
+    description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_skill, public)]
+pub struct Dnd5eSkill {
+    #[primary_key]
+    #[auto_inc]
+    id: u64,
+    name: String,
+    source: String,
+    ability: Ability,
     description: String,
 }
 
@@ -297,7 +355,7 @@ pub fn seed_dnd5e_feat(
     name: String,
     source: String,
     category: Option<FeatCategory>,
-    prerequisite: Option<String>,
+    prerequisite: Option<FeatPrereq>,
     description: String,
 ) -> Result<(), String> {
     ctx.db.dnd5e_feat().insert(Dnd5eFeat {
@@ -368,6 +426,102 @@ pub fn seed_dnd5e_race(
         speed,
         ability_bonuses,
         language_proficiencies,
+        description,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+pub fn seed_dnd5e_optional_feature(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    feature_types: Vec<OptionalFeatureType>,
+    prerequisite: Option<OptionalFeaturePrereq>,
+    description: String,
+) -> Result<(), String> {
+    ctx.db
+        .dnd5e_optional_feature()
+        .insert(Dnd5eOptionalFeature {
+            id: 0,
+            name,
+            source,
+            feature_types,
+            prerequisite,
+            description,
+        });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+pub fn seed_dnd5e_action(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    time: String,
+    description: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_action().insert(Dnd5eAction {
+        id: 0,
+        name,
+        source,
+        time,
+        description,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+pub fn seed_dnd5e_language(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    kind: Option<String>,
+    script: Option<String>,
+    origin: Option<String>,
+    description: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_language().insert(Dnd5eLanguage {
+        id: 0,
+        name,
+        source,
+        kind,
+        script,
+        origin,
+        description,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+pub fn seed_dnd5e_sense(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    description: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_sense().insert(Dnd5eSense {
+        id: 0,
+        name,
+        source,
+        description,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+pub fn seed_dnd5e_skill(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    ability: Ability,
+    description: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_skill().insert(Dnd5eSkill {
+        id: 0,
+        name,
+        source,
+        ability,
         description,
     });
     Ok(())

@@ -1,7 +1,6 @@
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
 
-mod convert;
 mod dnd5e;
 
 #[derive(Parser)]

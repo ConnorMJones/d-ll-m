@@ -24,6 +24,12 @@ Before implementing new features:
 
 `temp/` is for scratch work, implementation guides, and feature plans.
 
+When resuming existing work:
+1. **Read `temp/implementation-map.md`** - Current vertical-slice roadmap
+2. Read the relevant `temp/feature-*.md` plan for the area you are touching
+3. Read the relevant `design/*.md` docs before changing behavior or schema
+4. Check `git status --short` to identify in-flight user work before editing
+
 ## Tech Stack
 
 - **SpacetimeDB** - Server state, persistence, real-time sync

@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use spacetimedb::SpacetimeType;
+use std::str::FromStr;
 
 #[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum SpellSchool {
@@ -120,6 +121,27 @@ pub enum ItemRarity {
     Varies,
 }
 
+impl FromStr for ItemRarity {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let normalized = s.trim().to_ascii_lowercase();
+        match normalized.as_str() {
+            "none" => Ok(Self::NoRarity),
+            "common" => Ok(Self::Common),
+            "uncommon" => Ok(Self::Uncommon),
+            "rare" => Ok(Self::Rare),
+            "very rare" => Ok(Self::VeryRare),
+            "legendary" => Ok(Self::Legendary),
+            "artifact" => Ok(Self::Artifact),
+            "unknown" => Ok(Self::Unknown),
+            "unknown (magic)" => Ok(Self::UnknownMagic),
+            "varies" => Ok(Self::Varies),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ItemType {
     #[serde(rename = "LA")]
@@ -193,6 +215,46 @@ pub enum ItemType {
     GenericVariant,
     #[serde(rename = "OTH", alias = "MR", alias = "TB")]
     Other,
+}
+
+impl ItemType {
+    pub fn from_code(code: &str) -> Option<Self> {
+        let base_code = code.split('|').next().unwrap_or(code).trim();
+        match base_code {
+            "LA" => Some(Self::LightArmor),
+            "MA" => Some(Self::MediumArmor),
+            "HA" => Some(Self::HeavyArmor),
+            "S" => Some(Self::Shield),
+            "M" => Some(Self::MeleeWeapon),
+            "R" => Some(Self::RangedWeapon),
+            "A" | "AF" => Some(Self::Ammunition),
+            "P" => Some(Self::Potion),
+            "RG" => Some(Self::Ring),
+            "RD" => Some(Self::Rod),
+            "SC" => Some(Self::Scroll),
+            "ST" => Some(Self::Staff),
+            "WD" => Some(Self::Wand),
+            "W" => Some(Self::WondrousItem),
+            "G" => Some(Self::Adventuring),
+            "AT" | "T" => Some(Self::Tool),
+            "INS" => Some(Self::Instrument),
+            "GS" => Some(Self::GamingSet),
+            "MNT" => Some(Self::Mount),
+            "SHP" => Some(Self::Ship),
+            "VEH" => Some(Self::Vehicle),
+            "AIR" => Some(Self::Airship),
+            "TG" => Some(Self::TradeGood),
+            "$" | "$A" | "$C" | "$G" | "$H" | "$I" | "$P" | "$W" => Some(Self::Treasure),
+            "SCF" => Some(Self::SpellcastingFocus),
+            "FD" => Some(Self::Food),
+            "TAH" => Some(Self::Tack),
+            "EXP" => Some(Self::Explosive),
+            "SPC" => Some(Self::SpellComponent),
+            "GV" => Some(Self::GenericVariant),
+            "OTH" | "MR" | "TB" => Some(Self::Other),
+            _ => None,
+        }
+    }
 }
 
 #[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
@@ -353,4 +415,148 @@ pub struct AbilityChoice {
 pub enum AbilityGrant {
     Fixed(Vec<AbilityBonus>),
     ChooseAny(AbilityChoice),
+}
+
+#[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum Class {
+    Artificer,
+    Barbarian,
+    Bard,
+    Cleric,
+    Druid,
+    Fighter,
+    Monk,
+    Paladin,
+    Ranger,
+    Rogue,
+    Sorcerer,
+    Warlock,
+    Wizard,
+}
+
+#[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum PactBoon {
+    #[serde(alias = "Pact of the Chain")]
+    Chain,
+    #[serde(alias = "Pact of the Blade")]
+    Blade,
+    #[serde(alias = "Pact of the Tome")]
+    Tome,
+    #[serde(alias = "Pact of the Talisman")]
+    Talisman,
+}
+
+#[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
+pub enum WarlockPatron {
+    #[serde(rename = "Archfey")]
+    Archfey,
+    #[serde(rename = "Fiend")]
+    Fiend,
+    #[serde(rename = "Great Old One")]
+    GreatOldOne,
+    #[serde(rename = "Celestial")]
+    Celestial,
+    #[serde(rename = "Hexblade")]
+    Hexblade,
+    #[serde(rename = "Fathomless")]
+    Fathomless,
+    #[serde(rename = "Genie")]
+    Genie,
+    #[serde(rename = "Undead")]
+    Undead,
+    #[serde(rename = "Undying")]
+    Undying,
+}
+
+#[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
+pub enum OptionalFeatureType {
+    #[serde(rename = "AI")]
+    ArtificerInfusion,
+    #[serde(rename = "AS")]
+    ArcaneShot,
+    #[serde(rename = "ED")]
+    ElementalDiscipline,
+    #[serde(rename = "EI")]
+    EldritchInvocation,
+    #[serde(rename = "FS:B")]
+    FightingStyleBard,
+    #[serde(rename = "FS:F")]
+    FightingStyleFighter,
+    #[serde(rename = "FS:P")]
+    FightingStylePaladin,
+    #[serde(rename = "FS:R")]
+    FightingStyleRanger,
+    #[serde(rename = "MM")]
+    Metamagic,
+    #[serde(rename = "MV:B")]
+    ManeuverBattleMaster,
+    #[serde(rename = "PB")]
+    PactBoon,
+    #[serde(rename = "RN")]
+    Rune,
+    #[serde(rename = "RP")]
+    RunePrestige,
+}
+
+#[derive(SpacetimeType, Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
+pub struct ClassLevelPrereq {
+    pub class: Class,
+    pub level: u8,
+}
+
+#[derive(SpacetimeType, Serialize, Deserialize, Clone, Debug, PartialEq, Eq, Default)]
+pub struct OptionalFeaturePrereq {
+    pub level: Option<ClassLevelPrereq>,
+    pub pact: Option<PactBoon>,
+    pub patron: Option<WarlockPatron>,
+}
+
+#[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum Race {
+    Dragonborn,
+    Dwarf,
+    Elf,
+    Gnome,
+    #[serde(rename = "half-elf")]
+    HalfElf,
+    Halfling,
+    #[serde(rename = "half-orc")]
+    HalfOrc,
+    Human,
+    Tiefling,
+    Aasimar,
+    Firbolg,
+    Goliath,
+    Kenku,
+    Lizardfolk,
+    Tabaxi,
+    Triton,
+    Goblin,
+    Hobgoblin,
+    Bugbear,
+    Orc,
+    Kobold,
+    Genasi,
+    Tortle,
+    Changeling,
+    Shifter,
+    Warforged,
+    Kalashtar,
+}
+
+#[derive(SpacetimeType, Serialize, Deserialize, Clone, Debug, PartialEq, Eq, Default)]
+pub struct FeatPrereq {
+    pub level: Option<u8>,
+    pub races: Vec<Race>,
+    pub abilities: Vec<AbilityScore>,
+    pub spellcasting: bool,
+}
+
+#[derive(SpacetimeType, Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
+pub struct AbilityScore {
+    pub ability: Ability,
+    pub minimum: u8,
 }

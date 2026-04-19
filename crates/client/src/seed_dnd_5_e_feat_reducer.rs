@@ -5,6 +5,7 @@
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
 use super::feat_category_type::FeatCategory;
+use super::feat_prereq_type::FeatPrereq;
 
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
@@ -12,7 +13,7 @@ pub(super) struct SeedDnd5EFeatArgs {
     pub name: String,
     pub source: String,
     pub category: Option<FeatCategory>,
-    pub prerequisite: Option<String>,
+    pub prerequisite: Option<FeatPrereq>,
     pub description: String,
 }
 
@@ -48,7 +49,7 @@ pub trait seed_dnd_5_e_feat {
         name: String,
         source: String,
         category: Option<FeatCategory>,
-        prerequisite: Option<String>,
+        prerequisite: Option<FeatPrereq>,
         description: String,
     ) -> __sdk::Result<()> {
         self.seed_dnd_5_e_feat_then(name, source, category, prerequisite, description, |_, _| {})
@@ -65,12 +66,14 @@ pub trait seed_dnd_5_e_feat {
         name: String,
         source: String,
         category: Option<FeatCategory>,
-        prerequisite: Option<String>,
+        prerequisite: Option<FeatPrereq>,
         description: String,
 
-        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
-            + Send
-            + 'static,
+        callback: impl FnOnce(
+            &super::ReducerEventContext,
+            Result<Result<(), String>, __sdk::InternalError>,
+        ) + Send
+        + 'static,
     ) -> __sdk::Result<()>;
 }
 
@@ -80,12 +83,14 @@ impl seed_dnd_5_e_feat for super::RemoteReducers {
         name: String,
         source: String,
         category: Option<FeatCategory>,
-        prerequisite: Option<String>,
+        prerequisite: Option<FeatPrereq>,
         description: String,
 
-        callback: impl FnOnce(&super::ReducerEventContext, Result<Result<(), String>, __sdk::InternalError>)
-            + Send
-            + 'static,
+        callback: impl FnOnce(
+            &super::ReducerEventContext,
+            Result<Result<(), String>, __sdk::InternalError>,
+        ) + Send
+        + 'static,
     ) -> __sdk::Result<()> {
         self.imp.invoke_reducer_with_callback(
             SeedDnd5EFeatArgs {
