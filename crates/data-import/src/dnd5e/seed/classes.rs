@@ -15,7 +15,10 @@ pub fn seed_classes(conn: &DbConnection, data_dir: &Path) -> SectionReport {
 
     let mut report = SectionReport::new("classes");
 
-    for (_, path) in json_files_with_prefix(&class_dir, "class-") {
+    for (filename, path) in json_files_with_prefix(&class_dir, "class-") {
+        if filename == "class-sidekick.json" {
+            continue;
+        }
         let Some(class_file) = read_json_file::<ClassFile>(&path, &mut report) else {
             continue;
         };
@@ -42,7 +45,10 @@ pub fn seed_subclasses(conn: &DbConnection, data_dir: &Path) -> SectionReport {
 
     let mut report = SectionReport::new("subclasses");
 
-    for (_, path) in json_files_with_prefix(&class_dir, "class-") {
+    for (filename, path) in json_files_with_prefix(&class_dir, "class-") {
+        if filename == "class-sidekick.json" {
+            continue;
+        }
         let Some(class_file) = read_json_file::<ClassFile>(&path, &mut report) else {
             continue;
         };
@@ -72,7 +78,10 @@ pub fn seed_class_features(conn: &DbConnection, data_dir: &Path) -> SectionRepor
 
     let mut report = SectionReport::new("class_features");
 
-    for (_, path) in json_files_with_prefix(&class_dir, "class-") {
+    for (filename, path) in json_files_with_prefix(&class_dir, "class-") {
+        if filename == "class-sidekick.json" {
+            continue;
+        }
         let Some(class_file) = read_json_file::<ClassFile>(&path, &mut report) else {
             continue;
         };
@@ -102,7 +111,10 @@ pub fn seed_subclass_features(conn: &DbConnection, data_dir: &Path) -> SectionRe
 
     let mut report = SectionReport::new("subclass_features");
 
-    for (_, path) in json_files_with_prefix(&class_dir, "class-") {
+    for (filename, path) in json_files_with_prefix(&class_dir, "class-") {
+        if filename == "class-sidekick.json" {
+            continue;
+        }
         let Some(class_file) = read_json_file::<ClassFile>(&path, &mut report) else {
             continue;
         };

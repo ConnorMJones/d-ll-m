@@ -22,13 +22,38 @@ pub struct RawFeat {
 #[derive(Deserialize, Default)]
 pub struct RawFeatPrereq {
     #[serde(default)]
-    pub level: Option<u8>,
+    pub level: Option<RawFeatLevelReq>,
     #[serde(default)]
     pub race: Option<Vec<RawRaceRef>>,
     #[serde(default)]
     pub ability: Option<Vec<RawAbilityReq>>,
     #[serde(default)]
     pub spellcasting: Option<bool>,
+}
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+pub enum RawFeatLevelReq {
+    Number(u8),
+    ClassLevel {
+        level: u8,
+        #[serde(default)]
+        _class: Option<RawFeatClassRef>,
+    },
+}
+
+impl RawFeatLevelReq {
+    pub fn get(&self) -> u8 {
+        match self {
+            Self::Number(level) => *level,
+            Self::ClassLevel { level, .. } => *level,
+        }
+    }
+}
+
+#[derive(Deserialize)]
+pub struct RawFeatClassRef {
+    pub _name: String,
 }
 
 #[derive(Deserialize)]

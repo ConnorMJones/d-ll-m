@@ -171,7 +171,7 @@ pub fn parse_feat_prereq(
     let prereq = prereqs.first()?;
 
     Some(dnd::FeatPrereq {
-        level: prereq.level,
+        level: prereq.level.as_ref().map(|level| level.get()),
         races: prereq
             .race
             .as_ref()

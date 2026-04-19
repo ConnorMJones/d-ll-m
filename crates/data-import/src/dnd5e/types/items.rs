@@ -21,7 +21,7 @@ pub struct RawItem {
     #[serde(default)]
     pub weight: Option<f32>,
     #[serde(default)]
-    pub value: Option<u32>,
+    pub value: Option<f32>,
     #[serde(default)]
     pub wondrous: bool,
     #[serde(rename = "reqAttune", default)]

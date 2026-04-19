@@ -394,7 +394,7 @@ pub fn normalize_item(raw: RawItem, report: &mut SectionReport) -> Option<Import
         item_type,
         rarity: raw.rarity.unwrap_or(dnd::ItemRarity::NoRarity),
         weight: raw.weight,
-        value: raw.value,
+        value: raw.value.map(gp_to_cp),
         wondrous: raw.wondrous,
         attunement: raw.req_attune.as_ref().and_then(|a| a.get()),
         description,
@@ -621,8 +621,8 @@ pub fn normalize_object(raw: RawObject, report: &mut SectionReport) -> ImportObj
         source: raw.source,
         size: raw.size,
         object_type: raw.object_type,
-        ac: raw.ac,
-        hp: raw.hp,
+        ac: raw.ac.and_then(|ac| ac.get()),
+        hp: raw.hp.and_then(|hp| hp.get()),
         description,
         action_description,
     }
@@ -640,9 +640,9 @@ pub fn normalize_vehicle(raw: RawVehicle, report: &mut SectionReport) -> ImportV
         terrain: raw.terrain,
         crew_capacity: raw.cap_crew,
         passenger_capacity: raw.cap_passenger,
-        pace: raw.pace,
-        ac: raw.ac,
-        hp: raw.hp,
+        pace: raw.pace.and_then(|pace| pace.get()),
+        ac: raw.ac.and_then(|ac| ac.get()),
+        hp: raw.hp.and_then(|hp| hp.get()),
         description,
     }
 }
@@ -690,9 +690,14 @@ pub fn normalize_trap_hazard(
         source: raw.source,
         kind: kind.to_string(),
         trap_hazard_type: raw.trap_hazard_type,
-        trigger: join_text_blocks(&raw.trigger),
-        effect: join_text_blocks(&raw.effect),
-        countermeasures: join_text_blocks(&raw.countermeasures),
+        trigger: normalize_named_entries(&item_name, "trigger", &raw.trigger, report),
+        effect: normalize_named_entries(&item_name, "effect", &raw.effect, report),
+        countermeasures: normalize_named_entries(
+            &item_name,
+            "countermeasures",
+            &raw.countermeasures,
+            report,
+        ),
         description,
     }
 }
@@ -741,7 +746,12 @@ pub fn normalize_recipe(raw: RawRecipe, _report: &mut SectionReport) -> ImportRe
             .map(|ingredient| ingredient.into_text())
             .collect::<Vec<_>>()
             .join("\n"),
-        instructions: raw.instructions.join("\n\n"),
+        instructions: raw
+            .instructions
+            .into_iter()
+            .map(|instruction| instruction.into_text())
+            .collect::<Vec<_>>()
+            .join("\n\n"),
     }
 }
 
@@ -839,10 +849,6 @@ fn format_action_time(times: &[RawActionTime]) -> String {
         .join(", ")
 }
 
-fn join_text_blocks(values: &[String]) -> String {
-    values.join("\n\n")
-}
-
 fn format_recipe_serves(serves: Option<super::types::RawRecipeServes>) -> Option<String> {
     let serves = serves?;
     let range = match (serves.exact, serves.min, serves.max) {
@@ -862,6 +868,10 @@ fn format_recipe_serves(serves: Option<super::types::RawRecipeServes>) -> Option
     }
 
     (!parts.is_empty()).then(|| parts.join(" "))
+}
+
+fn gp_to_cp(value_gp: f32) -> u32 {
+    (value_gp * 100.0).round() as u32
 }
 
 fn format_psionic_modes(

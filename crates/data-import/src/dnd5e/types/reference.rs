@@ -24,6 +24,25 @@ pub struct RawTextEntry {
 }
 
 #[derive(Deserialize)]
+#[serde(untagged)]
+pub enum RawNumericValue {
+    Number(u16),
+    Special {
+        #[serde(default)]
+        _special: Option<String>,
+    },
+}
+
+impl RawNumericValue {
+    pub fn get(&self) -> Option<u16> {
+        match self {
+            Self::Number(value) => Some(*value),
+            Self::Special { .. } => None,
+        }
+    }
+}
+
+#[derive(Deserialize)]
 pub struct ActionFile {
     pub action: Vec<RawAction>,
 }
@@ -105,9 +124,9 @@ pub struct RawObject {
     #[serde(rename = "objectType")]
     pub object_type: Option<String>,
     #[serde(default)]
-    pub ac: Option<u16>,
+    pub ac: Option<RawNumericValue>,
     #[serde(default)]
-    pub hp: Option<u16>,
+    pub hp: Option<RawNumericValue>,
     #[serde(default)]
     pub entries: Vec<Entry>,
     #[serde(rename = "actionEntries", default)]
@@ -134,13 +153,88 @@ pub struct RawVehicle {
     #[serde(rename = "capPassenger", default)]
     pub cap_passenger: Option<u16>,
     #[serde(default)]
-    pub pace: Option<u16>,
+    pub pace: Option<RawVehiclePace>,
     #[serde(default)]
-    pub ac: Option<u16>,
+    pub ac: Option<RawVehicleArmor>,
     #[serde(default)]
-    pub hp: Option<u16>,
+    pub hp: Option<RawNumericValue>,
     #[serde(default)]
     pub entries: Vec<Entry>,
+}
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+pub enum RawVehicleArmor {
+    Number(u16),
+    Special {
+        #[serde(default)]
+        _special: Option<String>,
+    },
+    Entries(Vec<RawVehicleArmorEntry>),
+}
+
+impl RawVehicleArmor {
+    pub fn get(&self) -> Option<u16> {
+        match self {
+            Self::Number(value) => Some(*value),
+            Self::Special { .. } => None,
+            Self::Entries(entries) => entries.iter().find_map(|entry| entry.ac),
+        }
+    }
+}
+
+#[derive(Deserialize)]
+pub struct RawVehicleArmorEntry {
+    #[serde(default)]
+    pub ac: Option<u16>,
+}
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+pub enum RawVehiclePace {
+    Number(u16),
+    Speeds {
+        #[serde(default)]
+        walk: Option<RawPaceValue>,
+        #[serde(default)]
+        fly: Option<RawPaceValue>,
+        #[serde(default)]
+        swim: Option<RawPaceValue>,
+    },
+}
+
+impl RawVehiclePace {
+    pub fn get(&self) -> Option<u16> {
+        match self {
+            Self::Number(value) => Some(*value),
+            Self::Speeds { walk, fly, swim } => walk
+                .as_ref()
+                .and_then(RawPaceValue::get)
+                .or_else(|| fly.as_ref().and_then(RawPaceValue::get))
+                .or_else(|| swim.as_ref().and_then(RawPaceValue::get)),
+        }
+    }
+}
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+pub enum RawPaceValue {
+    Number(u16),
+    Text(String),
+}
+
+impl RawPaceValue {
+    pub fn get(&self) -> Option<u16> {
+        match self {
+            Self::Number(value) => Some(*value),
+            Self::Text(value) => value
+                .chars()
+                .take_while(|ch| ch.is_ascii_digit())
+                .collect::<String>()
+                .parse()
+                .ok(),
+        }
+    }
 }
 
 #[derive(Deserialize)]
@@ -200,11 +294,11 @@ pub struct RawTrapHazard {
     #[serde(rename = "trapHazType", default)]
     pub trap_hazard_type: Option<String>,
     #[serde(default)]
-    pub trigger: Vec<String>,
+    pub trigger: Vec<Entry>,
     #[serde(default)]
-    pub effect: Vec<String>,
+    pub effect: Vec<Entry>,
     #[serde(default)]
-    pub countermeasures: Vec<String>,
+    pub countermeasures: Vec<Entry>,
     #[serde(default)]
     pub entries: Vec<Entry>,
 }
@@ -275,14 +369,21 @@ pub struct RawRecipe {
     #[serde(default)]
     pub ingredients: Vec<RawRecipeText>,
     #[serde(default)]
-    pub instructions: Vec<String>,
+    pub instructions: Vec<RawRecipeText>,
 }
 
 #[derive(Deserialize)]
 #[serde(untagged)]
 pub enum RawRecipeText {
     Text(String),
-    Structured { entry: String },
+    Structured {
+        entry: String,
+    },
+    Section {
+        #[serde(default)]
+        name: Option<String>,
+        entries: Vec<RawRecipeText>,
+    },
 }
 
 impl RawRecipeText {
@@ -290,6 +391,19 @@ impl RawRecipeText {
         match self {
             Self::Text(text) => text,
             Self::Structured { entry } => entry,
+            Self::Section { name, entries } => {
+                let body = entries
+                    .into_iter()
+                    .map(Self::into_text)
+                    .filter(|text| !text.is_empty())
+                    .collect::<Vec<_>>()
+                    .join("\n");
+                match name {
+                    Some(name) if !body.is_empty() => format!("{name}:\n{body}"),
+                    Some(name) => name,
+                    None => body,
+                }
+            }
         }
     }
 }

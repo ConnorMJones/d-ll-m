@@ -77,14 +77,19 @@ impl CrValue {
 #[serde(untagged)]
 pub enum AcValue {
     Number(u8),
-    Complex { ac: u8 },
+    Complex {
+        #[serde(default)]
+        ac: Option<u8>,
+        #[serde(default)]
+        _special: Option<String>,
+    },
 }
 
 impl AcValue {
     pub fn get(&self) -> u8 {
         match self {
             Self::Number(n) => *n,
-            Self::Complex { ac } => *ac,
+            Self::Complex { ac, .. } => ac.unwrap_or(10),
         }
     }
 }
@@ -95,6 +100,8 @@ pub struct HpValue {
     pub average: u16,
     #[serde(default)]
     pub formula: Option<String>,
+    #[serde(default)]
+    pub _special: Option<String>,
 }
 
 #[derive(Deserialize)]
