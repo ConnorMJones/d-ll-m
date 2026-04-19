@@ -5,8 +5,9 @@ use super::seed::support::{
     parse_race_speed, parse_skill_grants, parse_tool_grants,
 };
 use super::types::{
-    RawAction, RawActionTime, RawBackground, RawCondition, RawFeat, RawItem, RawLanguage,
-    RawMonster, RawOptionalFeature, RawRace, RawSense, RawSkill, RawSpell,
+    RawAction, RawActionTime, RawBackground, RawClass, RawClassFeature, RawCondition, RawFeat,
+    RawItem, RawLanguage, RawMonster, RawOptionalFeature, RawRace, RawSense, RawSkill, RawSpell,
+    RawSubclass, RawSubclassFeature,
 };
 use dllm::dnd5e as dnd;
 
@@ -133,6 +134,58 @@ pub struct ImportSkill {
     pub name: String,
     pub source: String,
     pub ability: dnd::Ability,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportClass {
+    pub name: String,
+    pub source: String,
+    pub edition: Option<String>,
+    pub hit_die: u8,
+    pub saving_throws: Vec<dnd::Ability>,
+    pub spellcasting_ability: Option<dnd::Ability>,
+    pub caster_progression: Option<dnd::CasterProgression>,
+    pub prepared_spells_formula: Option<String>,
+    pub prepared_spells_progression: Vec<u8>,
+    pub cantrip_progression: Vec<u8>,
+    pub class_features: Vec<String>,
+    pub subclass_title: Option<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportSubclass {
+    pub name: String,
+    pub short_name: String,
+    pub source: String,
+    pub class_name: String,
+    pub class_source: String,
+    pub edition: Option<String>,
+    pub spellcasting_ability: Option<dnd::Ability>,
+    pub caster_progression: Option<dnd::CasterProgression>,
+    pub cantrip_progression: Vec<u8>,
+    pub subclass_features: Vec<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportClassFeature {
+    pub name: String,
+    pub source: String,
+    pub class_name: String,
+    pub class_source: String,
+    pub level: u8,
+    pub description: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImportSubclassFeature {
+    pub name: String,
+    pub source: String,
+    pub class_name: String,
+    pub class_source: String,
+    pub subclass_short_name: String,
+    pub subclass_source: String,
+    pub level: u8,
     pub description: String,
 }
 
@@ -347,6 +400,89 @@ pub fn normalize_skill(raw: RawSkill, report: &mut SectionReport) -> ImportSkill
         name: raw.name,
         source: raw.source,
         ability: raw.ability,
+        description,
+    }
+}
+
+pub fn normalize_class(raw: RawClass, _report: &mut SectionReport) -> ImportClass {
+    ImportClass {
+        name: raw.name,
+        source: raw.source,
+        edition: raw.edition,
+        hit_die: raw.hd.faces,
+        saving_throws: raw.saving_throws,
+        spellcasting_ability: raw.spellcasting_ability,
+        caster_progression: raw.caster_progression,
+        prepared_spells_formula: raw.prepared_spells_formula,
+        prepared_spells_progression: raw.prepared_spells_progression,
+        cantrip_progression: raw.cantrip_progression,
+        class_features: raw
+            .class_features
+            .into_iter()
+            .map(|feature| feature.reference().to_string())
+            .collect(),
+        subclass_title: raw.subclass_title,
+    }
+}
+
+pub fn normalize_subclass(raw: RawSubclass, report: &mut SectionReport) -> ImportSubclass {
+    let item_name = format!("{} ({}) [{}]", raw.name, raw.class_name, raw.source);
+    if raw.subclass_features.is_empty() {
+        report.warn(
+            Some(item_name),
+            "subclass had no explicit feature references; likely copy-derived data",
+        );
+    }
+
+    ImportSubclass {
+        name: raw.name,
+        short_name: raw.short_name,
+        source: raw.source,
+        class_name: raw.class_name,
+        class_source: raw.class_source,
+        edition: raw.edition,
+        spellcasting_ability: raw.spellcasting_ability,
+        caster_progression: raw.caster_progression,
+        cantrip_progression: raw.cantrip_progression,
+        subclass_features: raw.subclass_features,
+    }
+}
+
+pub fn normalize_class_feature(
+    raw: RawClassFeature,
+    report: &mut SectionReport,
+) -> ImportClassFeature {
+    let item_name = format!("{} ({}) [{}]", raw.name, raw.class_name, raw.source);
+    let description = normalize_description(&item_name, &raw.entries, report);
+
+    ImportClassFeature {
+        name: raw.name,
+        source: raw.source,
+        class_name: raw.class_name,
+        class_source: raw.class_source,
+        level: raw.level,
+        description,
+    }
+}
+
+pub fn normalize_subclass_feature(
+    raw: RawSubclassFeature,
+    report: &mut SectionReport,
+) -> ImportSubclassFeature {
+    let item_name = format!(
+        "{} ({}/{}) [{}]",
+        raw.name, raw.class_name, raw.subclass_short_name, raw.source
+    );
+    let description = normalize_description(&item_name, &raw.entries, report);
+
+    ImportSubclassFeature {
+        name: raw.name,
+        source: raw.source,
+        class_name: raw.class_name,
+        class_source: raw.class_source,
+        subclass_short_name: raw.subclass_short_name,
+        subclass_source: raw.subclass_source,
+        level: raw.level,
         description,
     }
 }

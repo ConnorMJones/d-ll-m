@@ -1,12 +1,14 @@
 use crate::dnd5e::normalize::{
-    ImportAction, ImportBackground, ImportCondition, ImportFeat, ImportItem, ImportLanguage,
-    ImportMonster, ImportOptionalFeature, ImportRace, ImportSense, ImportSkill, ImportSpell,
+    ImportAction, ImportBackground, ImportClass, ImportClassFeature, ImportCondition, ImportFeat,
+    ImportItem, ImportLanguage, ImportMonster, ImportOptionalFeature, ImportRace, ImportSense,
+    ImportSkill, ImportSpell, ImportSubclass, ImportSubclassFeature,
 };
 use dllm_client::{
-    DbConnection, seed_dnd_5_e_action, seed_dnd_5_e_background, seed_dnd_5_e_condition,
-    seed_dnd_5_e_feat, seed_dnd_5_e_item, seed_dnd_5_e_language, seed_dnd_5_e_monster,
-    seed_dnd_5_e_optional_feature, seed_dnd_5_e_race, seed_dnd_5_e_sense, seed_dnd_5_e_skill,
-    seed_dnd_5_e_spell,
+    DbConnection, seed_dnd_5_e_action, seed_dnd_5_e_background, seed_dnd_5_e_class,
+    seed_dnd_5_e_class_feature, seed_dnd_5_e_condition, seed_dnd_5_e_feat, seed_dnd_5_e_item,
+    seed_dnd_5_e_language, seed_dnd_5_e_monster, seed_dnd_5_e_optional_feature, seed_dnd_5_e_race,
+    seed_dnd_5_e_sense, seed_dnd_5_e_skill, seed_dnd_5_e_spell, seed_dnd_5_e_subclass,
+    seed_dnd_5_e_subclass_feature,
 };
 use spacetime::dnd5e::convert;
 
@@ -177,6 +179,74 @@ pub fn skill(conn: &DbConnection, skill: ImportSkill) -> Result<(), String> {
             skill.source,
             convert::ability(skill.ability),
             skill.description,
+        )
+        .map_err(|err| err.to_string())
+}
+
+pub fn class(conn: &DbConnection, class: ImportClass) -> Result<(), String> {
+    conn.reducers
+        .seed_dnd_5_e_class(
+            class.name,
+            class.source,
+            class.edition,
+            class.hit_die,
+            class
+                .saving_throws
+                .into_iter()
+                .map(convert::ability)
+                .collect(),
+            class.spellcasting_ability.map(convert::ability),
+            class.caster_progression.map(convert::caster_progression),
+            class.prepared_spells_formula,
+            class.prepared_spells_progression,
+            class.cantrip_progression,
+            class.class_features,
+            class.subclass_title,
+        )
+        .map_err(|err| err.to_string())
+}
+
+pub fn subclass(conn: &DbConnection, subclass: ImportSubclass) -> Result<(), String> {
+    conn.reducers
+        .seed_dnd_5_e_subclass(
+            subclass.name,
+            subclass.short_name,
+            subclass.source,
+            subclass.class_name,
+            subclass.class_source,
+            subclass.edition,
+            subclass.spellcasting_ability.map(convert::ability),
+            subclass.caster_progression.map(convert::caster_progression),
+            subclass.cantrip_progression,
+            subclass.subclass_features,
+        )
+        .map_err(|err| err.to_string())
+}
+
+pub fn class_feature(conn: &DbConnection, feature: ImportClassFeature) -> Result<(), String> {
+    conn.reducers
+        .seed_dnd_5_e_class_feature(
+            feature.name,
+            feature.source,
+            feature.class_name,
+            feature.class_source,
+            feature.level,
+            feature.description,
+        )
+        .map_err(|err| err.to_string())
+}
+
+pub fn subclass_feature(conn: &DbConnection, feature: ImportSubclassFeature) -> Result<(), String> {
+    conn.reducers
+        .seed_dnd_5_e_subclass_feature(
+            feature.name,
+            feature.source,
+            feature.class_name,
+            feature.class_source,
+            feature.subclass_short_name,
+            feature.subclass_source,
+            feature.level,
+            feature.description,
         )
         .map_err(|err| err.to_string())
 }

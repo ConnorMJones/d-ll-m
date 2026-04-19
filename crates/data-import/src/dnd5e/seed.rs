@@ -1,3 +1,4 @@
+mod classes;
 use super::report::ImportReport;
 mod items;
 mod monsters;
@@ -14,6 +15,10 @@ pub fn seed_all(conn: &DbConnection, data_dir: &Path) -> ImportReport {
             spells::seed(conn, data_dir),
             monsters::seed(conn, data_dir),
             items::seed(conn, data_dir),
+            classes::seed_classes(conn, data_dir),
+            classes::seed_subclasses(conn, data_dir),
+            classes::seed_class_features(conn, data_dir),
+            classes::seed_subclass_features(conn, data_dir),
             other::seed_actions(conn, data_dir),
             other::seed_feats(conn, data_dir),
             other::seed_conditions(conn, data_dir),

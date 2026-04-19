@@ -1,7 +1,7 @@
 use dllm::dnd5e::{
-    Ability, AbilityGrant, CreatureSize, CreatureType, FeatCategory, FeatPrereq, ItemRarity,
-    ItemType, LanguageGrant, OptionalFeaturePrereq, OptionalFeatureType, SkillGrant, Speed,
-    SpellSchool, ToolGrant,
+    Ability, AbilityGrant, CasterProgression, CreatureSize, CreatureType, FeatCategory, FeatPrereq,
+    ItemRarity, ItemType, LanguageGrant, OptionalFeaturePrereq, OptionalFeatureType, SkillGrant,
+    Speed, SpellSchool, ToolGrant,
 };
 use spacetimedb::{ReducerContext, Table};
 
@@ -188,6 +188,70 @@ pub struct Dnd5eSkill {
     name: String,
     source: String,
     ability: Ability,
+    description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_class, public)]
+pub struct Dnd5eClass {
+    #[primary_key]
+    #[auto_inc]
+    id: u64,
+    name: String,
+    source: String,
+    edition: Option<String>,
+    hit_die: u8,
+    saving_throws: Vec<Ability>,
+    spellcasting_ability: Option<Ability>,
+    caster_progression: Option<CasterProgression>,
+    prepared_spells_formula: Option<String>,
+    prepared_spells_progression: Vec<u8>,
+    cantrip_progression: Vec<u8>,
+    class_features: Vec<String>,
+    subclass_title: Option<String>,
+}
+
+#[spacetimedb::table(accessor = dnd5e_subclass, public)]
+pub struct Dnd5eSubclass {
+    #[primary_key]
+    #[auto_inc]
+    id: u64,
+    name: String,
+    short_name: String,
+    source: String,
+    class_name: String,
+    class_source: String,
+    edition: Option<String>,
+    spellcasting_ability: Option<Ability>,
+    caster_progression: Option<CasterProgression>,
+    cantrip_progression: Vec<u8>,
+    subclass_features: Vec<String>,
+}
+
+#[spacetimedb::table(accessor = dnd5e_class_feature, public)]
+pub struct Dnd5eClassFeature {
+    #[primary_key]
+    #[auto_inc]
+    id: u64,
+    name: String,
+    source: String,
+    class_name: String,
+    class_source: String,
+    level: u8,
+    description: String,
+}
+
+#[spacetimedb::table(accessor = dnd5e_subclass_feature, public)]
+pub struct Dnd5eSubclassFeature {
+    #[primary_key]
+    #[auto_inc]
+    id: u64,
+    name: String,
+    source: String,
+    class_name: String,
+    class_source: String,
+    subclass_short_name: String,
+    subclass_source: String,
+    level: u8,
     description: String,
 }
 
@@ -524,5 +588,122 @@ pub fn seed_dnd5e_skill(
         ability,
         description,
     });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+#[allow(clippy::too_many_arguments)]
+pub fn seed_dnd5e_class(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    edition: Option<String>,
+    hit_die: u8,
+    saving_throws: Vec<Ability>,
+    spellcasting_ability: Option<Ability>,
+    caster_progression: Option<CasterProgression>,
+    prepared_spells_formula: Option<String>,
+    prepared_spells_progression: Vec<u8>,
+    cantrip_progression: Vec<u8>,
+    class_features: Vec<String>,
+    subclass_title: Option<String>,
+) -> Result<(), String> {
+    ctx.db.dnd5e_class().insert(Dnd5eClass {
+        id: 0,
+        name,
+        source,
+        edition,
+        hit_die,
+        saving_throws,
+        spellcasting_ability,
+        caster_progression,
+        prepared_spells_formula,
+        prepared_spells_progression,
+        cantrip_progression,
+        class_features,
+        subclass_title,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+#[allow(clippy::too_many_arguments)]
+pub fn seed_dnd5e_subclass(
+    ctx: &ReducerContext,
+    name: String,
+    short_name: String,
+    source: String,
+    class_name: String,
+    class_source: String,
+    edition: Option<String>,
+    spellcasting_ability: Option<Ability>,
+    caster_progression: Option<CasterProgression>,
+    cantrip_progression: Vec<u8>,
+    subclass_features: Vec<String>,
+) -> Result<(), String> {
+    ctx.db.dnd5e_subclass().insert(Dnd5eSubclass {
+        id: 0,
+        name,
+        short_name,
+        source,
+        class_name,
+        class_source,
+        edition,
+        spellcasting_ability,
+        caster_progression,
+        cantrip_progression,
+        subclass_features,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+pub fn seed_dnd5e_class_feature(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    class_name: String,
+    class_source: String,
+    level: u8,
+    description: String,
+) -> Result<(), String> {
+    ctx.db.dnd5e_class_feature().insert(Dnd5eClassFeature {
+        id: 0,
+        name,
+        source,
+        class_name,
+        class_source,
+        level,
+        description,
+    });
+    Ok(())
+}
+
+#[spacetimedb::reducer]
+#[allow(clippy::too_many_arguments)]
+pub fn seed_dnd5e_subclass_feature(
+    ctx: &ReducerContext,
+    name: String,
+    source: String,
+    class_name: String,
+    class_source: String,
+    subclass_short_name: String,
+    subclass_source: String,
+    level: u8,
+    description: String,
+) -> Result<(), String> {
+    ctx.db
+        .dnd5e_subclass_feature()
+        .insert(Dnd5eSubclassFeature {
+            id: 0,
+            name,
+            source,
+            class_name,
+            class_source,
+            subclass_short_name,
+            subclass_source,
+            level,
+            description,
+        });
     Ok(())
 }

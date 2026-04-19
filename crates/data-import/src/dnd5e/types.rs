@@ -1,4 +1,5 @@
 mod backgrounds;
+mod classes;
 mod conditions;
 mod feats;
 mod grants;
@@ -10,6 +11,7 @@ mod reference;
 mod spells;
 
 pub use backgrounds::*;
+pub use classes::*;
 pub use conditions::*;
 pub use feats::*;
 pub use grants::*;

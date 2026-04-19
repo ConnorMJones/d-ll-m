@@ -436,6 +436,20 @@ pub enum Class {
 }
 
 #[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
+pub enum CasterProgression {
+    #[serde(rename = "full")]
+    Full,
+    #[serde(rename = "1/2")]
+    Half,
+    #[serde(rename = "1/3")]
+    Third,
+    #[serde(rename = "artificer")]
+    Artificer,
+    #[serde(rename = "pact")]
+    Pact,
+}
+
+#[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum PactBoon {
     #[serde(alias = "Pact of the Chain")]

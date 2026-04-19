@@ -5,11 +5,12 @@ use dllm::dnd5e as dnd;
 use dllm_client::{
     ability_bonus_type::AbilityBonus, ability_choice_type::AbilityChoice,
     ability_grant_type::AbilityGrant, ability_score_type::AbilityScore, ability_type::Ability,
-    class_level_prereq_type::ClassLevelPrereq, class_type::Class, creature_size_type::CreatureSize,
-    creature_type_type::CreatureType, feat_category_type::FeatCategory,
-    feat_prereq_type::FeatPrereq, item_rarity_type::ItemRarity, item_type_type::ItemType,
-    language_choice_type::LanguageChoice, language_grant_type::LanguageGrant,
-    language_type::Language, optional_feature_prereq_type::OptionalFeaturePrereq,
+    caster_progression_type::CasterProgression, class_level_prereq_type::ClassLevelPrereq,
+    class_type::Class, creature_size_type::CreatureSize, creature_type_type::CreatureType,
+    feat_category_type::FeatCategory, feat_prereq_type::FeatPrereq, item_rarity_type::ItemRarity,
+    item_type_type::ItemType, language_choice_type::LanguageChoice,
+    language_grant_type::LanguageGrant, language_type::Language,
+    optional_feature_prereq_type::OptionalFeaturePrereq,
     optional_feature_type_type::OptionalFeatureType, pact_boon_type::PactBoon, race_type::Race,
     skill_choice_type::SkillChoice, skill_grant_type::SkillGrant, skill_type::Skill,
     speed_type::Speed, spell_school_type::SpellSchool, string_choice_type::StringChoice,
@@ -265,6 +266,16 @@ pub fn class(c: dnd::Class) -> Class {
         dnd::Class::Sorcerer => Class::Sorcerer,
         dnd::Class::Warlock => Class::Warlock,
         dnd::Class::Wizard => Class::Wizard,
+    }
+}
+
+pub fn caster_progression(c: dnd::CasterProgression) -> CasterProgression {
+    match c {
+        dnd::CasterProgression::Full => CasterProgression::Full,
+        dnd::CasterProgression::Half => CasterProgression::Half,
+        dnd::CasterProgression::Third => CasterProgression::Third,
+        dnd::CasterProgression::Artificer => CasterProgression::Artificer,
+        dnd::CasterProgression::Pact => CasterProgression::Pact,
     }
 }
 
