@@ -12,6 +12,7 @@ dllm-core = { path = "crates/core" }
 dllm-client = { path = "crates/client" }
 dllm-server = { path = "crates/server" }
 dllm-bindings = { path = "crates/spacetime-bindings" }
+dllm-tools = { path = "crates/tools" }
 data-import = { path = "crates/data-import" }
 
 # spacetime

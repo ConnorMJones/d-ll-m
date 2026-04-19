@@ -543,6 +543,13 @@ dependencies = [
 [[package]]
 name = "dllm"
 version = "0.1.0"
+dependencies = [
+ "dllm-bindings",
+ "dllm-client",
+ "dllm-core",
+ "dllm-server",
+ "dllm-tools",
+]
 
 [[package]]
 name = "dllm-bindings"
@@ -590,7 +597,6 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "data-import",
- "dllm",
  "dllm-bindings",
  "dllm-server",
  "serde",

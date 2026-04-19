@@ -4,3 +4,8 @@ version.workspace = true
 edition.workspace = true
 
 [dependencies]
+dllm-core.workspace = true
+dllm-client.workspace = true
+dllm-server.workspace = true
+dllm-bindings.workspace = true
+dllm-tools.workspace = true

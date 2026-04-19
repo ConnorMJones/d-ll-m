@@ -8,7 +8,6 @@ name = "dllm-tools"
 path = "src/main.rs"
 
 [dependencies]
-dllm.workspace = true
 dllm-bindings.workspace = true
 data-import.workspace = true
 dllm-server.workspace = true
