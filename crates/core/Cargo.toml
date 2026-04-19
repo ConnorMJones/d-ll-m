@@ -1,6 +1,8 @@
 [package]
-name = "dllm"
+name = "dllm-core"
 version.workspace = true
 edition.workspace = true
 
 [dependencies]
+spacetimedb.workspace = true
+serde.workspace = true

@@ -1,8 +1,7 @@
 //! Conversions from dllm types to generated client types.
 //! These exist because SpacetimeDB generates separate client types.
 
-use dllm::dnd5e as dnd;
-use dllm_client::{
+use dllm_bindings::{
     ability_bonus_type::AbilityBonus, ability_choice_type::AbilityChoice,
     ability_grant_type::AbilityGrant, ability_score_type::AbilityScore, ability_type::Ability,
     caster_progression_type::CasterProgression, class_level_prereq_type::ClassLevelPrereq,
@@ -16,6 +15,7 @@ use dllm_client::{
     speed_type::Speed, spell_school_type::SpellSchool, string_choice_type::StringChoice,
     tool_grant_type::ToolGrant, warlock_patron_type::WarlockPatron,
 };
+use dllm_core::dnd5e as dnd;
 
 pub fn spell_school(s: dnd::SpellSchool) -> SpellSchool {
     match s {

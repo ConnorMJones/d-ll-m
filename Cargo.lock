@@ -478,11 +478,11 @@ checksum = "d7a1e2f27636f116493b8b860f5546edb47c8d8f8ea73e1d2a20be88e28d1fea"
 name = "data-import"
 version = "0.1.0"
 dependencies = [
- "dllm",
- "dllm-client",
+ "dllm-bindings",
+ "dllm-core",
+ "dllm-server",
  "serde",
  "serde_json",
- "spacetime",
  "tracing",
 ]
 
@@ -543,18 +543,20 @@ dependencies = [
 [[package]]
 name = "dllm"
 version = "0.1.0"
+
+[[package]]
+name = "dllm-bindings"
+version = "0.1.0"
 dependencies = [
- "serde",
- "spacetimedb",
+ "spacetimedb-sdk",
 ]
 
 [[package]]
 name = "dllm-cli"
 version = "0.1.0"
 dependencies = [
- "dllm-client",
+ "dllm-bindings",
  "spacetimedb-sdk",
- "tokio",
  "tracing",
  "tracing-subscriber",
 ]
@@ -562,16 +564,24 @@ dependencies = [
 [[package]]
 name = "dllm-client"
 version = "0.1.0"
+
+[[package]]
+name = "dllm-core"
+version = "0.1.0"
 dependencies = [
- "spacetimedb-sdk",
+ "serde",
+ "spacetimedb",
 ]
 
 [[package]]
 name = "dllm-server"
 version = "0.1.0"
 dependencies = [
- "dllm",
+ "dllm-bindings",
+ "dllm-core",
  "spacetimedb",
+ "spacetimedb-sdk",
+ "tracing",
 ]
 
 [[package]]
@@ -581,10 +591,10 @@ dependencies = [
  "clap",
  "data-import",
  "dllm",
- "dllm-client",
+ "dllm-bindings",
+ "dllm-server",
  "serde",
  "serde_json",
- "spacetime",
  "spacetimedb-sdk",
  "tracing",
  "tracing-subscriber",
@@ -1926,16 +1936,6 @@ checksum = "3a766e1110788c36f4fa1c2b71b387a7815aa65f88ce0229841826633d93723e"
 dependencies = [
  "libc",
  "windows-sys",
-]
-
-[[package]]
-name = "spacetime"
-version = "0.1.0"
-dependencies = [
- "dllm",
- "dllm-client",
- "spacetimedb-sdk",
- "tracing",
 ]
 
 [[package]]

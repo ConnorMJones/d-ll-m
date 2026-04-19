@@ -10,7 +10,7 @@ use crate::dnd5e::types::{
     RaceFile, SenseFile, SkillFile,
 };
 use crate::dnd5e::write;
-use dllm_client::DbConnection;
+use dllm_bindings::DbConnection;
 use std::path::Path;
 use tracing::info;
 

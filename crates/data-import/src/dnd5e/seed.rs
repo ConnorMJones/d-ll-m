@@ -6,7 +6,7 @@ mod other;
 mod spells;
 pub(crate) mod support;
 
-use dllm_client::DbConnection;
+use dllm_bindings::DbConnection;
 use std::path::Path;
 
 pub fn seed_all(conn: &DbConnection, data_dir: &Path) -> ImportReport {

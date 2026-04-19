@@ -9,7 +9,7 @@ use super::types::{
     RawItem, RawLanguage, RawMonster, RawOptionalFeature, RawRace, RawSense, RawSkill, RawSpell,
     RawSubclass, RawSubclassFeature,
 };
-use dllm::dnd5e as dnd;
+use dllm_core::dnd5e as dnd;
 
 #[derive(Debug, Clone)]
 pub struct ImportSpell {

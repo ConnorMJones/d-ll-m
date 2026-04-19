@@ -4,8 +4,8 @@ version.workspace = true
 edition.workspace = true
 
 [dependencies]
-dllm-client.workspace = true
+dllm-bindings.workspace = true
+
 spacetimedb-sdk.workspace = true
-tokio.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true

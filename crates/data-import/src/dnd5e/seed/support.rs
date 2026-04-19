@@ -1,6 +1,6 @@
 use crate::dnd5e::report::SectionReport;
 use crate::dnd5e::types::*;
-use dllm::dnd5e as dnd;
+use dllm_core::dnd5e as dnd;
 use serde::de::DeserializeOwned;
 use std::path::{Path, PathBuf};
 use tracing::{error, info};

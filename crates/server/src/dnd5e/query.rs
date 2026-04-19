@@ -1,9 +1,9 @@
 use crate::dnd5e::convert;
-use dllm::dnd5e as dnd;
-use dllm_client::{
+use dllm_bindings::{
     DbConnection, dnd_5_e_item_table::Dnd5EItemTableAccess,
     dnd_5_e_monster_table::Dnd5EMonsterTableAccess, dnd_5_e_spell_table::Dnd5ESpellTableAccess,
 };
+use dllm_core::dnd5e as dnd;
 use spacetimedb_sdk::{DbContext, Table};
 use std::str::FromStr;
 use tracing::info;

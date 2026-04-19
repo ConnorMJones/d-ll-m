@@ -1,4 +1,4 @@
-use dllm::dnd5e as dnd;
+use dllm_core::dnd5e as dnd;
 use serde::Deserialize;
 use std::collections::HashMap;
 

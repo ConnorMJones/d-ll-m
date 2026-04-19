@@ -3,14 +3,14 @@ use crate::dnd5e::normalize::{
     ImportItem, ImportLanguage, ImportMonster, ImportOptionalFeature, ImportRace, ImportSense,
     ImportSkill, ImportSpell, ImportSubclass, ImportSubclassFeature,
 };
-use dllm_client::{
+use dllm_bindings::{
     DbConnection, seed_dnd_5_e_action, seed_dnd_5_e_background, seed_dnd_5_e_class,
     seed_dnd_5_e_class_feature, seed_dnd_5_e_condition, seed_dnd_5_e_feat, seed_dnd_5_e_item,
     seed_dnd_5_e_language, seed_dnd_5_e_monster, seed_dnd_5_e_optional_feature, seed_dnd_5_e_race,
     seed_dnd_5_e_sense, seed_dnd_5_e_skill, seed_dnd_5_e_spell, seed_dnd_5_e_subclass,
     seed_dnd_5_e_subclass_feature,
 };
-use spacetime::dnd5e::convert;
+use dllm_server::dnd5e::convert;
 
 pub fn spell(conn: &DbConnection, spell: ImportSpell) -> Result<(), String> {
     conn.reducers

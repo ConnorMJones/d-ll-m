@@ -1,6 +1,7 @@
 [package]
-name = "dllm"
+name = "dllm-bindings"
 version.workspace = true
 edition.workspace = true
 
 [dependencies]
+spacetimedb-sdk.workspace = true

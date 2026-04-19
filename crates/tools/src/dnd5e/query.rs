@@ -1,5 +1,5 @@
-use dllm_client::DbConnection;
-use spacetime::dnd5e::query::{self as db_query, ItemQuery, MonsterQuery, SpellQuery};
+use dllm_bindings::DbConnection;
+use dllm_server::dnd5e::query::{self as db_query, ItemQuery, MonsterQuery, SpellQuery};
 
 pub fn query_spells(conn: &DbConnection, name_filter: Option<String>, level_filter: Option<u8>) {
     let spells = db_query::query_spells(

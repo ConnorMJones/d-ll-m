@@ -1,6 +1,6 @@
 mod query;
 use data_import::dnd5e as import_dnd5e;
-use spacetime::connect;
+use dllm_server::connect;
 use spacetimedb_sdk::DbContext;
 use std::path::Path;
 use tracing::info;

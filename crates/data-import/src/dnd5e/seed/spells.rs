@@ -3,7 +3,7 @@ use crate::dnd5e::normalize::normalize_spell;
 use crate::dnd5e::report::SectionReport;
 use crate::dnd5e::types::SpellFile;
 use crate::dnd5e::write;
-use dllm_client::DbConnection;
+use dllm_bindings::DbConnection;
 use std::path::Path;
 use tracing::info;
 

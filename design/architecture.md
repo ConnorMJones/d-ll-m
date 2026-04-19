@@ -13,13 +13,15 @@ d-ll-m is a multiplayer TTRPG platform. Server holds authoritative game state, c
 ## Crates
 
 ```
-dllm           - Core types, game system interfaces
-dllm-server    - SpacetimeDB module
-dllm-client    - Client library for connecting/syncing
-dllm-cli       - CLI client
-data-import    - Import game data (5etools JSON → SpacetimeDB)
-spacetime      - SpacetimeDB connection and query helpers
-tools          - Query and data tools
+dllm           - Main engine and game crate.
+dllm-core      - Core engine types.
+dllm-server    - SpacetimeDB server interface.
+dllm-client    - Game client.
+dllm-cli       - CLI engine commands.
+dllm-bindings  - SpacetimeDB generated client bindings.
+data-import    - Import game data (5etools JSON → SpacetimeDB).
+spacetime      - SpacetimeDB interface layer (connection, query helpers, etc.).
+tools          - Support tools for the game engine.
 ```
 
 ## State Ownership
@@ -31,12 +33,4 @@ Server is authoritative. Clients send actions, server validates and applies.
 
 ## TTRPG Data
 
-Game rules and content live outside the crates in `ttrpg/`:
-
-```
-ttrpg/
-└── dnd5e/
-    └── rules/    # Monsters, spells, items, classes, etc. (5etools format)
-```
-
-Server loads relevant data at runtime based on which system/campaign is active.
+Base game data lies in ttrp. Includes game data, ttrpg rules, campainges, etc.

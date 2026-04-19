@@ -1,4 +1,4 @@
-use dllm_client::{
+use dllm_bindings::{
     DbConnection, message_table::MessageTableAccess, send_message_reducer::send_message,
     set_name_reducer::set_name, user_table::UserTableAccess,
 };

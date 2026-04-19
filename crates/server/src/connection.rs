@@ -1,4 +1,4 @@
-use dllm_client::DbConnection;
+use dllm_bindings::DbConnection;
 use tracing::{error, info};
 
 pub fn connect(uri: &str, database_name: &str) -> DbConnection {

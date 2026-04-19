@@ -1,5 +1,5 @@
 use crate::dnd5e::entry::Entry;
-use dllm::dnd5e as dnd;
+use dllm_core::dnd5e as dnd;
 use serde::Deserialize;
 
 #[derive(Deserialize)]

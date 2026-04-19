@@ -3,9 +3,12 @@ name = "dllm-server"
 version.workspace = true
 edition.workspace = true
 
-[lib]
-crate-type = ["cdylib"]
-
 [dependencies]
-dllm.workspace = true
+# internal
+dllm-core.workspace = true
+dllm-bindings.workspace = true
+
+# external
 spacetimedb.workspace = true
+spacetimedb-sdk.workspace = true
+tracing.workspace = true

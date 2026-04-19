@@ -8,17 +8,21 @@ edition = "2024"
 
 [workspace.dependencies]
 dllm = { path = "crates/dllm" }
+dllm-core = { path = "crates/core" }
 dllm-client = { path = "crates/client" }
 dllm-server = { path = "crates/server" }
+dllm-bindings = { path = "crates/spacetime-bindings" }
 data-import = { path = "crates/data-import" }
-spacetime = { path = "crates/spacetime" }
 
-clap = { version = "4.6.1", features = ["derive"] }
+# spacetime
 spacetimedb = "2.1.0"
 spacetimedb-sdk = "2.1.0"
+
+clap = { version = "4.6.1", features = ["derive"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
+
+# logging
 tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
 tracing-tracy = "0.11.4"
-tokio = { version = "1.52.0", features = ["full"] }

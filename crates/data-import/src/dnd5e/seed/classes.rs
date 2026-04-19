@@ -5,7 +5,7 @@ use crate::dnd5e::normalize::{
 use crate::dnd5e::report::SectionReport;
 use crate::dnd5e::types::ClassFile;
 use crate::dnd5e::write;
-use dllm_client::DbConnection;
+use dllm_bindings::DbConnection;
 use std::path::Path;
 use tracing::info;
 

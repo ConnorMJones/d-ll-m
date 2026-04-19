@@ -6,7 +6,7 @@ mod seed;
 mod types;
 mod write;
 
-use dllm_client::DbConnection;
+use dllm_bindings::DbConnection;
 use std::path::Path;
 
 pub use report::{ImportIssue, ImportReport, SectionReport};
