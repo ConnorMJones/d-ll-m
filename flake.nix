@@ -45,6 +45,14 @@
             # Build dependencies
             pkg-config
             openssl
+            glib
+            gtk3
+            webkitgtk_4_1
+            libsoup_3
+            cairo
+            pango
+            gdk-pixbuf
+            atk
 
             # Dev tools
             just
