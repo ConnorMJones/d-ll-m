@@ -45,6 +45,8 @@
             # Build dependencies
             pkg-config
             openssl
+            zlib
+            xdotool
             glib
             gtk3
             webkitgtk_4_1
