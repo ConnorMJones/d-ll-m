@@ -4,12 +4,14 @@
 #![allow(unused, clippy::all)]
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
+use super::creature_size_type::CreatureSize;
+
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub(super) struct SeedDnd5EObjectArgs {
     pub name: String,
     pub source: String,
-    pub size: Vec<String>,
+    pub size: Vec<CreatureSize>,
     pub object_type: Option<String>,
     pub ac: Option<u16>,
     pub hp: Option<u16>,
@@ -51,7 +53,7 @@ pub trait seed_dnd_5_e_object {
         &self,
         name: String,
         source: String,
-        size: Vec<String>,
+        size: Vec<CreatureSize>,
         object_type: Option<String>,
         ac: Option<u16>,
         hp: Option<u16>,
@@ -81,7 +83,7 @@ pub trait seed_dnd_5_e_object {
         &self,
         name: String,
         source: String,
-        size: Vec<String>,
+        size: Vec<CreatureSize>,
         object_type: Option<String>,
         ac: Option<u16>,
         hp: Option<u16>,
@@ -101,7 +103,7 @@ impl seed_dnd_5_e_object for super::RemoteReducers {
         &self,
         name: String,
         source: String,
-        size: Vec<String>,
+        size: Vec<CreatureSize>,
         object_type: Option<String>,
         ac: Option<u16>,
         hp: Option<u16>,

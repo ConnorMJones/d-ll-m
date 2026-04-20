@@ -1,18 +1,26 @@
 mod state;
 
 use dllm_bindings::{
-    DbConnection, message_table::MessageTableAccess, send_message_reducer::send_message,
+    DbConnection, dnd_5_e_item_table::Dnd5EItemTableAccess,
+    dnd_5_e_monster_table::Dnd5EMonsterTableAccess, dnd_5_e_spell_table::Dnd5ESpellTableAccess,
+    message_table::MessageTableAccess, send_message_reducer::send_message,
     set_name_reducer::set_name, user_table::UserTableAccess,
 };
 use spacetimedb_sdk::{DbContext, Identity, Table, TableWithPrimaryKey, Timestamp};
-use state::{ConnectionRuntime, MessageRecord, RuntimeState, UserRecord};
+use state::{
+    ConnectionRuntime, ItemRecord, MessageRecord, MonsterRecord, RuntimeState, SpellRecord,
+    UserRecord,
+};
 use std::{
     fmt,
     sync::{Arc, Mutex},
 };
 use tracing::{error, info};
 
-pub use state::{ClientConfig, ClientSnapshot, ConnectionStatus, MessageView, UserView};
+pub use state::{
+    ClientConfig, ClientSnapshot, ConnectionStatus, ItemView, MessageView, MonsterView, SpellView,
+    UserView,
+};
 
 pub const DEFAULT_URI: &str = "http://127.0.0.1:3033";
 pub const DEFAULT_DATABASE_NAME: &str = "dllm";
@@ -131,7 +139,13 @@ impl DllmClient {
                     error!(?err, "subscription failed");
                 }
             })
-            .subscribe(["SELECT * FROM user", "SELECT * FROM message"]);
+            .subscribe([
+                "SELECT * FROM user",
+                "SELECT * FROM message",
+                "SELECT * FROM dnd_5_e_spell",
+                "SELECT * FROM dnd_5_e_monster",
+                "SELECT * FROM dnd_5_e_item",
+            ]);
 
         let handle = conn.run_threaded();
         let mut runtime = self.inner.runtime.lock().unwrap();
@@ -234,24 +248,31 @@ fn register_callbacks(conn: &DbConnection, shared_state: Arc<Mutex<RuntimeState>
     conn.db.user().on_insert({
         let shared_state = shared_state.clone();
         move |_ctx, user| {
-            let mut state = shared_state.lock().unwrap();
-            state.upsert_user(UserRecord::from_row(user));
+            shared_state
+                .lock()
+                .unwrap()
+                .users
+                .insert(identity_key(&user.identity), UserRecord::from_row(user));
         }
     });
-
     conn.db.user().on_update({
         let shared_state = shared_state.clone();
         move |_ctx, _old, new| {
-            let mut state = shared_state.lock().unwrap();
-            state.upsert_user(UserRecord::from_row(new));
+            shared_state
+                .lock()
+                .unwrap()
+                .users
+                .insert(identity_key(&new.identity), UserRecord::from_row(new));
         }
     });
-
     conn.db.user().on_delete({
         let shared_state = shared_state.clone();
         move |_ctx, user| {
-            let mut state = shared_state.lock().unwrap();
-            state.remove_user(&user.identity);
+            shared_state
+                .lock()
+                .unwrap()
+                .users
+                .remove(&identity_key(&user.identity));
         }
     });
 
@@ -259,21 +280,106 @@ fn register_callbacks(conn: &DbConnection, shared_state: Arc<Mutex<RuntimeState>
         let shared_state = shared_state.clone();
         move |_ctx, message| {
             let mut state = shared_state.lock().unwrap();
-            state.upsert_message(MessageRecord::from_row(message));
+            let record = MessageRecord::from_row(message);
+            state.upsert_message(record);
         }
     });
-
     conn.db.message().on_update({
         let shared_state = shared_state.clone();
         move |_ctx, _old, new| {
             let mut state = shared_state.lock().unwrap();
-            state.upsert_message(MessageRecord::from_row(new));
+            let record = MessageRecord::from_row(new);
+            state.upsert_message(record);
+        }
+    });
+    conn.db.message().on_delete({
+        let shared_state = shared_state.clone();
+        move |_ctx, message| {
+            shared_state
+                .lock()
+                .unwrap()
+                .messages
+                .retain(|m| m.id != message.id);
         }
     });
 
-    conn.db.message().on_delete(move |_ctx, message| {
-        let mut state = shared_state.lock().unwrap();
-        state.remove_message(message.id);
+    conn.db.dnd_5_e_spell().on_insert({
+        let shared_state = shared_state.clone();
+        move |_ctx, spell| {
+            let record = SpellRecord::from_row(spell);
+            shared_state
+                .lock()
+                .unwrap()
+                .spells
+                .insert(record.id, record);
+        }
+    });
+    conn.db.dnd_5_e_spell().on_update({
+        let shared_state = shared_state.clone();
+        move |_ctx, _old, new| {
+            let record = SpellRecord::from_row(new);
+            shared_state
+                .lock()
+                .unwrap()
+                .spells
+                .insert(record.id, record);
+        }
+    });
+    conn.db.dnd_5_e_spell().on_delete({
+        let shared_state = shared_state.clone();
+        move |_ctx, spell| {
+            shared_state.lock().unwrap().spells.remove(&spell.id);
+        }
+    });
+
+    conn.db.dnd_5_e_monster().on_insert({
+        let shared_state = shared_state.clone();
+        move |_ctx, monster| {
+            let record = MonsterRecord::from_row(monster);
+            shared_state
+                .lock()
+                .unwrap()
+                .monsters
+                .insert(record.id, record);
+        }
+    });
+    conn.db.dnd_5_e_monster().on_update({
+        let shared_state = shared_state.clone();
+        move |_ctx, _old, new| {
+            let record = MonsterRecord::from_row(new);
+            shared_state
+                .lock()
+                .unwrap()
+                .monsters
+                .insert(record.id, record);
+        }
+    });
+    conn.db.dnd_5_e_monster().on_delete({
+        let shared_state = shared_state.clone();
+        move |_ctx, monster| {
+            shared_state.lock().unwrap().monsters.remove(&monster.id);
+        }
+    });
+
+    conn.db.dnd_5_e_item().on_insert({
+        let shared_state = shared_state.clone();
+        move |_ctx, item| {
+            let record = ItemRecord::from_row(item);
+            shared_state.lock().unwrap().items.insert(record.id, record);
+        }
+    });
+    conn.db.dnd_5_e_item().on_update({
+        let shared_state = shared_state.clone();
+        move |_ctx, _old, new| {
+            let record = ItemRecord::from_row(new);
+            shared_state.lock().unwrap().items.insert(record.id, record);
+        }
+    });
+    conn.db.dnd_5_e_item().on_delete({
+        let shared_state: Arc<Mutex<RuntimeState>> = shared_state.clone();
+        move |_ctx, item| {
+            shared_state.lock().unwrap().items.remove(&item.id);
+        }
     });
 }
 
@@ -298,14 +404,23 @@ fn timestamp_text(timestamp: &Timestamp) -> String {
 impl RuntimeState {
     fn snapshot(&self) -> ClientSnapshot {
         let mut users = self.users.values().cloned().collect::<Vec<_>>();
-        users.sort_by(|left, right| {
-            left.display_name()
-                .cmp(&right.display_name())
-                .then_with(|| identity_key(&left.identity).cmp(&identity_key(&right.identity)))
+        users.sort_by(|a, b| {
+            a.display_name()
+                .cmp(&b.display_name())
+                .then_with(|| identity_key(&a.identity).cmp(&identity_key(&b.identity)))
         });
 
         let mut messages = self.messages.clone();
-        messages.sort_by_key(|message| message.id);
+        messages.sort_by_key(|m| m.id);
+
+        let mut spells = self.spells.values().cloned().collect::<Vec<_>>();
+        spells.sort_by(|a, b| a.name.cmp(&b.name));
+
+        let mut monsters = self.monsters.values().cloned().collect::<Vec<_>>();
+        monsters.sort_by(|a, b| a.name.cmp(&b.name));
+
+        let mut items = self.items.values().cloned().collect::<Vec<_>>();
+        items.sort_by(|a, b| a.name.cmp(&b.name));
 
         ClientSnapshot {
             connection_status: self.connection_status,
@@ -313,51 +428,70 @@ impl RuntimeState {
             local_identity: self.local_identity.as_ref().map(identity_key),
             users: users
                 .into_iter()
-                .map(|user| UserView {
-                    identity: identity_key(&user.identity),
-                    name: user.name,
-                    online: user.online,
+                .map(|u| UserView {
+                    identity: identity_key(&u.identity),
+                    name: u.name,
+                    online: u.online,
                 })
                 .collect(),
             messages: messages
                 .into_iter()
-                .map(|message| MessageView {
-                    id: message.id,
-                    sender_identity: identity_key(&message.sender),
+                .map(|m| MessageView {
+                    id: m.id,
+                    sender_identity: identity_key(&m.sender),
                     sender_name: self
                         .users
-                        .get(&identity_key(&message.sender))
-                        .and_then(|user| user.name.clone())
+                        .get(&identity_key(&m.sender))
+                        .and_then(|u| u.name.clone())
                         .unwrap_or_else(|| "anonymous".to_string()),
-                    text: message.text,
-                    sent: timestamp_text(&message.sent),
+                    text: m.text,
+                    sent: timestamp_text(&m.sent),
+                })
+                .collect(),
+            spells: spells
+                .into_iter()
+                .map(|s| SpellView {
+                    id: s.id,
+                    name: s.name,
+                    level: s.level,
+                    school: s.school,
+                    ritual: s.ritual,
+                    concentration: s.concentration,
+                    description: s.description,
+                })
+                .collect(),
+            monsters: monsters
+                .into_iter()
+                .map(|m| MonsterView {
+                    id: m.id,
+                    name: m.name,
+                    cr: m.cr,
+                    size: m.size,
+                    creature_type: m.creature_type,
+                    ac: m.ac,
+                    hp_average: m.hp_average,
+                    description: m.description,
+                })
+                .collect(),
+            items: items
+                .into_iter()
+                .map(|i| ItemView {
+                    id: i.id,
+                    name: i.name,
+                    item_type: i.item_type,
+                    rarity: i.rarity,
+                    description: i.description,
                 })
                 .collect(),
             last_error: self.last_error.clone(),
         }
     }
 
-    fn upsert_user(&mut self, user: UserRecord) {
-        self.users.insert(identity_key(&user.identity), user);
-    }
-
-    fn remove_user(&mut self, identity: &Identity) {
-        self.users.remove(&identity_key(identity));
-    }
-
     fn upsert_message(&mut self, message: MessageRecord) {
-        if let Some(existing) = self
-            .messages
-            .iter_mut()
-            .find(|existing| existing.id == message.id)
-        {
+        if let Some(existing) = self.messages.iter_mut().find(|m| m.id == message.id) {
             *existing = message;
         } else {
             self.messages.push(message);
         }
-    }
-
-    fn remove_message(&mut self, id: u64) {
-        self.messages.retain(|message| message.id != id);
     }
 }

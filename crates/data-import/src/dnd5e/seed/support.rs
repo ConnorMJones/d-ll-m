@@ -78,7 +78,7 @@ pub fn parse_tool_grants(profs: &[RawToolBlock]) -> Vec<dnd::ToolGrant> {
                 let tools: Vec<String> = block
                     .tools
                     .iter()
-                    .filter(|(_, v)| **v)
+                    .filter(|(_, v)| v.is_truthy())
                     .map(|(k, _)| k.clone())
                     .collect();
                 (!tools.is_empty()).then_some(dnd::ToolGrant::Fixed(tools))
@@ -140,15 +140,19 @@ pub fn parse_ability_grants(blocks: &[RawAbilityBlock]) -> Vec<dnd::AbilityGrant
         .collect()
 }
 
-pub fn parse_race_speed(speed: &Option<RawRaceSpeed>) -> dnd::Speed {
+pub fn parse_race_speed(speed: &Option<RawRaceSpeedValue>) -> dnd::Speed {
     match speed {
-        Some(s) => dnd::Speed {
-            walk: s.walk.unwrap_or(30),
-            fly: s.fly.unwrap_or(0),
-            swim: s.swim.unwrap_or(0),
-            climb: s.climb.unwrap_or(0),
-            burrow: s.burrow.unwrap_or(0),
-        },
+        Some(value) => {
+            let s = value.as_speed();
+            let walk = s.walk.unwrap_or(30);
+            dnd::Speed {
+                walk,
+                fly: s.fly.as_ref().map(|e| e.resolve(walk)).unwrap_or(0),
+                swim: s.swim.as_ref().map(|e| e.resolve(walk)).unwrap_or(0),
+                climb: s.climb.as_ref().map(|e| e.resolve(walk)).unwrap_or(0),
+                burrow: s.burrow.as_ref().map(|e| e.resolve(walk)).unwrap_or(0),
+            }
+        }
         None => dnd::Speed::default(),
     }
 }
@@ -170,13 +174,12 @@ pub fn parse_feat_prereq(
     }
     let prereq = prereqs.first()?;
 
+    let race_refs = prereq.race.as_deref().unwrap_or_default();
+
     Some(dnd::FeatPrereq {
         level: prereq.level.as_ref().map(|level| level.get()),
-        races: prereq
-            .race
-            .as_ref()
-            .map(|rs| rs.iter().map(|r| r.name).collect())
-            .unwrap_or_default(),
+        races: race_refs.iter().filter_map(|r| r.as_race()).collect(),
+        sizes: race_refs.iter().filter_map(|r| r.as_size()).collect(),
         abilities: prereq
             .ability
             .as_ref()

@@ -13,7 +13,7 @@ pub fn seed(conn: &DbConnection, data_dir: &Path) -> SectionReport {
 
     let mut report = SectionReport::new("spells");
 
-    for (_, path) in json_files_with_prefix(&spells_dir, "spell-") {
+    for (_, path) in json_files_with_prefix(&spells_dir, "spells-") {
         let Some(spell_file) = read_json_file::<SpellFile>(&path, &mut report) else {
             continue;
         };

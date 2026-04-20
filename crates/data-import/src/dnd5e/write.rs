@@ -261,7 +261,11 @@ pub fn object(conn: &DbConnection, object: ImportObject) -> Result<(), String> {
         .seed_dnd_5_e_object(
             object.name,
             object.source,
-            object.size,
+            object
+                .size
+                .into_iter()
+                .map(convert::creature_size)
+                .collect(),
             object.object_type,
             object.ac,
             object.hp,
@@ -295,7 +299,11 @@ pub fn deity(conn: &DbConnection, deity: ImportDeity) -> Result<(), String> {
             deity.name,
             deity.source,
             deity.pantheon,
-            deity.alignment,
+            deity
+                .alignment
+                .into_iter()
+                .map(convert::alignment)
+                .collect(),
             deity.category,
             deity.domains,
             deity.province,

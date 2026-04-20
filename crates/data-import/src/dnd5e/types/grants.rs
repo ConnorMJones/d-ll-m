@@ -109,6 +109,22 @@ pub struct RawSkillChoose {
     pub count: Option<u8>,
 }
 
+#[derive(Deserialize)]
+#[serde(untagged)]
+pub enum BoolOrInt {
+    Bool(bool),
+    Int(u8),
+}
+
+impl BoolOrInt {
+    pub fn is_truthy(&self) -> bool {
+        match self {
+            Self::Bool(b) => *b,
+            Self::Int(n) => *n > 0,
+        }
+    }
+}
+
 #[derive(Deserialize, Default)]
 pub struct RawToolBlock {
     #[serde(default)]
@@ -116,7 +132,7 @@ pub struct RawToolBlock {
     #[serde(default)]
     pub choose: Option<RawToolChoose>,
     #[serde(flatten)]
-    pub tools: HashMap<String, bool>,
+    pub tools: HashMap<String, BoolOrInt>,
 }
 
 #[derive(Deserialize)]

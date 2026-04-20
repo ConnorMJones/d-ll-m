@@ -58,6 +58,20 @@ pub enum Ability {
 }
 
 #[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Alignment {
+    #[serde(rename = "L")]
+    Lawful,
+    #[serde(rename = "C")]
+    Chaotic,
+    #[serde(rename = "N")]
+    Neutral,
+    #[serde(rename = "G")]
+    Good,
+    #[serde(rename = "E")]
+    Evil,
+}
+
+#[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum CastingTimeUnit {
     Action,
@@ -82,6 +96,8 @@ pub enum CreatureSize {
     Huge,
     #[serde(rename = "G")]
     Gargantuan,
+    #[serde(rename = "V")]
+    Varies,
 }
 
 #[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
@@ -142,78 +158,38 @@ impl FromStr for ItemRarity {
     }
 }
 
-#[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(SpacetimeType, Serialize, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ItemType {
-    #[serde(rename = "LA")]
     LightArmor,
-    #[serde(rename = "MA")]
     MediumArmor,
-    #[serde(rename = "HA")]
     HeavyArmor,
-    #[serde(rename = "S")]
     Shield,
-    #[serde(rename = "M")]
     MeleeWeapon,
-    #[serde(rename = "R")]
     RangedWeapon,
-    #[serde(rename = "A", alias = "AF")]
     Ammunition,
-    #[serde(rename = "P")]
     Potion,
-    #[serde(rename = "RG")]
     Ring,
-    #[serde(rename = "RD")]
     Rod,
-    #[serde(rename = "SC")]
     Scroll,
-    #[serde(rename = "ST")]
     Staff,
-    #[serde(rename = "WD")]
     Wand,
-    #[serde(rename = "W")]
     WondrousItem,
-    #[serde(rename = "G")]
     Adventuring,
-    #[serde(rename = "AT", alias = "T")]
     Tool,
-    #[serde(rename = "INS")]
     Instrument,
-    #[serde(rename = "GS")]
     GamingSet,
-    #[serde(rename = "MNT")]
     Mount,
-    #[serde(rename = "SHP")]
     Ship,
-    #[serde(rename = "VEH")]
     Vehicle,
-    #[serde(rename = "AIR")]
     Airship,
-    #[serde(rename = "TG")]
     TradeGood,
-    #[serde(
-        rename = "$",
-        alias = "$A",
-        alias = "$C",
-        alias = "$G",
-        alias = "$H",
-        alias = "$I",
-        alias = "$P",
-        alias = "$W"
-    )]
     Treasure,
-    #[serde(rename = "SCF")]
     SpellcastingFocus,
-    #[serde(rename = "FD")]
     Food,
-    #[serde(rename = "TAH")]
     Tack,
-    #[serde(rename = "EXP")]
     Explosive,
-    #[serde(rename = "SPC")]
     SpellComponent,
-    #[serde(rename = "GV")]
     GenericVariant,
-    #[serde(rename = "OTH", alias = "MR", alias = "TB")]
     Other,
 }
 
@@ -254,6 +230,16 @@ impl ItemType {
             "OTH" | "MR" | "TB" => Some(Self::Other),
             _ => None,
         }
+    }
+}
+
+impl<'de> Deserialize<'de> for ItemType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let s = String::deserialize(deserializer)?;
+        Self::from_code(&s).ok_or_else(|| serde::de::Error::unknown_variant(&s, &[]))
     }
 }
 
@@ -373,6 +359,7 @@ pub enum Language {
     #[serde(rename = "thieves' cant")]
     ThievesCant,
     Gith,
+    Other,
 }
 
 #[derive(SpacetimeType, Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
@@ -418,7 +405,6 @@ pub enum AbilityGrant {
 }
 
 #[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
-#[serde(rename_all = "lowercase")]
 pub enum Class {
     Artificer,
     Barbarian,
@@ -450,7 +436,6 @@ pub enum CasterProgression {
 }
 
 #[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
-#[serde(rename_all = "lowercase")]
 pub enum PactBoon {
     #[serde(alias = "Pact of the Chain")]
     Chain,
@@ -464,23 +449,15 @@ pub enum PactBoon {
 
 #[derive(SpacetimeType, Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
 pub enum WarlockPatron {
-    #[serde(rename = "Archfey")]
     Archfey,
-    #[serde(rename = "Fiend")]
     Fiend,
     #[serde(rename = "Great Old One")]
     GreatOldOne,
-    #[serde(rename = "Celestial")]
     Celestial,
-    #[serde(rename = "Hexblade")]
     Hexblade,
-    #[serde(rename = "Fathomless")]
     Fathomless,
-    #[serde(rename = "Genie")]
     Genie,
-    #[serde(rename = "Undead")]
     Undead,
-    #[serde(rename = "Undying")]
     Undying,
 }
 
@@ -559,12 +536,15 @@ pub enum Race {
     Shifter,
     Warforged,
     Kalashtar,
+    #[serde(rename = "Vampire (Ixalan)")]
+    Vampire,
 }
 
 #[derive(SpacetimeType, Serialize, Deserialize, Clone, Debug, PartialEq, Eq, Default)]
 pub struct FeatPrereq {
     pub level: Option<u8>,
     pub races: Vec<Race>,
+    pub sizes: Vec<CreatureSize>,
     pub abilities: Vec<AbilityScore>,
     pub spellcasting: bool,
 }

@@ -15,7 +15,7 @@ pub struct RawItem {
     pub name: String,
     pub source: String,
     #[serde(rename = "type", default)]
-    pub item_type: Option<RawItemType>,
+    pub item_type: Option<dnd::ItemType>,
     #[serde(default)]
     pub rarity: Option<dnd::ItemRarity>,
     #[serde(default)]
@@ -28,22 +28,6 @@ pub struct RawItem {
     pub req_attune: Option<AttunementValue>,
     #[serde(default)]
     pub entries: Vec<Entry>,
-}
-
-#[derive(Deserialize)]
-#[serde(untagged)]
-pub enum RawItemType {
-    Known(dnd::ItemType),
-    Unknown(String),
-}
-
-impl RawItemType {
-    pub fn get(&self) -> Option<dnd::ItemType> {
-        match self {
-            Self::Known(t) => Some(*t),
-            Self::Unknown(s) => dnd::ItemType::from_code(s),
-        }
-    }
 }
 
 #[derive(Deserialize)]

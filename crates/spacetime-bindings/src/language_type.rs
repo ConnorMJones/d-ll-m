@@ -53,6 +53,8 @@ pub enum Language {
     ThievesCant,
 
     Gith,
+
+    Other,
 }
 
 impl __sdk::InModule for Language {

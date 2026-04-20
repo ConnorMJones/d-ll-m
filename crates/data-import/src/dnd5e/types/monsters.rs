@@ -37,20 +37,35 @@ pub struct RawMonster {
 }
 
 #[derive(Deserialize)]
+pub struct CreatureTypeChoose {
+    pub choose: Vec<dnd::CreatureType>,
+}
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+pub enum CreatureTypeInner {
+    Fixed(dnd::CreatureType),
+    Choose(CreatureTypeChoose),
+}
+
+#[derive(Deserialize)]
 #[serde(untagged)]
 pub enum CreatureTypeValue {
     Simple(dnd::CreatureType),
     Complex {
         #[serde(rename = "type")]
-        creature_type: dnd::CreatureType,
+        creature_type: CreatureTypeInner,
     },
 }
 
 impl CreatureTypeValue {
-    pub fn get(&self) -> dnd::CreatureType {
+    pub fn get(&self) -> Option<dnd::CreatureType> {
         match self {
-            Self::Simple(t) => *t,
-            Self::Complex { creature_type } => *creature_type,
+            Self::Simple(t) => Some(*t),
+            Self::Complex { creature_type } => match creature_type {
+                CreatureTypeInner::Fixed(t) => Some(*t),
+                CreatureTypeInner::Choose(c) => c.choose.first().copied(),
+            },
         }
     }
 }

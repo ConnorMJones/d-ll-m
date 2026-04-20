@@ -46,6 +46,14 @@ fn audits_full_current_dnd5e_import_surface() {
 }
 
 const RECENT_SECTIONS: &[&str] = &[
+    "spells",
+    "monsters",
+    "items",
+    "feats",
+    "conditions",
+    "backgrounds",
+    "races",
+    "optional_features",
     "classes",
     "subclasses",
     "class_features",

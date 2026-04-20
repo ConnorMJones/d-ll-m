@@ -120,7 +120,7 @@ pub struct RawObject {
     pub name: String,
     pub source: String,
     #[serde(default)]
-    pub size: Vec<String>,
+    pub size: Vec<dnd::CreatureSize>,
     #[serde(rename = "objectType")]
     pub object_type: Option<String>,
     #[serde(default)]
@@ -249,7 +249,7 @@ pub struct RawDeity {
     #[serde(default)]
     pub pantheon: Option<String>,
     #[serde(default)]
-    pub alignment: Vec<String>,
+    pub alignment: Vec<dnd::Alignment>,
     #[serde(default)]
     pub category: Option<String>,
     #[serde(default)]

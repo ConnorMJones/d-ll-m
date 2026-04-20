@@ -4,6 +4,8 @@
 #![allow(unused, clippy::all)]
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
+use super::alignment_type::Alignment;
+
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct Dnd5EDeity {
@@ -11,7 +13,7 @@ pub struct Dnd5EDeity {
     pub name: String,
     pub source: String,
     pub pantheon: Option<String>,
-    pub alignment: Vec<String>,
+    pub alignment: Vec<Alignment>,
     pub category: Option<String>,
     pub domains: Vec<String>,
     pub province: Option<String>,
@@ -32,7 +34,7 @@ pub struct Dnd5EDeityCols {
     pub name: __sdk::__query_builder::Col<Dnd5EDeity, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EDeity, String>,
     pub pantheon: __sdk::__query_builder::Col<Dnd5EDeity, Option<String>>,
-    pub alignment: __sdk::__query_builder::Col<Dnd5EDeity, Vec<String>>,
+    pub alignment: __sdk::__query_builder::Col<Dnd5EDeity, Vec<Alignment>>,
     pub category: __sdk::__query_builder::Col<Dnd5EDeity, Option<String>>,
     pub domains: __sdk::__query_builder::Col<Dnd5EDeity, Vec<String>>,
     pub province: __sdk::__query_builder::Col<Dnd5EDeity, Option<String>>,

@@ -7,12 +7,27 @@ Currently in Very Early development.
 ## Running
 
 ```bash
-# 1. Start SpacetimeDB on port 3033
+# Enter the dev shell first
+nix develop
+
+# Start SpacetimeDB on port 3033
 spacetime start --listen-addr 0.0.0.0:3033
 
-# 2. Publish the server module
-spacetime publish -p crates/server -s http://127.0.0.1:3033 dllm-server
+# Publish the server module (in a new terminal, also inside nix develop)
+spacetime publish -p crates/server -s http://127.0.0.1:3033 dllm
 
-# 3. Run the desktop client
+# Seed game data (idempotent, safe to re-run)
+cargo run -p dllm-tools -- seed
+
+# Run the desktop client
 cargo run -p dllm-client-desktop
+```
+
+## Reset
+
+```bash
+# Delete the database and republish from scratch
+spacetime delete -s http://127.0.0.1:3033 dllm -y
+spacetime publish -p crates/server -s http://127.0.0.1:3033 dllm
+cargo run -p dllm-tools -- seed
 ```

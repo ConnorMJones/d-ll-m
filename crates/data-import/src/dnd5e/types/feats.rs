@@ -57,8 +57,34 @@ pub struct RawFeatClassRef {
 }
 
 #[derive(Deserialize)]
-pub struct RawRaceRef {
-    pub name: dnd::Race,
+#[serde(untagged)]
+pub enum RawRaceRef {
+    Race { name: dnd::Race },
+    SizeCategory { name: SizeCategory },
+}
+
+#[derive(Deserialize)]
+pub enum SizeCategory {
+    #[serde(rename = "small race")]
+    Small,
+}
+
+impl RawRaceRef {
+    pub fn as_race(&self) -> Option<dnd::Race> {
+        match self {
+            Self::Race { name } => Some(*name),
+            Self::SizeCategory { .. } => None,
+        }
+    }
+
+    pub fn as_size(&self) -> Option<dnd::CreatureSize> {
+        match self {
+            Self::SizeCategory {
+                name: SizeCategory::Small,
+            } => Some(dnd::CreatureSize::Small),
+            Self::Race { .. } => None,
+        }
+    }
 }
 
 #[derive(Deserialize, Default)]

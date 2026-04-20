@@ -61,6 +61,8 @@ pub enum Race {
     Warforged,
 
     Kalashtar,
+
+    Vampire,
 }
 
 impl __sdk::InModule for Race {

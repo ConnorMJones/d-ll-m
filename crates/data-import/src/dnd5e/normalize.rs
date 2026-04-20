@@ -195,7 +195,7 @@ pub struct ImportSubclassFeature {
 pub struct ImportObject {
     pub name: String,
     pub source: String,
-    pub size: Vec<String>,
+    pub size: Vec<dnd::CreatureSize>,
     pub object_type: Option<String>,
     pub ac: Option<u16>,
     pub hp: Option<u16>,
@@ -223,7 +223,7 @@ pub struct ImportDeity {
     pub name: String,
     pub source: String,
     pub pantheon: Option<String>,
-    pub alignment: Vec<String>,
+    pub alignment: Vec<dnd::Alignment>,
     pub category: Option<String>,
     pub domains: Vec<String>,
     pub province: Option<String>,
@@ -342,8 +342,8 @@ pub fn normalize_monster(raw: RawMonster, report: &mut SectionReport) -> Option<
         }
     };
 
-    let creature_type = match raw.creature_type {
-        Some(creature_type) => creature_type.get(),
+    let creature_type = match raw.creature_type.and_then(|t| t.get()) {
+        Some(creature_type) => creature_type,
         None => {
             report.skipped(item_name.clone(), "missing creature type");
             return None;
@@ -377,7 +377,7 @@ pub fn normalize_monster(raw: RawMonster, report: &mut SectionReport) -> Option<
 
 pub fn normalize_item(raw: RawItem, report: &mut SectionReport) -> Option<ImportItem> {
     let item_name = format!("{} [{}]", raw.name, raw.source);
-    let item_type = match raw.item_type.as_ref().and_then(|item_type| item_type.get()) {
+    let item_type = match raw.item_type {
         Some(item_type) => item_type,
         None if raw.wondrous => dnd::ItemType::WondrousItem,
         None => {

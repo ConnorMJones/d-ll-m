@@ -4,12 +4,12 @@
 use dllm_bindings::{
     ability_bonus_type::AbilityBonus, ability_choice_type::AbilityChoice,
     ability_grant_type::AbilityGrant, ability_score_type::AbilityScore, ability_type::Ability,
-    caster_progression_type::CasterProgression, class_level_prereq_type::ClassLevelPrereq,
-    class_type::Class, creature_size_type::CreatureSize, creature_type_type::CreatureType,
-    feat_category_type::FeatCategory, feat_prereq_type::FeatPrereq, item_rarity_type::ItemRarity,
-    item_type_type::ItemType, language_choice_type::LanguageChoice,
-    language_grant_type::LanguageGrant, language_type::Language,
-    optional_feature_prereq_type::OptionalFeaturePrereq,
+    alignment_type::Alignment, caster_progression_type::CasterProgression,
+    class_level_prereq_type::ClassLevelPrereq, class_type::Class, creature_size_type::CreatureSize,
+    creature_type_type::CreatureType, feat_category_type::FeatCategory,
+    feat_prereq_type::FeatPrereq, item_rarity_type::ItemRarity, item_type_type::ItemType,
+    language_choice_type::LanguageChoice, language_grant_type::LanguageGrant,
+    language_type::Language, optional_feature_prereq_type::OptionalFeaturePrereq,
     optional_feature_type_type::OptionalFeatureType, pact_boon_type::PactBoon, race_type::Race,
     skill_choice_type::SkillChoice, skill_grant_type::SkillGrant, skill_type::Skill,
     speed_type::Speed, spell_school_type::SpellSchool, string_choice_type::StringChoice,
@@ -27,6 +27,26 @@ pub fn spell_school(s: dnd::SpellSchool) -> SpellSchool {
         dnd::SpellSchool::Illusion => SpellSchool::Illusion,
         dnd::SpellSchool::Necromancy => SpellSchool::Necromancy,
         dnd::SpellSchool::Transmutation => SpellSchool::Transmutation,
+    }
+}
+
+pub fn alignment(a: dnd::Alignment) -> Alignment {
+    match a {
+        dnd::Alignment::Lawful => Alignment::Lawful,
+        dnd::Alignment::Chaotic => Alignment::Chaotic,
+        dnd::Alignment::Neutral => Alignment::Neutral,
+        dnd::Alignment::Good => Alignment::Good,
+        dnd::Alignment::Evil => Alignment::Evil,
+    }
+}
+
+pub fn alignment_from_client(a: Alignment) -> dnd::Alignment {
+    match a {
+        Alignment::Lawful => dnd::Alignment::Lawful,
+        Alignment::Chaotic => dnd::Alignment::Chaotic,
+        Alignment::Neutral => dnd::Alignment::Neutral,
+        Alignment::Good => dnd::Alignment::Good,
+        Alignment::Evil => dnd::Alignment::Evil,
     }
 }
 
@@ -49,6 +69,7 @@ pub fn creature_size(s: dnd::CreatureSize) -> CreatureSize {
         dnd::CreatureSize::Large => CreatureSize::Large,
         dnd::CreatureSize::Huge => CreatureSize::Huge,
         dnd::CreatureSize::Gargantuan => CreatureSize::Gargantuan,
+        dnd::CreatureSize::Varies => CreatureSize::Varies,
     }
 }
 
@@ -204,6 +225,7 @@ pub fn language(l: dnd::Language) -> Language {
         dnd::Language::Druidic => Language::Druidic,
         dnd::Language::ThievesCant => Language::ThievesCant,
         dnd::Language::Gith => Language::Gith,
+        dnd::Language::Other => Language::Other,
     }
 }
 
@@ -360,6 +382,7 @@ pub fn race(r: dnd::Race) -> Race {
         dnd::Race::Shifter => Race::Shifter,
         dnd::Race::Warforged => Race::Warforged,
         dnd::Race::Kalashtar => Race::Kalashtar,
+        dnd::Race::Vampire => Race::Vampire,
     }
 }
 
@@ -374,6 +397,7 @@ pub fn feat_prereq(p: dnd::FeatPrereq) -> FeatPrereq {
     FeatPrereq {
         level: p.level,
         races: p.races.into_iter().map(race).collect(),
+        sizes: p.sizes.into_iter().map(creature_size).collect(),
         abilities: p.abilities.into_iter().map(ability_score).collect(),
         spellcasting: p.spellcasting,
     }
@@ -400,6 +424,7 @@ pub fn creature_size_from_client(s: CreatureSize) -> dnd::CreatureSize {
         CreatureSize::Large => dnd::CreatureSize::Large,
         CreatureSize::Huge => dnd::CreatureSize::Huge,
         CreatureSize::Gargantuan => dnd::CreatureSize::Gargantuan,
+        CreatureSize::Varies => dnd::CreatureSize::Varies,
     }
 }
 

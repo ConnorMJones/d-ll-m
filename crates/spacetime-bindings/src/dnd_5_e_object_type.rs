@@ -4,13 +4,15 @@
 #![allow(unused, clippy::all)]
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
+use super::creature_size_type::CreatureSize;
+
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub struct Dnd5EObject {
     pub id: u64,
     pub name: String,
     pub source: String,
-    pub size: Vec<String>,
+    pub size: Vec<CreatureSize>,
     pub object_type: Option<String>,
     pub ac: Option<u16>,
     pub hp: Option<u16>,
@@ -29,7 +31,7 @@ pub struct Dnd5EObjectCols {
     pub id: __sdk::__query_builder::Col<Dnd5EObject, u64>,
     pub name: __sdk::__query_builder::Col<Dnd5EObject, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EObject, String>,
-    pub size: __sdk::__query_builder::Col<Dnd5EObject, Vec<String>>,
+    pub size: __sdk::__query_builder::Col<Dnd5EObject, Vec<CreatureSize>>,
     pub object_type: __sdk::__query_builder::Col<Dnd5EObject, Option<String>>,
     pub ac: __sdk::__query_builder::Col<Dnd5EObject, Option<u16>>,
     pub hp: __sdk::__query_builder::Col<Dnd5EObject, Option<u16>>,

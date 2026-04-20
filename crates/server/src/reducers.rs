@@ -1,10 +1,23 @@
 use crate::tables::*;
 use dllm_core::dnd5e::{
-    Ability, AbilityGrant, CasterProgression, CreatureSize, CreatureType, FeatCategory, FeatPrereq,
-    ItemRarity, ItemType, LanguageGrant, OptionalFeaturePrereq, OptionalFeatureType, SkillGrant,
-    Speed, SpellSchool, ToolGrant,
+    Ability, AbilityGrant, Alignment, CasterProgression, CreatureSize, CreatureType, FeatCategory,
+    FeatPrereq, ItemRarity, ItemType, LanguageGrant, OptionalFeaturePrereq, OptionalFeatureType,
+    SkillGrant, Speed, SpellSchool, ToolGrant,
 };
 use spacetimedb::{ReducerContext, Table};
+
+macro_rules! skip_if_exists {
+    ($ctx:expr, $table:ident, $name:expr, $source:expr) => {
+        if $ctx
+            .db
+            .$table()
+            .iter()
+            .any(|row| row.name == $name && row.source == $source)
+        {
+            return Ok(());
+        }
+    };
+}
 
 #[spacetimedb::reducer(client_connected)]
 pub fn client_connected(ctx: &ReducerContext) {
@@ -74,6 +87,7 @@ pub fn seed_dnd5e_spell(
     description: String,
     saving_throw: Option<Ability>,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_spell, name, source);
     ctx.db.dnd5e_spell().insert(Dnd5eSpell {
         id: 0,
         name,
@@ -111,6 +125,7 @@ pub fn seed_dnd5e_monster(
     cha_score: u8,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_monster, name, source);
     ctx.db.dnd5e_monster().insert(Dnd5eMonster {
         id: 0,
         name,
@@ -149,6 +164,7 @@ pub fn seed_dnd5e_item(
     attunement: Option<String>,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_item, name, source);
     ctx.db.dnd5e_item().insert(Dnd5eItem {
         id: 0,
         name,
@@ -173,6 +189,7 @@ pub fn seed_dnd5e_feat(
     prerequisite: Option<FeatPrereq>,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_feat, name, source);
     ctx.db.dnd5e_feat().insert(Dnd5eFeat {
         id: 0,
         name,
@@ -191,6 +208,7 @@ pub fn seed_dnd5e_condition(
     source: String,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_condition, name, source);
     ctx.db.dnd5e_condition().insert(Dnd5eCondition {
         id: 0,
         name,
@@ -210,6 +228,7 @@ pub fn seed_dnd5e_background(
     language_proficiencies: Vec<LanguageGrant>,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_background, name, source);
     ctx.db.dnd5e_background().insert(Dnd5eBackground {
         id: 0,
         name,
@@ -233,6 +252,7 @@ pub fn seed_dnd5e_race(
     language_proficiencies: Vec<LanguageGrant>,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_race, name, source);
     ctx.db.dnd5e_race().insert(Dnd5eRace {
         id: 0,
         name,
@@ -255,6 +275,7 @@ pub fn seed_dnd5e_optional_feature(
     prerequisite: Option<OptionalFeaturePrereq>,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_optional_feature, name, source);
     ctx.db
         .dnd5e_optional_feature()
         .insert(Dnd5eOptionalFeature {
@@ -276,6 +297,7 @@ pub fn seed_dnd5e_action(
     time: String,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_action, name, source);
     ctx.db.dnd5e_action().insert(Dnd5eAction {
         id: 0,
         name,
@@ -296,6 +318,7 @@ pub fn seed_dnd5e_language(
     origin: Option<String>,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_language, name, source);
     ctx.db.dnd5e_language().insert(Dnd5eLanguage {
         id: 0,
         name,
@@ -315,6 +338,7 @@ pub fn seed_dnd5e_sense(
     source: String,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_sense, name, source);
     ctx.db.dnd5e_sense().insert(Dnd5eSense {
         id: 0,
         name,
@@ -332,6 +356,7 @@ pub fn seed_dnd5e_skill(
     ability: Ability,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_skill, name, source);
     ctx.db.dnd5e_skill().insert(Dnd5eSkill {
         id: 0,
         name,
@@ -359,6 +384,7 @@ pub fn seed_dnd5e_class(
     class_features: Vec<String>,
     subclass_title: Option<String>,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_class, name, source);
     ctx.db.dnd5e_class().insert(Dnd5eClass {
         id: 0,
         name,
@@ -392,6 +418,7 @@ pub fn seed_dnd5e_subclass(
     cantrip_progression: Vec<u8>,
     subclass_features: Vec<String>,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_subclass, name, source);
     ctx.db.dnd5e_subclass().insert(Dnd5eSubclass {
         id: 0,
         name,
@@ -418,6 +445,7 @@ pub fn seed_dnd5e_class_feature(
     level: u8,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_class_feature, name, source);
     ctx.db.dnd5e_class_feature().insert(Dnd5eClassFeature {
         id: 0,
         name,
@@ -443,6 +471,7 @@ pub fn seed_dnd5e_subclass_feature(
     level: u8,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_subclass_feature, name, source);
     ctx.db
         .dnd5e_subclass_feature()
         .insert(Dnd5eSubclassFeature {
@@ -465,13 +494,14 @@ pub fn seed_dnd5e_object(
     ctx: &ReducerContext,
     name: String,
     source: String,
-    size: Vec<String>,
+    size: Vec<CreatureSize>,
     object_type: Option<String>,
     ac: Option<u16>,
     hp: Option<u16>,
     description: String,
     action_description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_object, name, source);
     ctx.db.dnd5e_object().insert(Dnd5eObject {
         id: 0,
         name,
@@ -502,6 +532,7 @@ pub fn seed_dnd5e_vehicle(
     hp: Option<u16>,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_vehicle, name, source);
     ctx.db.dnd5e_vehicle().insert(Dnd5eVehicle {
         id: 0,
         name,
@@ -526,7 +557,7 @@ pub fn seed_dnd5e_deity(
     name: String,
     source: String,
     pantheon: Option<String>,
-    alignment: Vec<String>,
+    alignment: Vec<Alignment>,
     category: Option<String>,
     domains: Vec<String>,
     province: Option<String>,
@@ -534,6 +565,7 @@ pub fn seed_dnd5e_deity(
     symbol: Option<String>,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_deity, name, source);
     ctx.db.dnd5e_deity().insert(Dnd5eDeity {
         id: 0,
         name,
@@ -558,6 +590,7 @@ pub fn seed_dnd5e_reward(
     reward_type: Option<String>,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_reward, name, source);
     ctx.db.dnd5e_reward().insert(Dnd5eReward {
         id: 0,
         name,
@@ -581,6 +614,7 @@ pub fn seed_dnd5e_trap_hazard(
     countermeasures: String,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_trap_hazard, name, source);
     ctx.db.dnd5e_trap_hazard().insert(Dnd5eTrapHazard {
         id: 0,
         name,
@@ -603,6 +637,7 @@ pub fn seed_dnd5e_char_creation_option(
     option_types: Vec<String>,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_char_creation_option, name, source);
     ctx.db
         .dnd5e_char_creation_option()
         .insert(Dnd5eCharCreationOption {
@@ -627,6 +662,7 @@ pub fn seed_dnd5e_psionic(
     description: String,
     modes: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_psionic, name, source);
     ctx.db.dnd5e_psionic().insert(Dnd5ePsionic {
         id: 0,
         name,
@@ -653,6 +689,7 @@ pub fn seed_dnd5e_recipe(
     ingredients: String,
     instructions: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_recipe, name, source);
     ctx.db.dnd5e_recipe().insert(Dnd5eRecipe {
         id: 0,
         name,
@@ -681,6 +718,7 @@ pub fn seed_dnd5e_cult_boon(
     ability_text: Option<String>,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_cult_boon, name, source);
     ctx.db.dnd5e_cult_boon().insert(Dnd5eCultBoon {
         id: 0,
         name,
@@ -704,6 +742,7 @@ pub fn seed_dnd5e_deck(
     cards: Vec<String>,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_deck, name, source);
     ctx.db.dnd5e_deck().insert(Dnd5eDeck {
         id: 0,
         name,
@@ -722,6 +761,7 @@ pub fn seed_dnd5e_variant_rule(
     rule_type: Option<String>,
     description: String,
 ) -> Result<(), String> {
+    skip_if_exists!(ctx, dnd5e_variant_rule, name, source);
     ctx.db.dnd5e_variant_rule().insert(Dnd5eVariantRule {
         id: 0,
         name,

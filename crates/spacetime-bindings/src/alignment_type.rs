@@ -4,20 +4,21 @@
 #![allow(unused, clippy::all)]
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
-use super::ability_score_type::AbilityScore;
-use super::creature_size_type::CreatureSize;
-use super::race_type::Race;
-
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
-pub struct FeatPrereq {
-    pub level: Option<u8>,
-    pub races: Vec<Race>,
-    pub sizes: Vec<CreatureSize>,
-    pub abilities: Vec<AbilityScore>,
-    pub spellcasting: bool,
+#[derive(Copy, Eq, Hash)]
+pub enum Alignment {
+    Lawful,
+
+    Chaotic,
+
+    Neutral,
+
+    Good,
+
+    Evil,
 }
 
-impl __sdk::InModule for FeatPrereq {
+impl __sdk::InModule for Alignment {
     type Module = super::RemoteModule;
 }

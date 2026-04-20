@@ -11,6 +11,7 @@ pub mod ability_choice_type;
 pub mod ability_grant_type;
 pub mod ability_score_type;
 pub mod ability_type;
+pub mod alignment_type;
 pub mod caster_progression_type;
 pub mod class_level_prereq_type;
 pub mod class_type;
@@ -128,6 +129,7 @@ pub use ability_choice_type::AbilityChoice;
 pub use ability_grant_type::AbilityGrant;
 pub use ability_score_type::AbilityScore;
 pub use ability_type::Ability;
+pub use alignment_type::Alignment;
 pub use caster_progression_type::CasterProgression;
 pub use class_level_prereq_type::ClassLevelPrereq;
 pub use class_type::Class;
@@ -316,7 +318,7 @@ pub enum Reducer {
         name: String,
         source: String,
         pantheon: Option<String>,
-        alignment: Vec<String>,
+        alignment: Vec<Alignment>,
         category: Option<String>,
         domains: Vec<String>,
         province: Option<String>,
@@ -373,7 +375,7 @@ pub enum Reducer {
     SeedDnd5EObject {
         name: String,
         source: String,
-        size: Vec<String>,
+        size: Vec<CreatureSize>,
         object_type: Option<String>,
         ac: Option<u16>,
         hp: Option<u16>,

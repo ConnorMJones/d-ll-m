@@ -1,4 +1,7 @@
-use dllm_bindings::{message_type::Message, user_type::User};
+use dllm_bindings::{
+    dnd_5_e_item_type::Dnd5EItem, dnd_5_e_monster_type::Dnd5EMonster,
+    dnd_5_e_spell_type::Dnd5ESpell, message_type::Message, user_type::User,
+};
 use spacetimedb_sdk::{Identity, Timestamp};
 use std::{collections::BTreeMap, thread::JoinHandle};
 
@@ -34,6 +37,9 @@ pub struct ClientSnapshot {
     pub local_identity: Option<String>,
     pub users: Vec<UserView>,
     pub messages: Vec<MessageView>,
+    pub spells: Vec<SpellView>,
+    pub monsters: Vec<MonsterView>,
+    pub items: Vec<ItemView>,
     pub last_error: Option<String>,
 }
 
@@ -57,6 +63,38 @@ pub struct MessageView {
     pub sender_name: String,
     pub text: String,
     pub sent: String,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct SpellView {
+    pub id: u64,
+    pub name: String,
+    pub level: u8,
+    pub school: String,
+    pub ritual: bool,
+    pub concentration: bool,
+    pub description: String,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct MonsterView {
+    pub id: u64,
+    pub name: String,
+    pub cr: String,
+    pub size: String,
+    pub creature_type: String,
+    pub ac: u8,
+    pub hp_average: u16,
+    pub description: String,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct ItemView {
+    pub id: u64,
+    pub name: String,
+    pub item_type: String,
+    pub rarity: String,
+    pub description: String,
 }
 
 pub struct ConnectionRuntime {
@@ -88,6 +126,9 @@ pub struct RuntimeState {
     pub local_identity: Option<Identity>,
     pub users: BTreeMap<String, UserRecord>,
     pub messages: Vec<MessageRecord>,
+    pub spells: BTreeMap<u64, SpellRecord>,
+    pub monsters: BTreeMap<u64, MonsterRecord>,
+    pub items: BTreeMap<u64, ItemRecord>,
     pub last_error: Option<String>,
 }
 
@@ -98,6 +139,9 @@ impl RuntimeState {
         self.local_identity = None;
         self.users.clear();
         self.messages.clear();
+        self.spells.clear();
+        self.monsters.clear();
+        self.items.clear();
         self.last_error = None;
     }
 }
@@ -138,6 +182,79 @@ impl MessageRecord {
             sender: row.sender,
             text: row.text.clone(),
             sent: row.sent,
+        }
+    }
+}
+
+#[derive(Clone)]
+pub struct SpellRecord {
+    pub id: u64,
+    pub name: String,
+    pub level: u8,
+    pub school: String,
+    pub ritual: bool,
+    pub concentration: bool,
+    pub description: String,
+}
+
+impl SpellRecord {
+    pub fn from_row(row: &Dnd5ESpell) -> Self {
+        Self {
+            id: row.id,
+            name: row.name.clone(),
+            level: row.level,
+            school: format!("{:?}", row.school),
+            ritual: row.ritual,
+            concentration: row.concentration,
+            description: row.description.clone(),
+        }
+    }
+}
+
+#[derive(Clone)]
+pub struct MonsterRecord {
+    pub id: u64,
+    pub name: String,
+    pub cr: String,
+    pub size: String,
+    pub creature_type: String,
+    pub ac: u8,
+    pub hp_average: u16,
+    pub description: String,
+}
+
+impl MonsterRecord {
+    pub fn from_row(row: &Dnd5EMonster) -> Self {
+        Self {
+            id: row.id,
+            name: row.name.clone(),
+            cr: row.cr.clone(),
+            size: format!("{:?}", row.size),
+            creature_type: format!("{:?}", row.creature_type),
+            ac: row.ac,
+            hp_average: row.hp_average,
+            description: row.description.clone(),
+        }
+    }
+}
+
+#[derive(Clone)]
+pub struct ItemRecord {
+    pub id: u64,
+    pub name: String,
+    pub item_type: String,
+    pub rarity: String,
+    pub description: String,
+}
+
+impl ItemRecord {
+    pub fn from_row(row: &Dnd5EItem) -> Self {
+        Self {
+            id: row.id,
+            name: row.name.clone(),
+            item_type: format!("{:?}", row.item_type),
+            rarity: format!("{:?}", row.rarity),
+            description: row.description.clone(),
         }
     }
 }

@@ -2,6 +2,7 @@
 // WILL NOT BE SAVED. MODIFY TABLES IN YOUR MODULE SOURCE CODE INSTEAD.
 
 #![allow(unused, clippy::all)]
+use super::creature_size_type::CreatureSize;
 use super::dnd_5_e_object_type::Dnd5EObject;
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 

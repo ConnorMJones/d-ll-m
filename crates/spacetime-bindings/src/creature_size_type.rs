@@ -19,6 +19,8 @@ pub enum CreatureSize {
     Huge,
 
     Gargantuan,
+
+    Varies,
 }
 
 impl __sdk::InModule for CreatureSize {

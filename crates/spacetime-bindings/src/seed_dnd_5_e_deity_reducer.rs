@@ -4,13 +4,15 @@
 #![allow(unused, clippy::all)]
 use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 
+use super::alignment_type::Alignment;
+
 #[derive(__lib::ser::Serialize, __lib::de::Deserialize, Clone, PartialEq, Debug)]
 #[sats(crate = __lib)]
 pub(super) struct SeedDnd5EDeityArgs {
     pub name: String,
     pub source: String,
     pub pantheon: Option<String>,
-    pub alignment: Vec<String>,
+    pub alignment: Vec<Alignment>,
     pub category: Option<String>,
     pub domains: Vec<String>,
     pub province: Option<String>,
@@ -56,7 +58,7 @@ pub trait seed_dnd_5_e_deity {
         name: String,
         source: String,
         pantheon: Option<String>,
-        alignment: Vec<String>,
+        alignment: Vec<Alignment>,
         category: Option<String>,
         domains: Vec<String>,
         province: Option<String>,
@@ -90,7 +92,7 @@ pub trait seed_dnd_5_e_deity {
         name: String,
         source: String,
         pantheon: Option<String>,
-        alignment: Vec<String>,
+        alignment: Vec<Alignment>,
         category: Option<String>,
         domains: Vec<String>,
         province: Option<String>,
@@ -112,7 +114,7 @@ impl seed_dnd_5_e_deity for super::RemoteReducers {
         name: String,
         source: String,
         pantheon: Option<String>,
-        alignment: Vec<String>,
+        alignment: Vec<Alignment>,
         category: Option<String>,
         domains: Vec<String>,
         province: Option<String>,

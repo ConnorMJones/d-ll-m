@@ -1,7 +1,7 @@
 use dllm_core::dnd5e::{
-    Ability, AbilityGrant, CasterProgression, CreatureSize, CreatureType, FeatCategory, FeatPrereq,
-    ItemRarity, ItemType, LanguageGrant, OptionalFeaturePrereq, OptionalFeatureType, SkillGrant,
-    Speed, SpellSchool, ToolGrant,
+    Ability, AbilityGrant, Alignment, CasterProgression, CreatureSize, CreatureType, FeatCategory,
+    FeatPrereq, ItemRarity, ItemType, LanguageGrant, OptionalFeaturePrereq, OptionalFeatureType,
+    SkillGrant, Speed, SpellSchool, ToolGrant,
 };
 
 #[spacetimedb::table(accessor = user, public)]
@@ -261,7 +261,7 @@ pub struct Dnd5eObject {
     pub id: u64,
     pub name: String,
     pub source: String,
-    pub size: Vec<String>,
+    pub size: Vec<CreatureSize>,
     pub object_type: Option<String>,
     pub ac: Option<u16>,
     pub hp: Option<u16>,
@@ -295,7 +295,7 @@ pub struct Dnd5eDeity {
     pub name: String,
     pub source: String,
     pub pantheon: Option<String>,
-    pub alignment: Vec<String>,
+    pub alignment: Vec<Alignment>,
     pub category: Option<String>,
     pub domains: Vec<String>,
     pub province: Option<String>,
