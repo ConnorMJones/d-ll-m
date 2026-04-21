@@ -11,6 +11,7 @@ use super::spell_school_type::SpellSchool;
 #[sats(crate = __lib)]
 pub struct Dnd5ESpell {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub level: u8,
@@ -30,6 +31,7 @@ impl __sdk::InModule for Dnd5ESpell {
 /// Provides typed access to columns for query building.
 pub struct Dnd5ESpellCols {
     pub id: __sdk::__query_builder::Col<Dnd5ESpell, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5ESpell, String>,
     pub name: __sdk::__query_builder::Col<Dnd5ESpell, String>,
     pub source: __sdk::__query_builder::Col<Dnd5ESpell, String>,
     pub level: __sdk::__query_builder::Col<Dnd5ESpell, u8>,
@@ -45,6 +47,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ESpell {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5ESpellCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             level: __sdk::__query_builder::Col::new(table_name, "level"),
@@ -62,6 +65,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ESpell {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5ESpellIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5ESpell, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5ESpell, String>,
     pub saving_throw: __sdk::__query_builder::IxCol<Dnd5ESpell, Option<Ability>>,
 }
 
@@ -70,6 +74,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5ESpell {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5ESpellIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
             saving_throw: __sdk::__query_builder::IxCol::new(table_name, "saving_throw"),
         }
     }

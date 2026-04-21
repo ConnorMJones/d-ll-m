@@ -11,6 +11,7 @@ use super::caster_progression_type::CasterProgression;
 #[sats(crate = __lib)]
 pub struct Dnd5ESubclass {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub short_name: String,
     pub source: String,
@@ -32,6 +33,7 @@ impl __sdk::InModule for Dnd5ESubclass {
 /// Provides typed access to columns for query building.
 pub struct Dnd5ESubclassCols {
     pub id: __sdk::__query_builder::Col<Dnd5ESubclass, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5ESubclass, String>,
     pub name: __sdk::__query_builder::Col<Dnd5ESubclass, String>,
     pub short_name: __sdk::__query_builder::Col<Dnd5ESubclass, String>,
     pub source: __sdk::__query_builder::Col<Dnd5ESubclass, String>,
@@ -49,6 +51,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ESubclass {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5ESubclassCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             short_name: __sdk::__query_builder::Col::new(table_name, "short_name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
@@ -74,6 +77,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ESubclass {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5ESubclassIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5ESubclass, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5ESubclass, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5ESubclass {
@@ -81,6 +85,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5ESubclass {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5ESubclassIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

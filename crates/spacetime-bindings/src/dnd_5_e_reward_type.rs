@@ -8,6 +8,7 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 #[sats(crate = __lib)]
 pub struct Dnd5EReward {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub reward_type: Option<String>,
@@ -23,6 +24,7 @@ impl __sdk::InModule for Dnd5EReward {
 /// Provides typed access to columns for query building.
 pub struct Dnd5ERewardCols {
     pub id: __sdk::__query_builder::Col<Dnd5EReward, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5EReward, String>,
     pub name: __sdk::__query_builder::Col<Dnd5EReward, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EReward, String>,
     pub reward_type: __sdk::__query_builder::Col<Dnd5EReward, Option<String>>,
@@ -34,6 +36,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EReward {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5ERewardCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             reward_type: __sdk::__query_builder::Col::new(table_name, "reward_type"),
@@ -47,6 +50,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EReward {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5ERewardIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5EReward, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5EReward, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5EReward {
@@ -54,6 +58,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5EReward {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5ERewardIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

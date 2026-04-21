@@ -8,6 +8,7 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 #[sats(crate = __lib)]
 pub struct Dnd5EClassFeature {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub class_name: String,
@@ -25,6 +26,7 @@ impl __sdk::InModule for Dnd5EClassFeature {
 /// Provides typed access to columns for query building.
 pub struct Dnd5EClassFeatureCols {
     pub id: __sdk::__query_builder::Col<Dnd5EClassFeature, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5EClassFeature, String>,
     pub name: __sdk::__query_builder::Col<Dnd5EClassFeature, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EClassFeature, String>,
     pub class_name: __sdk::__query_builder::Col<Dnd5EClassFeature, String>,
@@ -38,6 +40,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EClassFeature {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5EClassFeatureCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             class_name: __sdk::__query_builder::Col::new(table_name, "class_name"),
@@ -53,6 +56,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EClassFeature {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5EClassFeatureIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5EClassFeature, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5EClassFeature, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5EClassFeature {
@@ -60,6 +64,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5EClassFeature {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5EClassFeatureIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

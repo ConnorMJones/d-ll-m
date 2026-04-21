@@ -8,6 +8,7 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 #[sats(crate = __lib)]
 pub struct Dnd5ESense {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub description: String,
@@ -22,6 +23,7 @@ impl __sdk::InModule for Dnd5ESense {
 /// Provides typed access to columns for query building.
 pub struct Dnd5ESenseCols {
     pub id: __sdk::__query_builder::Col<Dnd5ESense, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5ESense, String>,
     pub name: __sdk::__query_builder::Col<Dnd5ESense, String>,
     pub source: __sdk::__query_builder::Col<Dnd5ESense, String>,
     pub description: __sdk::__query_builder::Col<Dnd5ESense, String>,
@@ -32,6 +34,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ESense {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5ESenseCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             description: __sdk::__query_builder::Col::new(table_name, "description"),
@@ -44,6 +47,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ESense {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5ESenseIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5ESense, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5ESense, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5ESense {
@@ -51,6 +55,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5ESense {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5ESenseIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

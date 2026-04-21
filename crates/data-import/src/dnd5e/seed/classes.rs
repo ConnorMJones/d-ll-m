@@ -1,4 +1,4 @@
-use super::support::{json_files_with_prefix, read_json_file};
+use super::support::{json_files_with_prefix, read_json_file, warn_skipped_class_sidekick};
 use crate::dnd5e::normalize::{
     normalize_class, normalize_class_feature, normalize_subclass, normalize_subclass_feature,
 };
@@ -17,6 +17,7 @@ pub fn seed_classes(conn: &DbConnection, data_dir: &Path) -> SectionReport {
 
     for (filename, path) in json_files_with_prefix(&class_dir, "class-") {
         if filename == "class-sidekick.json" {
+            warn_skipped_class_sidekick(&mut report, "classes");
             continue;
         }
         let Some(class_file) = read_json_file::<ClassFile>(&path, &mut report) else {
@@ -47,6 +48,7 @@ pub fn seed_subclasses(conn: &DbConnection, data_dir: &Path) -> SectionReport {
 
     for (filename, path) in json_files_with_prefix(&class_dir, "class-") {
         if filename == "class-sidekick.json" {
+            warn_skipped_class_sidekick(&mut report, "subclasses");
             continue;
         }
         let Some(class_file) = read_json_file::<ClassFile>(&path, &mut report) else {
@@ -80,6 +82,7 @@ pub fn seed_class_features(conn: &DbConnection, data_dir: &Path) -> SectionRepor
 
     for (filename, path) in json_files_with_prefix(&class_dir, "class-") {
         if filename == "class-sidekick.json" {
+            warn_skipped_class_sidekick(&mut report, "class_features");
             continue;
         }
         let Some(class_file) = read_json_file::<ClassFile>(&path, &mut report) else {
@@ -113,6 +116,7 @@ pub fn seed_subclass_features(conn: &DbConnection, data_dir: &Path) -> SectionRe
 
     for (filename, path) in json_files_with_prefix(&class_dir, "class-") {
         if filename == "class-sidekick.json" {
+            warn_skipped_class_sidekick(&mut report, "subclass_features");
             continue;
         }
         let Some(class_file) = read_json_file::<ClassFile>(&path, &mut report) else {

@@ -8,6 +8,7 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 #[sats(crate = __lib)]
 pub struct Dnd5EAction {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub time: String,
@@ -23,6 +24,7 @@ impl __sdk::InModule for Dnd5EAction {
 /// Provides typed access to columns for query building.
 pub struct Dnd5EActionCols {
     pub id: __sdk::__query_builder::Col<Dnd5EAction, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5EAction, String>,
     pub name: __sdk::__query_builder::Col<Dnd5EAction, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EAction, String>,
     pub time: __sdk::__query_builder::Col<Dnd5EAction, String>,
@@ -34,6 +36,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EAction {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5EActionCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             time: __sdk::__query_builder::Col::new(table_name, "time"),
@@ -47,6 +50,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EAction {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5EActionIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5EAction, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5EAction, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5EAction {
@@ -54,6 +58,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5EAction {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5EActionIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

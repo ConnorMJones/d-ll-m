@@ -10,6 +10,7 @@ use super::creature_size_type::CreatureSize;
 #[sats(crate = __lib)]
 pub struct Dnd5EObject {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub size: Vec<CreatureSize>,
@@ -29,6 +30,7 @@ impl __sdk::InModule for Dnd5EObject {
 /// Provides typed access to columns for query building.
 pub struct Dnd5EObjectCols {
     pub id: __sdk::__query_builder::Col<Dnd5EObject, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5EObject, String>,
     pub name: __sdk::__query_builder::Col<Dnd5EObject, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EObject, String>,
     pub size: __sdk::__query_builder::Col<Dnd5EObject, Vec<CreatureSize>>,
@@ -44,6 +46,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EObject {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5EObjectCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             size: __sdk::__query_builder::Col::new(table_name, "size"),
@@ -61,6 +64,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EObject {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5EObjectIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5EObject, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5EObject, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5EObject {
@@ -68,6 +72,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5EObject {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5EObjectIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

@@ -8,6 +8,7 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 #[sats(crate = __lib)]
 pub struct Dnd5ELanguage {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub kind: Option<String>,
@@ -25,6 +26,7 @@ impl __sdk::InModule for Dnd5ELanguage {
 /// Provides typed access to columns for query building.
 pub struct Dnd5ELanguageCols {
     pub id: __sdk::__query_builder::Col<Dnd5ELanguage, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5ELanguage, String>,
     pub name: __sdk::__query_builder::Col<Dnd5ELanguage, String>,
     pub source: __sdk::__query_builder::Col<Dnd5ELanguage, String>,
     pub kind: __sdk::__query_builder::Col<Dnd5ELanguage, Option<String>>,
@@ -38,6 +40,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ELanguage {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5ELanguageCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             kind: __sdk::__query_builder::Col::new(table_name, "kind"),
@@ -53,6 +56,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ELanguage {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5ELanguageIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5ELanguage, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5ELanguage, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5ELanguage {
@@ -60,6 +64,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5ELanguage {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5ELanguageIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

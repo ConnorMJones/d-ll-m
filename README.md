@@ -23,6 +23,13 @@ cargo run -p dllm-tools -- seed
 cargo run -p dllm-client-desktop
 ```
 
+## Bindings
+
+```bash
+# Regenerate Rust bindings from the current Spacetime module schema
+spacetime generate --lang rust --out-dir crates/spacetime-bindings/src --module-path crates/server
+```
+
 ## Reset
 
 ```bash

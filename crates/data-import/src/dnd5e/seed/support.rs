@@ -44,10 +44,22 @@ pub fn json_files_with_prefix(dir: &Path, prefix: &str) -> Vec<(String, PathBuf)
     files
 }
 
-pub fn parse_skill_grants(profs: &[RawSkillBlock]) -> Vec<dnd::SkillGrant> {
+pub fn warn_skipped_class_sidekick(report: &mut SectionReport, context: &'static str) {
+    report.warn(
+        Some("class-sidekick.json".to_string()),
+        format!("skipping sidekick data for {context}; current importer only covers core class-family content"),
+    );
+}
+
+pub fn parse_skill_grants(
+    item_name: &str,
+    profs: &[RawSkillBlock],
+    report: &mut SectionReport,
+) -> Vec<dnd::SkillGrant> {
     profs
         .iter()
-        .filter_map(|block| {
+        .enumerate()
+        .filter_map(|(index, block)| {
             if let Some(ref choose) = block.choose {
                 Some(dnd::SkillGrant::Choose(dnd::SkillChoice {
                     count: choose.count.unwrap_or(1),
@@ -57,16 +69,32 @@ pub fn parse_skill_grants(profs: &[RawSkillBlock]) -> Vec<dnd::SkillGrant> {
                 Some(dnd::SkillGrant::Any(n))
             } else {
                 let skills = block.to_fixed_skills();
-                (!skills.is_empty()).then_some(dnd::SkillGrant::Fixed(skills))
+                if skills.is_empty() {
+                    report.warn(
+                        Some(item_name.to_string()),
+                        format!(
+                            "skill proficiency block {} contained no supported grant shape",
+                            index + 1
+                        ),
+                    );
+                    None
+                } else {
+                    Some(dnd::SkillGrant::Fixed(skills))
+                }
             }
         })
         .collect()
 }
 
-pub fn parse_tool_grants(profs: &[RawToolBlock]) -> Vec<dnd::ToolGrant> {
+pub fn parse_tool_grants(
+    item_name: &str,
+    profs: &[RawToolBlock],
+    report: &mut SectionReport,
+) -> Vec<dnd::ToolGrant> {
     profs
         .iter()
-        .filter_map(|block| {
+        .enumerate()
+        .filter_map(|(index, block)| {
             if let Some(ref choose) = block.choose {
                 Some(dnd::ToolGrant::Choose(dnd::StringChoice {
                     count: choose.count.unwrap_or(1),
@@ -81,16 +109,32 @@ pub fn parse_tool_grants(profs: &[RawToolBlock]) -> Vec<dnd::ToolGrant> {
                     .filter(|(_, v)| v.is_truthy())
                     .map(|(k, _)| k.clone())
                     .collect();
-                (!tools.is_empty()).then_some(dnd::ToolGrant::Fixed(tools))
+                if tools.is_empty() {
+                    report.warn(
+                        Some(item_name.to_string()),
+                        format!(
+                            "tool proficiency block {} contained no supported grant shape",
+                            index + 1
+                        ),
+                    );
+                    None
+                } else {
+                    Some(dnd::ToolGrant::Fixed(tools))
+                }
             }
         })
         .collect()
 }
 
-pub fn parse_language_grants(profs: &[RawLanguageBlock]) -> Vec<dnd::LanguageGrant> {
+pub fn parse_language_grants(
+    item_name: &str,
+    profs: &[RawLanguageBlock],
+    report: &mut SectionReport,
+) -> Vec<dnd::LanguageGrant> {
     profs
         .iter()
-        .filter_map(|block| {
+        .enumerate()
+        .filter_map(|(index, block)| {
             if let Some(n) = block.any_standard {
                 Some(dnd::LanguageGrant::AnyStandard(n))
             } else if let Some(n) = block.any_exotic {
@@ -104,16 +148,32 @@ pub fn parse_language_grants(profs: &[RawLanguageBlock]) -> Vec<dnd::LanguageGra
                 }))
             } else {
                 let langs = block.to_fixed_languages();
-                (!langs.is_empty()).then_some(dnd::LanguageGrant::Fixed(langs))
+                if langs.is_empty() {
+                    report.warn(
+                        Some(item_name.to_string()),
+                        format!(
+                            "language proficiency block {} contained no supported grant shape",
+                            index + 1
+                        ),
+                    );
+                    None
+                } else {
+                    Some(dnd::LanguageGrant::Fixed(langs))
+                }
             }
         })
         .collect()
 }
 
-pub fn parse_ability_grants(blocks: &[RawAbilityBlock]) -> Vec<dnd::AbilityGrant> {
+pub fn parse_ability_grants(
+    item_name: &str,
+    blocks: &[RawAbilityBlock],
+    report: &mut SectionReport,
+) -> Vec<dnd::AbilityGrant> {
     blocks
         .iter()
-        .filter_map(|block| {
+        .enumerate()
+        .filter_map(|(index, block)| {
             if let Some(ref choose) = block.choose {
                 Some(dnd::AbilityGrant::ChooseAny(dnd::AbilityChoice {
                     count: choose.count,
@@ -134,7 +194,18 @@ pub fn parse_ability_grants(blocks: &[RawAbilityBlock]) -> Vec<dnd::AbilityGrant
                 })
                 .collect();
 
-                (!bonuses.is_empty()).then_some(dnd::AbilityGrant::Fixed(bonuses))
+                if bonuses.is_empty() {
+                    report.warn(
+                        Some(item_name.to_string()),
+                        format!(
+                            "ability grant block {} contained no supported grant shape",
+                            index + 1
+                        ),
+                    );
+                    None
+                } else {
+                    Some(dnd::AbilityGrant::Fixed(bonuses))
+                }
             }
         })
         .collect()

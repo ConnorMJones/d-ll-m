@@ -27,6 +27,8 @@ pub struct Dnd5eSpell {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub level: u8,
@@ -43,6 +45,8 @@ pub struct Dnd5eMonster {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub size: CreatureSize,
@@ -69,6 +73,8 @@ pub struct Dnd5eItem {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     #[index(btree)]
@@ -87,6 +93,8 @@ pub struct Dnd5eFeat {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     #[index(btree)]
@@ -100,6 +108,8 @@ pub struct Dnd5eCondition {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub description: String,
@@ -110,6 +120,8 @@ pub struct Dnd5eBackground {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub skill_proficiencies: Vec<SkillGrant>,
@@ -123,6 +135,8 @@ pub struct Dnd5eRace {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     #[index(btree)]
@@ -138,6 +152,8 @@ pub struct Dnd5eOptionalFeature {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub feature_types: Vec<OptionalFeatureType>,
@@ -150,6 +166,8 @@ pub struct Dnd5eAction {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub time: String,
@@ -161,6 +179,8 @@ pub struct Dnd5eLanguage {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub kind: Option<String>,
@@ -174,6 +194,8 @@ pub struct Dnd5eSense {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub description: String,
@@ -184,6 +206,8 @@ pub struct Dnd5eSkill {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub ability: Ability,
@@ -195,6 +219,8 @@ pub struct Dnd5eClass {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub edition: Option<String>,
@@ -214,6 +240,8 @@ pub struct Dnd5eSubclass {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub short_name: String,
     pub source: String,
@@ -231,6 +259,8 @@ pub struct Dnd5eClassFeature {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub class_name: String,
@@ -244,6 +274,8 @@ pub struct Dnd5eSubclassFeature {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub class_name: String,
@@ -259,6 +291,8 @@ pub struct Dnd5eObject {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub size: Vec<CreatureSize>,
@@ -274,6 +308,8 @@ pub struct Dnd5eVehicle {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub vehicle_type: String,
@@ -292,6 +328,8 @@ pub struct Dnd5eDeity {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub pantheon: Option<String>,
@@ -309,6 +347,8 @@ pub struct Dnd5eReward {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub reward_type: Option<String>,
@@ -320,6 +360,8 @@ pub struct Dnd5eTrapHazard {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub kind: String,
@@ -335,6 +377,8 @@ pub struct Dnd5eCharCreationOption {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub option_types: Vec<String>,
@@ -346,6 +390,8 @@ pub struct Dnd5ePsionic {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub kind: String,
@@ -360,6 +406,8 @@ pub struct Dnd5eRecipe {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub recipe_type: Option<String>,
@@ -375,6 +423,8 @@ pub struct Dnd5eCultBoon {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub kind: String,
@@ -391,6 +441,8 @@ pub struct Dnd5eDeck {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub cards: Vec<String>,
@@ -402,6 +454,8 @@ pub struct Dnd5eVariantRule {
     #[primary_key]
     #[auto_inc]
     pub id: u64,
+    #[unique]
+    pub key: String,
     pub name: String,
     pub source: String,
     pub rule_type: Option<String>,

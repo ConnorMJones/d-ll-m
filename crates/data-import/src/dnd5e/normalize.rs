@@ -432,9 +432,9 @@ pub fn normalize_background(raw: RawBackground, report: &mut SectionReport) -> I
     ImportBackground {
         name: raw.name,
         source: raw.source,
-        skill_grants: parse_skill_grants(&raw.skill_proficiencies),
-        tool_grants: parse_tool_grants(&raw.tool_proficiencies),
-        language_grants: parse_language_grants(&raw.language_proficiencies),
+        skill_grants: parse_skill_grants(&item_name, &raw.skill_proficiencies, report),
+        tool_grants: parse_tool_grants(&item_name, &raw.tool_proficiencies, report),
+        language_grants: parse_language_grants(&item_name, &raw.language_proficiencies, report),
         description,
     }
 }
@@ -456,8 +456,8 @@ pub fn normalize_race(raw: RawRace, report: &mut SectionReport) -> Option<Import
         source: raw.source,
         size,
         speed: parse_race_speed(&raw.speed),
-        ability_grants: parse_ability_grants(&raw.ability),
-        language_grants: parse_language_grants(&raw.language_proficiencies),
+        ability_grants: parse_ability_grants(&item_name, &raw.ability, report),
+        language_grants: parse_language_grants(&item_name, &raw.language_proficiencies, report),
         description,
     })
 }

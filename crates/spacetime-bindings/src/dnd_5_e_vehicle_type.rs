@@ -8,6 +8,7 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 #[sats(crate = __lib)]
 pub struct Dnd5EVehicle {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub vehicle_type: String,
@@ -30,6 +31,7 @@ impl __sdk::InModule for Dnd5EVehicle {
 /// Provides typed access to columns for query building.
 pub struct Dnd5EVehicleCols {
     pub id: __sdk::__query_builder::Col<Dnd5EVehicle, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5EVehicle, String>,
     pub name: __sdk::__query_builder::Col<Dnd5EVehicle, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EVehicle, String>,
     pub vehicle_type: __sdk::__query_builder::Col<Dnd5EVehicle, String>,
@@ -48,6 +50,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EVehicle {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5EVehicleCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             vehicle_type: __sdk::__query_builder::Col::new(table_name, "vehicle_type"),
@@ -68,6 +71,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EVehicle {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5EVehicleIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5EVehicle, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5EVehicle, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5EVehicle {
@@ -75,6 +79,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5EVehicle {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5EVehicleIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

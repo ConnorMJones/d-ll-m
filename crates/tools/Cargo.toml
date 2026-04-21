@@ -9,6 +9,7 @@ path = "src/main.rs"
 
 [dependencies]
 dllm-bindings.workspace = true
+dllm-core.workspace = true
 data-import.workspace = true
 dllm-server.workspace = true
 

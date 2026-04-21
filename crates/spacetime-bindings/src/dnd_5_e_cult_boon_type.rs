@@ -8,6 +8,7 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 #[sats(crate = __lib)]
 pub struct Dnd5ECultBoon {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub kind: String,
@@ -28,6 +29,7 @@ impl __sdk::InModule for Dnd5ECultBoon {
 /// Provides typed access to columns for query building.
 pub struct Dnd5ECultBoonCols {
     pub id: __sdk::__query_builder::Col<Dnd5ECultBoon, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5ECultBoon, String>,
     pub name: __sdk::__query_builder::Col<Dnd5ECultBoon, String>,
     pub source: __sdk::__query_builder::Col<Dnd5ECultBoon, String>,
     pub kind: __sdk::__query_builder::Col<Dnd5ECultBoon, String>,
@@ -44,6 +46,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ECultBoon {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5ECultBoonCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             kind: __sdk::__query_builder::Col::new(table_name, "kind"),
@@ -62,6 +65,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ECultBoon {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5ECultBoonIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5ECultBoon, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5ECultBoon, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5ECultBoon {
@@ -69,6 +73,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5ECultBoon {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5ECultBoonIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

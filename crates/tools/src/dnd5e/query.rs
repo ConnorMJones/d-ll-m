@@ -1,5 +1,16 @@
 use dllm_bindings::DbConnection;
+use dllm_core::dnd5e::ItemRarity;
 use dllm_server::dnd5e::query::{self as db_query, ItemQuery, MonsterQuery, SpellQuery};
+use std::str::FromStr;
+
+pub fn parse_item_rarity_filter(value: Option<String>) -> Result<Option<ItemRarity>, String> {
+    match value {
+        Some(value) => ItemRarity::from_str(&value)
+            .map(Some)
+            .map_err(|()| format!("invalid item rarity filter: {value}")),
+        None => Ok(None),
+    }
+}
 
 pub fn query_spells(conn: &DbConnection, name_filter: Option<String>, level_filter: Option<u8>) {
     let spells = db_query::query_spells(
@@ -54,11 +65,21 @@ pub fn query_items(
     name_filter: Option<String>,
     rarity_filter: Option<String>,
 ) {
+    let rarity = match parse_item_rarity_filter(rarity_filter) {
+        Ok(rarity) => rarity,
+        Err(err) => {
+            eprintln!(
+                "{err}. Expected one of: none, common, uncommon, rare, very rare, legendary, artifact, unknown, unknown (magic), varies."
+            );
+            return;
+        }
+    };
+
     let items = db_query::query_items(
         conn,
         ItemQuery {
             name: name_filter,
-            rarity: rarity_filter,
+            rarity,
         },
     );
 

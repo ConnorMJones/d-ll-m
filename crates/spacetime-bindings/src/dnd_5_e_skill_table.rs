@@ -126,10 +126,41 @@ impl<'ctx> Dnd5ESkillIdUnique<'ctx> {
     }
 }
 
+/// Access to the `key` unique index on the table `dnd_5_e_skill`,
+/// which allows point queries on the field of the same name
+/// via the [`Dnd5ESkillKeyUnique::find`] method.
+///
+/// Users are encouraged not to explicitly reference this type,
+/// but to directly chain method calls,
+/// like `ctx.db.dnd_5_e_skill().key().find(...)`.
+pub struct Dnd5ESkillKeyUnique<'ctx> {
+    imp: __sdk::UniqueConstraintHandle<Dnd5ESkill, String>,
+    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+impl<'ctx> Dnd5ESkillTableHandle<'ctx> {
+    /// Get a handle on the `key` unique index on the table `dnd_5_e_skill`.
+    pub fn key(&self) -> Dnd5ESkillKeyUnique<'ctx> {
+        Dnd5ESkillKeyUnique {
+            imp: self.imp.get_unique_constraint::<String>("key"),
+            phantom: std::marker::PhantomData,
+        }
+    }
+}
+
+impl<'ctx> Dnd5ESkillKeyUnique<'ctx> {
+    /// Find the subscribed row whose `key` column value is equal to `col_val`,
+    /// if such a row is present in the client cache.
+    pub fn find(&self, col_val: &String) -> Option<Dnd5ESkill> {
+        self.imp.find(col_val)
+    }
+}
+
 #[doc(hidden)]
 pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
     let _table = client_cache.get_or_make_table::<Dnd5ESkill>("dnd_5_e_skill");
     _table.add_unique_constraint::<u64>("id", |row| &row.id);
+    _table.add_unique_constraint::<String>("key", |row| &row.key);
 }
 
 #[doc(hidden)]

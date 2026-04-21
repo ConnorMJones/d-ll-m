@@ -2,19 +2,16 @@ use crate::tables::*;
 use dllm_core::dnd5e::{
     Ability, AbilityGrant, Alignment, CasterProgression, CreatureSize, CreatureType, FeatCategory,
     FeatPrereq, ItemRarity, ItemType, LanguageGrant, OptionalFeaturePrereq, OptionalFeatureType,
-    SkillGrant, Speed, SpellSchool, ToolGrant,
+    SkillGrant, Speed, SpellSchool, ToolGrant, class_feature_key, source_name_key,
+    subclass_feature_key, subclass_key,
 };
-use spacetimedb::{ReducerContext, Table};
+use spacetimedb::{ReducerContext, Table, TryInsertError};
 
-macro_rules! skip_if_exists {
-    ($ctx:expr, $table:ident, $name:expr, $source:expr) => {
-        if $ctx
-            .db
-            .$table()
-            .iter()
-            .any(|row| row.name == $name && row.source == $source)
-        {
-            return Ok(());
+macro_rules! insert_seed_row {
+    ($table:expr, $row:expr) => {
+        match $table.try_insert($row) {
+            Ok(_) | Err(TryInsertError::UniqueConstraintViolation(_)) => Ok(()),
+            Err(err) => Err(err.to_string()),
         }
     };
 }
@@ -87,19 +84,21 @@ pub fn seed_dnd5e_spell(
     description: String,
     saving_throw: Option<Ability>,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_spell, name, source);
-    ctx.db.dnd5e_spell().insert(Dnd5eSpell {
-        id: 0,
-        name,
-        source,
-        level,
-        school,
-        ritual,
-        concentration,
-        description,
-        saving_throw,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_spell(),
+        Dnd5eSpell {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            level,
+            school,
+            ritual,
+            concentration,
+            description,
+            saving_throw,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -125,29 +124,31 @@ pub fn seed_dnd5e_monster(
     cha_score: u8,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_monster, name, source);
-    ctx.db.dnd5e_monster().insert(Dnd5eMonster {
-        id: 0,
-        name,
-        source,
-        size,
-        creature_type,
-        cr,
-        ac,
-        hp_average,
-        hp_formula,
-        speed_walk,
-        speed_fly,
-        speed_swim,
-        str_score,
-        dex_score,
-        con_score,
-        int_score,
-        wis_score,
-        cha_score,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_monster(),
+        Dnd5eMonster {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            size,
+            creature_type,
+            cr,
+            ac,
+            hp_average,
+            hp_formula,
+            speed_walk,
+            speed_fly,
+            speed_swim,
+            str_score,
+            dex_score,
+            con_score,
+            int_score,
+            wis_score,
+            cha_score,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -164,20 +165,22 @@ pub fn seed_dnd5e_item(
     attunement: Option<String>,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_item, name, source);
-    ctx.db.dnd5e_item().insert(Dnd5eItem {
-        id: 0,
-        name,
-        source,
-        item_type,
-        rarity,
-        weight,
-        value_cp,
-        wondrous,
-        attunement,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_item(),
+        Dnd5eItem {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            item_type,
+            rarity,
+            weight,
+            value_cp,
+            wondrous,
+            attunement,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -189,16 +192,18 @@ pub fn seed_dnd5e_feat(
     prerequisite: Option<FeatPrereq>,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_feat, name, source);
-    ctx.db.dnd5e_feat().insert(Dnd5eFeat {
-        id: 0,
-        name,
-        source,
-        category,
-        prerequisite,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_feat(),
+        Dnd5eFeat {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            category,
+            prerequisite,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -208,14 +213,16 @@ pub fn seed_dnd5e_condition(
     source: String,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_condition, name, source);
-    ctx.db.dnd5e_condition().insert(Dnd5eCondition {
-        id: 0,
-        name,
-        source,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_condition(),
+        Dnd5eCondition {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -228,17 +235,19 @@ pub fn seed_dnd5e_background(
     language_proficiencies: Vec<LanguageGrant>,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_background, name, source);
-    ctx.db.dnd5e_background().insert(Dnd5eBackground {
-        id: 0,
-        name,
-        source,
-        skill_proficiencies,
-        tool_proficiencies,
-        language_proficiencies,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_background(),
+        Dnd5eBackground {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            skill_proficiencies,
+            tool_proficiencies,
+            language_proficiencies,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -252,18 +261,20 @@ pub fn seed_dnd5e_race(
     language_proficiencies: Vec<LanguageGrant>,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_race, name, source);
-    ctx.db.dnd5e_race().insert(Dnd5eRace {
-        id: 0,
-        name,
-        source,
-        size,
-        speed,
-        ability_bonuses,
-        language_proficiencies,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_race(),
+        Dnd5eRace {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            size,
+            speed,
+            ability_bonuses,
+            language_proficiencies,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -275,18 +286,18 @@ pub fn seed_dnd5e_optional_feature(
     prerequisite: Option<OptionalFeaturePrereq>,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_optional_feature, name, source);
-    ctx.db
-        .dnd5e_optional_feature()
-        .insert(Dnd5eOptionalFeature {
+    insert_seed_row!(
+        ctx.db.dnd5e_optional_feature(),
+        Dnd5eOptionalFeature {
             id: 0,
+            key: source_name_key(&source, &name),
             name,
             source,
             feature_types,
             prerequisite,
             description,
-        });
-    Ok(())
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -297,15 +308,17 @@ pub fn seed_dnd5e_action(
     time: String,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_action, name, source);
-    ctx.db.dnd5e_action().insert(Dnd5eAction {
-        id: 0,
-        name,
-        source,
-        time,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_action(),
+        Dnd5eAction {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            time,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -318,17 +331,19 @@ pub fn seed_dnd5e_language(
     origin: Option<String>,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_language, name, source);
-    ctx.db.dnd5e_language().insert(Dnd5eLanguage {
-        id: 0,
-        name,
-        source,
-        kind,
-        script,
-        origin,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_language(),
+        Dnd5eLanguage {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            kind,
+            script,
+            origin,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -338,14 +353,16 @@ pub fn seed_dnd5e_sense(
     source: String,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_sense, name, source);
-    ctx.db.dnd5e_sense().insert(Dnd5eSense {
-        id: 0,
-        name,
-        source,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_sense(),
+        Dnd5eSense {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -356,15 +373,17 @@ pub fn seed_dnd5e_skill(
     ability: Ability,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_skill, name, source);
-    ctx.db.dnd5e_skill().insert(Dnd5eSkill {
-        id: 0,
-        name,
-        source,
-        ability,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_skill(),
+        Dnd5eSkill {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            ability,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -384,23 +403,25 @@ pub fn seed_dnd5e_class(
     class_features: Vec<String>,
     subclass_title: Option<String>,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_class, name, source);
-    ctx.db.dnd5e_class().insert(Dnd5eClass {
-        id: 0,
-        name,
-        source,
-        edition,
-        hit_die,
-        saving_throws,
-        spellcasting_ability,
-        caster_progression,
-        prepared_spells_formula,
-        prepared_spells_progression,
-        cantrip_progression,
-        class_features,
-        subclass_title,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_class(),
+        Dnd5eClass {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            edition,
+            hit_die,
+            saving_throws,
+            spellcasting_ability,
+            caster_progression,
+            prepared_spells_formula,
+            prepared_spells_progression,
+            cantrip_progression,
+            class_features,
+            subclass_title,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -418,21 +439,23 @@ pub fn seed_dnd5e_subclass(
     cantrip_progression: Vec<u8>,
     subclass_features: Vec<String>,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_subclass, name, source);
-    ctx.db.dnd5e_subclass().insert(Dnd5eSubclass {
-        id: 0,
-        name,
-        short_name,
-        source,
-        class_name,
-        class_source,
-        edition,
-        spellcasting_ability,
-        caster_progression,
-        cantrip_progression,
-        subclass_features,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_subclass(),
+        Dnd5eSubclass {
+            id: 0,
+            key: subclass_key(&source, &class_source, &class_name, &short_name),
+            name,
+            short_name,
+            source,
+            class_name,
+            class_source,
+            edition,
+            spellcasting_ability,
+            caster_progression,
+            cantrip_progression,
+            subclass_features,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -445,17 +468,19 @@ pub fn seed_dnd5e_class_feature(
     level: u8,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_class_feature, name, source);
-    ctx.db.dnd5e_class_feature().insert(Dnd5eClassFeature {
-        id: 0,
-        name,
-        source,
-        class_name,
-        class_source,
-        level,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_class_feature(),
+        Dnd5eClassFeature {
+            id: 0,
+            key: class_feature_key(&source, &class_source, &class_name, level, &name),
+            name,
+            source,
+            class_name,
+            class_source,
+            level,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -471,11 +496,19 @@ pub fn seed_dnd5e_subclass_feature(
     level: u8,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_subclass_feature, name, source);
-    ctx.db
-        .dnd5e_subclass_feature()
-        .insert(Dnd5eSubclassFeature {
+    insert_seed_row!(
+        ctx.db.dnd5e_subclass_feature(),
+        Dnd5eSubclassFeature {
             id: 0,
+            key: subclass_feature_key(
+                &source,
+                &class_source,
+                &class_name,
+                &subclass_source,
+                &subclass_short_name,
+                level,
+                &name,
+            ),
             name,
             source,
             class_name,
@@ -484,8 +517,8 @@ pub fn seed_dnd5e_subclass_feature(
             subclass_source,
             level,
             description,
-        });
-    Ok(())
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -501,19 +534,21 @@ pub fn seed_dnd5e_object(
     description: String,
     action_description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_object, name, source);
-    ctx.db.dnd5e_object().insert(Dnd5eObject {
-        id: 0,
-        name,
-        source,
-        size,
-        object_type,
-        ac,
-        hp,
-        description,
-        action_description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_object(),
+        Dnd5eObject {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            size,
+            object_type,
+            ac,
+            hp,
+            description,
+            action_description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -532,22 +567,24 @@ pub fn seed_dnd5e_vehicle(
     hp: Option<u16>,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_vehicle, name, source);
-    ctx.db.dnd5e_vehicle().insert(Dnd5eVehicle {
-        id: 0,
-        name,
-        source,
-        vehicle_type,
-        size,
-        terrain,
-        crew_capacity,
-        passenger_capacity,
-        pace,
-        ac,
-        hp,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_vehicle(),
+        Dnd5eVehicle {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            vehicle_type,
+            size,
+            terrain,
+            crew_capacity,
+            passenger_capacity,
+            pace,
+            ac,
+            hp,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -565,21 +602,23 @@ pub fn seed_dnd5e_deity(
     symbol: Option<String>,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_deity, name, source);
-    ctx.db.dnd5e_deity().insert(Dnd5eDeity {
-        id: 0,
-        name,
-        source,
-        pantheon,
-        alignment,
-        category,
-        domains,
-        province,
-        title,
-        symbol,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_deity(),
+        Dnd5eDeity {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            pantheon,
+            alignment,
+            category,
+            domains,
+            province,
+            title,
+            symbol,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -590,15 +629,17 @@ pub fn seed_dnd5e_reward(
     reward_type: Option<String>,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_reward, name, source);
-    ctx.db.dnd5e_reward().insert(Dnd5eReward {
-        id: 0,
-        name,
-        source,
-        reward_type,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_reward(),
+        Dnd5eReward {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            reward_type,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -614,19 +655,21 @@ pub fn seed_dnd5e_trap_hazard(
     countermeasures: String,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_trap_hazard, name, source);
-    ctx.db.dnd5e_trap_hazard().insert(Dnd5eTrapHazard {
-        id: 0,
-        name,
-        source,
-        kind,
-        trap_hazard_type,
-        trigger,
-        effect,
-        countermeasures,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_trap_hazard(),
+        Dnd5eTrapHazard {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            kind,
+            trap_hazard_type,
+            trigger,
+            effect,
+            countermeasures,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -637,17 +680,17 @@ pub fn seed_dnd5e_char_creation_option(
     option_types: Vec<String>,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_char_creation_option, name, source);
-    ctx.db
-        .dnd5e_char_creation_option()
-        .insert(Dnd5eCharCreationOption {
+    insert_seed_row!(
+        ctx.db.dnd5e_char_creation_option(),
+        Dnd5eCharCreationOption {
             id: 0,
+            key: source_name_key(&source, &name),
             name,
             source,
             option_types,
             description,
-        });
-    Ok(())
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -662,18 +705,20 @@ pub fn seed_dnd5e_psionic(
     description: String,
     modes: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_psionic, name, source);
-    ctx.db.dnd5e_psionic().insert(Dnd5ePsionic {
-        id: 0,
-        name,
-        source,
-        kind,
-        order_name,
-        focus,
-        description,
-        modes,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_psionic(),
+        Dnd5ePsionic {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            kind,
+            order_name,
+            focus,
+            description,
+            modes,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -689,19 +734,21 @@ pub fn seed_dnd5e_recipe(
     ingredients: String,
     instructions: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_recipe, name, source);
-    ctx.db.dnd5e_recipe().insert(Dnd5eRecipe {
-        id: 0,
-        name,
-        source,
-        recipe_type,
-        dish_types,
-        diet,
-        serves,
-        ingredients,
-        instructions,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_recipe(),
+        Dnd5eRecipe {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            recipe_type,
+            dish_types,
+            diet,
+            serves,
+            ingredients,
+            instructions,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -718,20 +765,22 @@ pub fn seed_dnd5e_cult_boon(
     ability_text: Option<String>,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_cult_boon, name, source);
-    ctx.db.dnd5e_cult_boon().insert(Dnd5eCultBoon {
-        id: 0,
-        name,
-        source,
-        kind,
-        subtype,
-        goal,
-        cultists,
-        signature_spells,
-        ability_text,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_cult_boon(),
+        Dnd5eCultBoon {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            kind,
+            subtype,
+            goal,
+            cultists,
+            signature_spells,
+            ability_text,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -742,15 +791,17 @@ pub fn seed_dnd5e_deck(
     cards: Vec<String>,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_deck, name, source);
-    ctx.db.dnd5e_deck().insert(Dnd5eDeck {
-        id: 0,
-        name,
-        source,
-        cards,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_deck(),
+        Dnd5eDeck {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            cards,
+            description,
+        }
+    )
 }
 
 #[spacetimedb::reducer]
@@ -761,13 +812,15 @@ pub fn seed_dnd5e_variant_rule(
     rule_type: Option<String>,
     description: String,
 ) -> Result<(), String> {
-    skip_if_exists!(ctx, dnd5e_variant_rule, name, source);
-    ctx.db.dnd5e_variant_rule().insert(Dnd5eVariantRule {
-        id: 0,
-        name,
-        source,
-        rule_type,
-        description,
-    });
-    Ok(())
+    insert_seed_row!(
+        ctx.db.dnd5e_variant_rule(),
+        Dnd5eVariantRule {
+            id: 0,
+            key: source_name_key(&source, &name),
+            name,
+            source,
+            rule_type,
+            description,
+        }
+    )
 }

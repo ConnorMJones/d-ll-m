@@ -7,7 +7,7 @@ use super::normalize::{
     normalize_subclass_feature, normalize_trap_hazard, normalize_variant_rule, normalize_vehicle,
 };
 use super::report::{ImportReport, SectionReport};
-use super::seed::support::{json_files_with_prefix, read_json_file};
+use super::seed::support::{json_files_with_prefix, read_json_file, warn_skipped_class_sidekick};
 use super::types::{
     ActionFile, BackgroundFile, CharCreationOptionFile, ClassFile, ConditionFile, CultsBoonsFile,
     DeckFile, DeityFile, FeatFile, LanguageFile, MonsterFile, ObjectFile, OptionalFeatureFile,
@@ -51,6 +51,23 @@ pub fn validate_all(data_dir: &Path) -> ImportReport {
     }
 }
 
+fn validate_infallible<T>(
+    report: &mut SectionReport,
+    normalize: impl FnOnce(&mut SectionReport) -> T,
+) {
+    let _ = normalize(report);
+    report.imported();
+}
+
+fn validate_optional<T>(
+    report: &mut SectionReport,
+    normalize: impl FnOnce(&mut SectionReport) -> Option<T>,
+) {
+    if normalize(report).is_some() {
+        report.imported();
+    }
+}
+
 fn validate_spells(data_dir: &Path) -> SectionReport {
     let path = data_dir.join("spells");
     let mut report = SectionReport::new("spells");
@@ -67,8 +84,7 @@ fn validate_spells(data_dir: &Path) -> SectionReport {
 
         for raw in file.spell {
             report.note_seen();
-            let _ = normalize_spell(raw, &mut report);
-            report.imported();
+            validate_infallible(&mut report, |report| normalize_spell(raw, report));
         }
     }
 
@@ -92,9 +108,7 @@ fn validate_monsters(data_dir: &Path) -> SectionReport {
 
         for raw in file.monster {
             report.note_seen();
-            if normalize_monster(raw, &mut report).is_some() {
-                report.imported();
-            }
+            validate_optional(&mut report, |report| normalize_monster(raw, report));
         }
     }
 
@@ -117,9 +131,9 @@ fn validate_items(data_dir: &Path) -> SectionReport {
 
     for raw in file.item {
         report.note_seen();
-        if super::normalize::normalize_item(raw, &mut report).is_some() {
-            report.imported();
-        }
+        validate_optional(&mut report, |report| {
+            super::normalize::normalize_item(raw, report)
+        });
     }
 
     info!(count = report.imported, "validated items");
@@ -130,8 +144,7 @@ fn validate_classes(data_dir: &Path) -> SectionReport {
     validate_class_family(data_dir, "classes", |file, report| {
         for raw in file.classes {
             report.note_seen();
-            let _ = normalize_class(raw, report);
-            report.imported();
+            validate_infallible(report, |report| normalize_class(raw, report));
         }
     })
 }
@@ -140,8 +153,7 @@ fn validate_subclasses(data_dir: &Path) -> SectionReport {
     validate_class_family(data_dir, "subclasses", |file, report| {
         for raw in file.subclasses {
             report.note_seen();
-            let _ = normalize_subclass(raw, report);
-            report.imported();
+            validate_infallible(report, |report| normalize_subclass(raw, report));
         }
     })
 }
@@ -150,8 +162,7 @@ fn validate_class_features(data_dir: &Path) -> SectionReport {
     validate_class_family(data_dir, "class_features", |file, report| {
         for raw in file.class_features {
             report.note_seen();
-            let _ = normalize_class_feature(raw, report);
-            report.imported();
+            validate_infallible(report, |report| normalize_class_feature(raw, report));
         }
     })
 }
@@ -160,8 +171,7 @@ fn validate_subclass_features(data_dir: &Path) -> SectionReport {
     validate_class_family(data_dir, "subclass_features", |file, report| {
         for raw in file.subclass_features {
             report.note_seen();
-            let _ = normalize_subclass_feature(raw, report);
-            report.imported();
+            validate_infallible(report, |report| normalize_subclass_feature(raw, report));
         }
     })
 }
@@ -181,8 +191,7 @@ fn validate_actions(data_dir: &Path) -> SectionReport {
 
     for raw in file.action {
         report.note_seen();
-        let _ = normalize_action(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_action(raw, report));
     }
 
     info!(count = report.imported, "validated actions");
@@ -204,8 +213,7 @@ fn validate_feats(data_dir: &Path) -> SectionReport {
 
     for raw in file.feat {
         report.note_seen();
-        let _ = normalize_feat(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_feat(raw, report));
     }
 
     info!(count = report.imported, "validated feats");
@@ -227,8 +235,7 @@ fn validate_conditions(data_dir: &Path) -> SectionReport {
 
     for raw in file.condition.into_iter().chain(file.disease) {
         report.note_seen();
-        let _ = normalize_condition(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_condition(raw, report));
     }
 
     info!(count = report.imported, "validated conditions");
@@ -250,8 +257,7 @@ fn validate_backgrounds(data_dir: &Path) -> SectionReport {
 
     for raw in file.background {
         report.note_seen();
-        let _ = normalize_background(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_background(raw, report));
     }
 
     info!(count = report.imported, "validated backgrounds");
@@ -273,9 +279,7 @@ fn validate_races(data_dir: &Path) -> SectionReport {
 
     for raw in file.race {
         report.note_seen();
-        if normalize_race(raw, &mut report).is_some() {
-            report.imported();
-        }
+        validate_optional(&mut report, |report| normalize_race(raw, report));
     }
 
     info!(count = report.imported, "validated races");
@@ -297,8 +301,9 @@ fn validate_optional_features(data_dir: &Path) -> SectionReport {
 
     for raw in file.optionalfeature {
         report.note_seen();
-        let _ = normalize_optional_feature(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| {
+            normalize_optional_feature(raw, report)
+        });
     }
 
     info!(count = report.imported, "validated optional features");
@@ -320,8 +325,7 @@ fn validate_languages(data_dir: &Path) -> SectionReport {
 
     for raw in file.language {
         report.note_seen();
-        let _ = normalize_language(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_language(raw, report));
     }
 
     info!(count = report.imported, "validated languages");
@@ -343,8 +347,7 @@ fn validate_senses(data_dir: &Path) -> SectionReport {
 
     for raw in file.sense {
         report.note_seen();
-        let _ = normalize_sense(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_sense(raw, report));
     }
 
     info!(count = report.imported, "validated senses");
@@ -366,8 +369,7 @@ fn validate_skills(data_dir: &Path) -> SectionReport {
 
     for raw in file.skill {
         report.note_seen();
-        let _ = normalize_skill(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_skill(raw, report));
     }
 
     info!(count = report.imported, "validated skills");
@@ -389,8 +391,7 @@ fn validate_objects(data_dir: &Path) -> SectionReport {
 
     for raw in file.object {
         report.note_seen();
-        let _ = normalize_object(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_object(raw, report));
     }
 
     info!(count = report.imported, "validated objects");
@@ -412,8 +413,7 @@ fn validate_vehicles(data_dir: &Path) -> SectionReport {
 
     for raw in file.vehicle {
         report.note_seen();
-        let _ = normalize_vehicle(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_vehicle(raw, report));
     }
 
     info!(count = report.imported, "validated vehicles");
@@ -435,8 +435,7 @@ fn validate_deities(data_dir: &Path) -> SectionReport {
 
     for raw in file.deity {
         report.note_seen();
-        let _ = normalize_deity(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_deity(raw, report));
     }
 
     info!(count = report.imported, "validated deities");
@@ -458,8 +457,7 @@ fn validate_rewards(data_dir: &Path) -> SectionReport {
 
     for raw in file.reward {
         report.note_seen();
-        let _ = normalize_reward(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_reward(raw, report));
     }
 
     info!(count = report.imported, "validated rewards");
@@ -481,14 +479,16 @@ fn validate_trap_hazards(data_dir: &Path) -> SectionReport {
 
     for raw in file.trap {
         report.note_seen();
-        let _ = normalize_trap_hazard(raw, "trap", &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| {
+            normalize_trap_hazard(raw, "trap", report)
+        });
     }
 
     for raw in file.hazard {
         report.note_seen();
-        let _ = normalize_trap_hazard(raw, "hazard", &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| {
+            normalize_trap_hazard(raw, "hazard", report)
+        });
     }
 
     info!(count = report.imported, "validated trap hazards");
@@ -510,8 +510,9 @@ fn validate_char_creation_options(data_dir: &Path) -> SectionReport {
 
     for raw in file.charoption {
         report.note_seen();
-        let _ = normalize_char_creation_option(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| {
+            normalize_char_creation_option(raw, report)
+        });
     }
 
     info!(count = report.imported, "validated char creation options");
@@ -533,8 +534,7 @@ fn validate_psionics(data_dir: &Path) -> SectionReport {
 
     for raw in file.psionic {
         report.note_seen();
-        let _ = normalize_psionic(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_psionic(raw, report));
     }
 
     info!(count = report.imported, "validated psionics");
@@ -556,8 +556,7 @@ fn validate_recipes(data_dir: &Path) -> SectionReport {
 
     for raw in file.recipe {
         report.note_seen();
-        let _ = normalize_recipe(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_recipe(raw, report));
     }
 
     info!(count = report.imported, "validated recipes");
@@ -579,14 +578,16 @@ fn validate_cults_boons(data_dir: &Path) -> SectionReport {
 
     for raw in file.cult {
         report.note_seen();
-        let _ = normalize_cult_boon(raw, "cult", &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| {
+            normalize_cult_boon(raw, "cult", report)
+        });
     }
 
     for raw in file.boon {
         report.note_seen();
-        let _ = normalize_cult_boon(raw, "boon", &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| {
+            normalize_cult_boon(raw, "boon", report)
+        });
     }
 
     info!(count = report.imported, "validated cults and boons");
@@ -608,8 +609,7 @@ fn validate_decks(data_dir: &Path) -> SectionReport {
 
     for raw in file.deck {
         report.note_seen();
-        let _ = normalize_deck(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_deck(raw, report));
     }
 
     info!(count = report.imported, "validated decks");
@@ -631,8 +631,7 @@ fn validate_variant_rules(data_dir: &Path) -> SectionReport {
 
     for raw in file.variantrule {
         report.note_seen();
-        let _ = normalize_variant_rule(raw, &mut report);
-        report.imported();
+        validate_infallible(&mut report, |report| normalize_variant_rule(raw, report));
     }
 
     info!(count = report.imported, "validated variant rules");
@@ -654,6 +653,7 @@ fn validate_class_family(
 
     for (filename, path) in json_files_with_prefix(&path, "class-") {
         if filename == "class-sidekick.json" {
+            warn_skipped_class_sidekick(&mut report, section_name);
             continue;
         }
         let Some(file) = read_json_file::<ClassFile>(&path, &mut report) else {

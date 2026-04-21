@@ -11,6 +11,7 @@ use super::feat_prereq_type::FeatPrereq;
 #[sats(crate = __lib)]
 pub struct Dnd5EFeat {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub category: Option<FeatCategory>,
@@ -27,6 +28,7 @@ impl __sdk::InModule for Dnd5EFeat {
 /// Provides typed access to columns for query building.
 pub struct Dnd5EFeatCols {
     pub id: __sdk::__query_builder::Col<Dnd5EFeat, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5EFeat, String>,
     pub name: __sdk::__query_builder::Col<Dnd5EFeat, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EFeat, String>,
     pub category: __sdk::__query_builder::Col<Dnd5EFeat, Option<FeatCategory>>,
@@ -39,6 +41,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EFeat {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5EFeatCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             category: __sdk::__query_builder::Col::new(table_name, "category"),
@@ -54,6 +57,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EFeat {
 pub struct Dnd5EFeatIxCols {
     pub category: __sdk::__query_builder::IxCol<Dnd5EFeat, Option<FeatCategory>>,
     pub id: __sdk::__query_builder::IxCol<Dnd5EFeat, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5EFeat, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5EFeat {
@@ -62,6 +66,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5EFeat {
         Dnd5EFeatIxCols {
             category: __sdk::__query_builder::IxCol::new(table_name, "category"),
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

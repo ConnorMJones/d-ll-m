@@ -1,6 +1,7 @@
 mod query;
 use data_import::dnd5e as import_dnd5e;
 use dllm_server::connect;
+pub use query::parse_item_rarity_filter;
 use spacetimedb_sdk::DbContext;
 use std::path::Path;
 use tracing::info;

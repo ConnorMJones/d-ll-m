@@ -8,6 +8,7 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 #[sats(crate = __lib)]
 pub struct Dnd5EVariantRule {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub rule_type: Option<String>,
@@ -23,6 +24,7 @@ impl __sdk::InModule for Dnd5EVariantRule {
 /// Provides typed access to columns for query building.
 pub struct Dnd5EVariantRuleCols {
     pub id: __sdk::__query_builder::Col<Dnd5EVariantRule, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5EVariantRule, String>,
     pub name: __sdk::__query_builder::Col<Dnd5EVariantRule, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EVariantRule, String>,
     pub rule_type: __sdk::__query_builder::Col<Dnd5EVariantRule, Option<String>>,
@@ -34,6 +36,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EVariantRule {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5EVariantRuleCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             rule_type: __sdk::__query_builder::Col::new(table_name, "rule_type"),
@@ -47,6 +50,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EVariantRule {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5EVariantRuleIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5EVariantRule, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5EVariantRule, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5EVariantRule {
@@ -54,6 +58,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5EVariantRule {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5EVariantRuleIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

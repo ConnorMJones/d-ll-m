@@ -5,7 +5,6 @@ use dllm_bindings::{
 };
 use dllm_core::dnd5e as dnd;
 use spacetimedb_sdk::{DbContext, Table};
-use std::str::FromStr;
 use tracing::info;
 
 #[derive(Clone, Debug, Default)]
@@ -43,7 +42,7 @@ pub struct MonsterSummary {
 #[derive(Clone, Debug, Default)]
 pub struct ItemQuery {
     pub name: Option<String>,
-    pub rarity: Option<String>,
+    pub rarity: Option<dnd::ItemRarity>,
 }
 
 #[derive(Clone, Debug)]
@@ -116,9 +115,6 @@ pub fn query_items(conn: &DbConnection, query: ItemQuery) -> Vec<ItemSummary> {
     info!(count, "subscribed to items");
 
     let name = query.name.map(|value| value.to_lowercase());
-    let rarity = query
-        .rarity
-        .and_then(|value| dnd::ItemRarity::from_str(&value).ok());
 
     conn.db
         .dnd_5_e_item()
@@ -127,7 +123,8 @@ pub fn query_items(conn: &DbConnection, query: ItemQuery) -> Vec<ItemSummary> {
             let matches_name = name
                 .as_ref()
                 .is_none_or(|value| item.name.to_lowercase().contains(value));
-            let matches_rarity = rarity
+            let matches_rarity = query
+                .rarity
                 .as_ref()
                 .is_none_or(|value| convert::item_rarity_from_client(item.rarity) == *value);
             matches_name && matches_rarity

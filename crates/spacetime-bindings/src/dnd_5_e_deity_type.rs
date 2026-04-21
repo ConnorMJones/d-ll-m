@@ -10,6 +10,7 @@ use super::alignment_type::Alignment;
 #[sats(crate = __lib)]
 pub struct Dnd5EDeity {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub pantheon: Option<String>,
@@ -31,6 +32,7 @@ impl __sdk::InModule for Dnd5EDeity {
 /// Provides typed access to columns for query building.
 pub struct Dnd5EDeityCols {
     pub id: __sdk::__query_builder::Col<Dnd5EDeity, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5EDeity, String>,
     pub name: __sdk::__query_builder::Col<Dnd5EDeity, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EDeity, String>,
     pub pantheon: __sdk::__query_builder::Col<Dnd5EDeity, Option<String>>,
@@ -48,6 +50,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EDeity {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5EDeityCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             pantheon: __sdk::__query_builder::Col::new(table_name, "pantheon"),
@@ -67,6 +70,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EDeity {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5EDeityIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5EDeity, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5EDeity, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5EDeity {
@@ -74,6 +78,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5EDeity {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5EDeityIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

@@ -129,10 +129,41 @@ impl<'ctx> Dnd5EOptionalFeatureIdUnique<'ctx> {
     }
 }
 
+/// Access to the `key` unique index on the table `dnd_5_e_optional_feature`,
+/// which allows point queries on the field of the same name
+/// via the [`Dnd5EOptionalFeatureKeyUnique::find`] method.
+///
+/// Users are encouraged not to explicitly reference this type,
+/// but to directly chain method calls,
+/// like `ctx.db.dnd_5_e_optional_feature().key().find(...)`.
+pub struct Dnd5EOptionalFeatureKeyUnique<'ctx> {
+    imp: __sdk::UniqueConstraintHandle<Dnd5EOptionalFeature, String>,
+    phantom: std::marker::PhantomData<&'ctx super::RemoteTables>,
+}
+
+impl<'ctx> Dnd5EOptionalFeatureTableHandle<'ctx> {
+    /// Get a handle on the `key` unique index on the table `dnd_5_e_optional_feature`.
+    pub fn key(&self) -> Dnd5EOptionalFeatureKeyUnique<'ctx> {
+        Dnd5EOptionalFeatureKeyUnique {
+            imp: self.imp.get_unique_constraint::<String>("key"),
+            phantom: std::marker::PhantomData,
+        }
+    }
+}
+
+impl<'ctx> Dnd5EOptionalFeatureKeyUnique<'ctx> {
+    /// Find the subscribed row whose `key` column value is equal to `col_val`,
+    /// if such a row is present in the client cache.
+    pub fn find(&self, col_val: &String) -> Option<Dnd5EOptionalFeature> {
+        self.imp.find(col_val)
+    }
+}
+
 #[doc(hidden)]
 pub(super) fn register_table(client_cache: &mut __sdk::ClientCache<super::RemoteModule>) {
     let _table = client_cache.get_or_make_table::<Dnd5EOptionalFeature>("dnd_5_e_optional_feature");
     _table.add_unique_constraint::<u64>("id", |row| &row.id);
+    _table.add_unique_constraint::<String>("key", |row| &row.key);
 }
 
 #[doc(hidden)]

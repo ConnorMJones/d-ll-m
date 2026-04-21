@@ -554,3 +554,65 @@ pub struct AbilityScore {
     pub ability: Ability,
     pub minimum: u8,
 }
+
+fn key_part(raw: &str) -> String {
+    raw.trim().to_ascii_lowercase()
+}
+
+fn composite_key(parts: &[String]) -> String {
+    parts.join("::")
+}
+
+pub fn source_name_key(source: &str, name: &str) -> String {
+    composite_key(&[key_part(source), key_part(name)])
+}
+
+pub fn subclass_key(
+    source: &str,
+    class_source: &str,
+    class_name: &str,
+    short_name: &str,
+) -> String {
+    composite_key(&[
+        key_part(source),
+        key_part(class_source),
+        key_part(class_name),
+        key_part(short_name),
+    ])
+}
+
+pub fn class_feature_key(
+    source: &str,
+    class_source: &str,
+    class_name: &str,
+    level: u8,
+    name: &str,
+) -> String {
+    composite_key(&[
+        key_part(source),
+        key_part(class_source),
+        key_part(class_name),
+        level.to_string(),
+        key_part(name),
+    ])
+}
+
+pub fn subclass_feature_key(
+    source: &str,
+    class_source: &str,
+    class_name: &str,
+    subclass_source: &str,
+    subclass_short_name: &str,
+    level: u8,
+    name: &str,
+) -> String {
+    composite_key(&[
+        key_part(source),
+        key_part(class_source),
+        key_part(class_name),
+        key_part(subclass_source),
+        key_part(subclass_short_name),
+        level.to_string(),
+        key_part(name),
+    ])
+}

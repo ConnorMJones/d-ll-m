@@ -13,6 +13,7 @@ use super::speed_type::Speed;
 #[sats(crate = __lib)]
 pub struct Dnd5ERace {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub size: CreatureSize,
@@ -31,6 +32,7 @@ impl __sdk::InModule for Dnd5ERace {
 /// Provides typed access to columns for query building.
 pub struct Dnd5ERaceCols {
     pub id: __sdk::__query_builder::Col<Dnd5ERace, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5ERace, String>,
     pub name: __sdk::__query_builder::Col<Dnd5ERace, String>,
     pub source: __sdk::__query_builder::Col<Dnd5ERace, String>,
     pub size: __sdk::__query_builder::Col<Dnd5ERace, CreatureSize>,
@@ -45,6 +47,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ERace {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5ERaceCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             size: __sdk::__query_builder::Col::new(table_name, "size"),
@@ -64,6 +67,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ERace {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5ERaceIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5ERace, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5ERace, String>,
     pub size: __sdk::__query_builder::IxCol<Dnd5ERace, CreatureSize>,
 }
 
@@ -72,6 +76,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5ERace {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5ERaceIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
             size: __sdk::__query_builder::IxCol::new(table_name, "size"),
         }
     }

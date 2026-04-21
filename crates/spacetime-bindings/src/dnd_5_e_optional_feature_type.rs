@@ -11,6 +11,7 @@ use super::optional_feature_type_type::OptionalFeatureType;
 #[sats(crate = __lib)]
 pub struct Dnd5EOptionalFeature {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub feature_types: Vec<OptionalFeatureType>,
@@ -27,6 +28,7 @@ impl __sdk::InModule for Dnd5EOptionalFeature {
 /// Provides typed access to columns for query building.
 pub struct Dnd5EOptionalFeatureCols {
     pub id: __sdk::__query_builder::Col<Dnd5EOptionalFeature, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5EOptionalFeature, String>,
     pub name: __sdk::__query_builder::Col<Dnd5EOptionalFeature, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EOptionalFeature, String>,
     pub feature_types: __sdk::__query_builder::Col<Dnd5EOptionalFeature, Vec<OptionalFeatureType>>,
@@ -40,6 +42,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EOptionalFeature {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5EOptionalFeatureCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             feature_types: __sdk::__query_builder::Col::new(table_name, "feature_types"),
@@ -54,6 +57,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EOptionalFeature {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5EOptionalFeatureIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5EOptionalFeature, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5EOptionalFeature, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5EOptionalFeature {
@@ -61,6 +65,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5EOptionalFeature {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5EOptionalFeatureIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

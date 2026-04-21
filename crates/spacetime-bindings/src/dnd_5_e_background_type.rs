@@ -12,6 +12,7 @@ use super::tool_grant_type::ToolGrant;
 #[sats(crate = __lib)]
 pub struct Dnd5EBackground {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub skill_proficiencies: Vec<SkillGrant>,
@@ -29,6 +30,7 @@ impl __sdk::InModule for Dnd5EBackground {
 /// Provides typed access to columns for query building.
 pub struct Dnd5EBackgroundCols {
     pub id: __sdk::__query_builder::Col<Dnd5EBackground, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5EBackground, String>,
     pub name: __sdk::__query_builder::Col<Dnd5EBackground, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EBackground, String>,
     pub skill_proficiencies: __sdk::__query_builder::Col<Dnd5EBackground, Vec<SkillGrant>>,
@@ -42,6 +44,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EBackground {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5EBackgroundCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             skill_proficiencies: __sdk::__query_builder::Col::new(
@@ -63,6 +66,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EBackground {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5EBackgroundIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5EBackground, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5EBackground, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5EBackground {
@@ -70,6 +74,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5EBackground {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5EBackgroundIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

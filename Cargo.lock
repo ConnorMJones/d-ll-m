@@ -840,6 +840,7 @@ dependencies = [
  "dllm-server",
  "serde",
  "serde_json",
+ "spacetimedb-sdk",
  "tracing",
 ]
 
@@ -1401,6 +1402,7 @@ dependencies = [
  "clap",
  "data-import",
  "dllm-bindings",
+ "dllm-core",
  "dllm-server",
  "serde",
  "serde_json",

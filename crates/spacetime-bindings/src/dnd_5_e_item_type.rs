@@ -11,6 +11,7 @@ use super::item_type_type::ItemType;
 #[sats(crate = __lib)]
 pub struct Dnd5EItem {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub item_type: ItemType,
@@ -31,6 +32,7 @@ impl __sdk::InModule for Dnd5EItem {
 /// Provides typed access to columns for query building.
 pub struct Dnd5EItemCols {
     pub id: __sdk::__query_builder::Col<Dnd5EItem, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5EItem, String>,
     pub name: __sdk::__query_builder::Col<Dnd5EItem, String>,
     pub source: __sdk::__query_builder::Col<Dnd5EItem, String>,
     pub item_type: __sdk::__query_builder::Col<Dnd5EItem, ItemType>,
@@ -47,6 +49,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EItem {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5EItemCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             item_type: __sdk::__query_builder::Col::new(table_name, "item_type"),
@@ -66,6 +69,7 @@ impl __sdk::__query_builder::HasCols for Dnd5EItem {
 pub struct Dnd5EItemIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5EItem, u64>,
     pub item_type: __sdk::__query_builder::IxCol<Dnd5EItem, ItemType>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5EItem, String>,
     pub rarity: __sdk::__query_builder::IxCol<Dnd5EItem, ItemRarity>,
 }
 
@@ -75,6 +79,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5EItem {
         Dnd5EItemIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
             item_type: __sdk::__query_builder::IxCol::new(table_name, "item_type"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
             rarity: __sdk::__query_builder::IxCol::new(table_name, "rarity"),
         }
     }

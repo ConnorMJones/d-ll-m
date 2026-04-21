@@ -8,6 +8,7 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 #[sats(crate = __lib)]
 pub struct Dnd5ETrapHazard {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub kind: String,
@@ -27,6 +28,7 @@ impl __sdk::InModule for Dnd5ETrapHazard {
 /// Provides typed access to columns for query building.
 pub struct Dnd5ETrapHazardCols {
     pub id: __sdk::__query_builder::Col<Dnd5ETrapHazard, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5ETrapHazard, String>,
     pub name: __sdk::__query_builder::Col<Dnd5ETrapHazard, String>,
     pub source: __sdk::__query_builder::Col<Dnd5ETrapHazard, String>,
     pub kind: __sdk::__query_builder::Col<Dnd5ETrapHazard, String>,
@@ -42,6 +44,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ETrapHazard {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5ETrapHazardCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             kind: __sdk::__query_builder::Col::new(table_name, "kind"),
@@ -59,6 +62,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ETrapHazard {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5ETrapHazardIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5ETrapHazard, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5ETrapHazard, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5ETrapHazard {
@@ -66,6 +70,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5ETrapHazard {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5ETrapHazardIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

@@ -8,6 +8,7 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 #[sats(crate = __lib)]
 pub struct Dnd5ECharCreationOption {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub option_types: Vec<String>,
@@ -23,6 +24,7 @@ impl __sdk::InModule for Dnd5ECharCreationOption {
 /// Provides typed access to columns for query building.
 pub struct Dnd5ECharCreationOptionCols {
     pub id: __sdk::__query_builder::Col<Dnd5ECharCreationOption, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5ECharCreationOption, String>,
     pub name: __sdk::__query_builder::Col<Dnd5ECharCreationOption, String>,
     pub source: __sdk::__query_builder::Col<Dnd5ECharCreationOption, String>,
     pub option_types: __sdk::__query_builder::Col<Dnd5ECharCreationOption, Vec<String>>,
@@ -34,6 +36,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ECharCreationOption {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5ECharCreationOptionCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             option_types: __sdk::__query_builder::Col::new(table_name, "option_types"),
@@ -47,6 +50,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ECharCreationOption {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5ECharCreationOptionIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5ECharCreationOption, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5ECharCreationOption, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5ECharCreationOption {
@@ -54,6 +58,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5ECharCreationOption {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5ECharCreationOptionIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

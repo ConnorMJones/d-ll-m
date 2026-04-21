@@ -8,6 +8,7 @@ use spacetimedb_sdk::__codegen::{self as __sdk, __lib, __sats, __ws};
 #[sats(crate = __lib)]
 pub struct Dnd5ESubclassFeature {
     pub id: u64,
+    pub key: String,
     pub name: String,
     pub source: String,
     pub class_name: String,
@@ -27,6 +28,7 @@ impl __sdk::InModule for Dnd5ESubclassFeature {
 /// Provides typed access to columns for query building.
 pub struct Dnd5ESubclassFeatureCols {
     pub id: __sdk::__query_builder::Col<Dnd5ESubclassFeature, u64>,
+    pub key: __sdk::__query_builder::Col<Dnd5ESubclassFeature, String>,
     pub name: __sdk::__query_builder::Col<Dnd5ESubclassFeature, String>,
     pub source: __sdk::__query_builder::Col<Dnd5ESubclassFeature, String>,
     pub class_name: __sdk::__query_builder::Col<Dnd5ESubclassFeature, String>,
@@ -42,6 +44,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ESubclassFeature {
     fn cols(table_name: &'static str) -> Self::Cols {
         Dnd5ESubclassFeatureCols {
             id: __sdk::__query_builder::Col::new(table_name, "id"),
+            key: __sdk::__query_builder::Col::new(table_name, "key"),
             name: __sdk::__query_builder::Col::new(table_name, "name"),
             source: __sdk::__query_builder::Col::new(table_name, "source"),
             class_name: __sdk::__query_builder::Col::new(table_name, "class_name"),
@@ -62,6 +65,7 @@ impl __sdk::__query_builder::HasCols for Dnd5ESubclassFeature {
 /// Provides typed access to indexed columns for query building.
 pub struct Dnd5ESubclassFeatureIxCols {
     pub id: __sdk::__query_builder::IxCol<Dnd5ESubclassFeature, u64>,
+    pub key: __sdk::__query_builder::IxCol<Dnd5ESubclassFeature, String>,
 }
 
 impl __sdk::__query_builder::HasIxCols for Dnd5ESubclassFeature {
@@ -69,6 +73,7 @@ impl __sdk::__query_builder::HasIxCols for Dnd5ESubclassFeature {
     fn ix_cols(table_name: &'static str) -> Self::IxCols {
         Dnd5ESubclassFeatureIxCols {
             id: __sdk::__query_builder::IxCol::new(table_name, "id"),
+            key: __sdk::__query_builder::IxCol::new(table_name, "key"),
         }
     }
 }

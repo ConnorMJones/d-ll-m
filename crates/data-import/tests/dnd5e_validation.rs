@@ -21,6 +21,11 @@ fn validates_recent_dnd5e_reference_expansion_sections() {
             "section {section_name} imported no records: {section:#?}"
         );
         assert_eq!(
+            section.imported + section.skipped + section.failed,
+            section.seen,
+            "section {section_name} has inconsistent accounting: {section:#?}"
+        );
+        assert_eq!(
             section.failed, 0,
             "section {section_name} had failures: {section:#?}"
         );
