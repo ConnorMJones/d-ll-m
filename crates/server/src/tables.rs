@@ -12,6 +12,15 @@ pub struct User {
     pub online: bool,
 }
 
+#[spacetimedb::table(accessor = profile, public)]
+pub struct Profile {
+    #[primary_key]
+    pub identity: spacetimedb::Identity,
+    pub display_name: Option<String>,
+    pub created_at: spacetimedb::Timestamp,
+    pub last_seen_at: spacetimedb::Timestamp,
+}
+
 #[spacetimedb::table(accessor = message, public)]
 pub struct Message {
     #[primary_key]

@@ -1,6 +1,7 @@
 use dioxus::prelude::*;
 use dllm_client::{
     ClientConfig, ClientSnapshot, ConnectionStatus, DEFAULT_DATABASE_NAME, DEFAULT_URI, DllmClient,
+    StoredIdentity,
 };
 use std::time::Duration;
 
@@ -23,8 +24,10 @@ enum CompendiumTab {
 fn app() -> Element {
     let client = use_hook(DllmClient::new);
     let mut snapshot = use_signal(ClientSnapshot::default);
+    let mut stored_identities = use_signal(|| client.stored_identities());
     let mut uri = use_signal(|| DEFAULT_URI.to_string());
     let mut database_name = use_signal(|| DEFAULT_DATABASE_NAME.to_string());
+    let mut identity_label = use_signal(|| client.preferred_identity_label());
     let mut display_name = use_signal(String::new);
     let mut message_text = use_signal(String::new);
     let mut compendium_tab = use_signal(|| CompendiumTab::Spells);
@@ -37,6 +40,7 @@ fn app() -> Element {
             async move {
                 loop {
                     snapshot.set(client.snapshot());
+                    stored_identities.set(client.stored_identities());
                     tokio::time::sleep(Duration::from_millis(150)).await;
                 }
             }
@@ -116,6 +120,29 @@ fn app() -> Element {
                             disabled: is_connected,
                             oninput: move |e| database_name.set(e.value()),
                         }
+                        label { style: label_style(), "Local identity label" }
+                        input {
+                            style: input_style(),
+                            value: "{identity_label}",
+                            disabled: is_connected,
+                            oninput: move |e| identity_label.set(e.value()),
+                        }
+                        if !stored_identities().is_empty() {
+                            div { style: "display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 10px;",
+                                for stored in stored_identities() {
+                                    button {
+                                        key: "{stored.label}",
+                                        style: stored_identity_button_style(identity_label() == stored.label, stored.last_used),
+                                        disabled: is_connected,
+                                        onclick: {
+                                            let label = stored.label.clone();
+                                            move |_| identity_label.set(label.clone())
+                                        },
+                                        "{stored_identity_label(&stored)}"
+                                    }
+                                }
+                            }
+                        }
                         div { style: "display: flex; gap: 10px; margin-top: 14px;",
                             button {
                                 style: primary_button_style(),
@@ -124,6 +151,7 @@ fn app() -> Element {
                                     let _ = connect_client.connect(ClientConfig {
                                         uri: uri(),
                                         database_name: database_name(),
+                                        identity_label: identity_label(),
                                     });
                                 },
                                 "Connect"
@@ -137,6 +165,15 @@ fn app() -> Element {
                         }
 
                         h2 { style: "margin: 22px 0 8px;", "Identity" }
+                        if let Some(profile) = snapshot().local_profile.clone() {
+                            p { style: "margin: 0 0 8px; font-size: 13px; color: #5b544b;",
+                                "Profile: {profile.display_name().to_string()}"
+                            }
+                        } else {
+                            p { style: "margin: 0 0 8px; font-size: 13px; color: #5b544b;",
+                                "No profile name set yet."
+                            }
+                        }
                         input {
                             style: input_style(),
                             value: "{display_name}",
@@ -358,6 +395,28 @@ fn primary_button_style() -> &'static str {
 
 fn secondary_button_style() -> &'static str {
     "border: 1px solid rgba(50,40,30,0.18); border-radius: 999px; padding: 10px 16px; background: rgba(255,255,255,0.75); color: #1f1c18; font-weight: 600; cursor: pointer;"
+}
+
+fn stored_identity_button_style(active: bool, last_used: bool) -> &'static str {
+    match (active, last_used) {
+        (true, _) => {
+            "border: none; border-radius: 999px; padding: 6px 12px; background: #7f4b2a; color: #fffdf8; font-size: 12px; cursor: pointer;"
+        }
+        (false, true) => {
+            "border: 1px solid rgba(127,75,42,0.4); border-radius: 999px; padding: 6px 12px; background: rgba(127,75,42,0.08); color: #7f4b2a; font-size: 12px; cursor: pointer;"
+        }
+        (false, false) => {
+            "border: 1px solid rgba(50,40,30,0.18); border-radius: 999px; padding: 6px 12px; background: rgba(255,255,255,0.75); color: #1f1c18; font-size: 12px; cursor: pointer;"
+        }
+    }
+}
+
+fn stored_identity_label(stored: &StoredIdentity) -> String {
+    if stored.last_used {
+        format!("{} (last used)", stored.label)
+    } else {
+        stored.label.clone()
+    }
 }
 
 fn compendium_grid_style(columns: u8) -> String {

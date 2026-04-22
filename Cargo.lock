@@ -1361,6 +1361,8 @@ name = "dllm-client"
 version = "0.1.0"
 dependencies = [
  "dllm-bindings",
+ "serde",
+ "serde_json",
  "spacetimedb-sdk",
  "tracing",
 ]

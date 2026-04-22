@@ -5,5 +5,7 @@ edition.workspace = true
 
 [dependencies]
 dllm-bindings.workspace = true
+serde.workspace = true
+serde_json.workspace = true
 spacetimedb-sdk.workspace = true
 tracing.workspace = true

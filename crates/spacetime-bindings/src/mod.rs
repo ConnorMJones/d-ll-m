@@ -83,6 +83,8 @@ pub mod message_type;
 pub mod optional_feature_prereq_type;
 pub mod optional_feature_type_type;
 pub mod pact_boon_type;
+pub mod profile_table;
+pub mod profile_type;
 pub mod race_type;
 pub mod seed_dnd_5_e_action_reducer;
 pub mod seed_dnd_5_e_background_reducer;
@@ -201,6 +203,8 @@ pub use message_type::Message;
 pub use optional_feature_prereq_type::OptionalFeaturePrereq;
 pub use optional_feature_type_type::OptionalFeatureType;
 pub use pact_boon_type::PactBoon;
+pub use profile_table::*;
+pub use profile_type::Profile;
 pub use race_type::Race;
 pub use seed_dnd_5_e_action_reducer::seed_dnd_5_e_action;
 pub use seed_dnd_5_e_background_reducer::seed_dnd_5_e_background;
@@ -1063,6 +1067,7 @@ pub struct DbUpdate {
     dnd_5_e_variant_rule: __sdk::TableUpdate<Dnd5EVariantRule>,
     dnd_5_e_vehicle: __sdk::TableUpdate<Dnd5EVehicle>,
     message: __sdk::TableUpdate<Message>,
+    profile: __sdk::TableUpdate<Profile>,
     user: __sdk::TableUpdate<User>,
 }
 
@@ -1156,6 +1161,9 @@ impl TryFrom<__ws::v2::TransactionUpdate> for DbUpdate {
                 "message" => db_update
                     .message
                     .append(message_table::parse_table_update(table_update)?),
+                "profile" => db_update
+                    .profile
+                    .append(profile_table::parse_table_update(table_update)?),
                 "user" => db_update
                     .user
                     .append(user_table::parse_table_update(table_update)?),
@@ -1287,6 +1295,9 @@ impl __sdk::DbUpdate for DbUpdate {
         diff.message = cache
             .apply_diff_to_table::<Message>("message", &self.message)
             .with_updates_by_pk(|row| &row.id);
+        diff.profile = cache
+            .apply_diff_to_table::<Profile>("profile", &self.profile)
+            .with_updates_by_pk(|row| &row.identity);
         diff.user = cache
             .apply_diff_to_table::<User>("user", &self.user)
             .with_updates_by_pk(|row| &row.identity);
@@ -1380,6 +1391,9 @@ impl __sdk::DbUpdate for DbUpdate {
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "message" => db_update
                     .message
+                    .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
+                "profile" => db_update
+                    .profile
                     .append(__sdk::parse_row_list_as_inserts(table_rows.rows)?),
                 "user" => db_update
                     .user
@@ -1481,6 +1495,9 @@ impl __sdk::DbUpdate for DbUpdate {
                 "message" => db_update
                     .message
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
+                "profile" => db_update
+                    .profile
+                    .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
                 "user" => db_update
                     .user
                     .append(__sdk::parse_row_list_as_deletes(table_rows.rows)?),
@@ -1527,6 +1544,7 @@ pub struct AppliedDiff<'r> {
     dnd_5_e_variant_rule: __sdk::TableAppliedDiff<'r, Dnd5EVariantRule>,
     dnd_5_e_vehicle: __sdk::TableAppliedDiff<'r, Dnd5EVehicle>,
     message: __sdk::TableAppliedDiff<'r, Message>,
+    profile: __sdk::TableAppliedDiff<'r, Profile>,
     user: __sdk::TableAppliedDiff<'r, User>,
     __unused: std::marker::PhantomData<&'r ()>,
 }
@@ -1677,6 +1695,7 @@ impl<'r> __sdk::AppliedDiff<'r> for AppliedDiff<'r> {
             event,
         );
         callbacks.invoke_table_row_callbacks::<Message>("message", &self.message, event);
+        callbacks.invoke_table_row_callbacks::<Profile>("profile", &self.profile, event);
         callbacks.invoke_table_row_callbacks::<User>("user", &self.user, event);
     }
 }
@@ -2366,6 +2385,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         dnd_5_e_variant_rule_table::register_table(client_cache);
         dnd_5_e_vehicle_table::register_table(client_cache);
         message_table::register_table(client_cache);
+        profile_table::register_table(client_cache);
         user_table::register_table(client_cache);
     }
     const ALL_TABLE_NAMES: &'static [&'static str] = &[
@@ -2397,6 +2417,7 @@ impl __sdk::SpacetimeModule for RemoteModule {
         "dnd_5_e_variant_rule",
         "dnd_5_e_vehicle",
         "message",
+        "profile",
         "user",
     ];
 }

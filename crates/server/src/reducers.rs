@@ -18,15 +18,18 @@ macro_rules! insert_seed_row {
 
 #[spacetimedb::reducer(client_connected)]
 pub fn client_connected(ctx: &ReducerContext) {
+    let display_name = ensure_profile(ctx);
+
     if let Some(user) = ctx.db.user().identity().find(ctx.sender()) {
         ctx.db.user().identity().update(User {
             online: true,
+            name: display_name,
             ..user
         });
     } else {
         ctx.db.user().insert(User {
             identity: ctx.sender(),
-            name: None,
+            name: display_name,
             online: true,
         });
     }
@@ -34,6 +37,8 @@ pub fn client_connected(ctx: &ReducerContext) {
 
 #[spacetimedb::reducer(client_disconnected)]
 pub fn client_disconnected(ctx: &ReducerContext) {
+    touch_profile_last_seen(ctx);
+
     if let Some(user) = ctx.db.user().identity().find(ctx.sender()) {
         ctx.db.user().identity().update(User {
             online: false,
@@ -47,6 +52,7 @@ pub fn set_name(ctx: &ReducerContext, name: String) -> Result<(), String> {
     if name.is_empty() {
         return Err("Name cannot be empty".to_string());
     }
+    upsert_profile_name(ctx, Some(name.clone()));
     if let Some(user) = ctx.db.user().identity().find(ctx.sender()) {
         ctx.db.user().identity().update(User {
             name: Some(name),
@@ -70,6 +76,51 @@ pub fn send_message(ctx: &ReducerContext, text: String) -> Result<(), String> {
         sent: ctx.timestamp,
     });
     Ok(())
+}
+
+fn ensure_profile(ctx: &ReducerContext) -> Option<String> {
+    if let Some(profile) = ctx.db.profile().identity().find(ctx.sender()) {
+        let display_name = profile.display_name.clone();
+        ctx.db.profile().identity().update(Profile {
+            last_seen_at: ctx.timestamp,
+            ..profile
+        });
+        display_name
+    } else {
+        ctx.db.profile().insert(Profile {
+            identity: ctx.sender(),
+            display_name: None,
+            created_at: ctx.timestamp,
+            last_seen_at: ctx.timestamp,
+        });
+        None
+    }
+}
+
+fn touch_profile_last_seen(ctx: &ReducerContext) {
+    if let Some(profile) = ctx.db.profile().identity().find(ctx.sender()) {
+        ctx.db.profile().identity().update(Profile {
+            last_seen_at: ctx.timestamp,
+            ..profile
+        });
+    }
+}
+
+fn upsert_profile_name(ctx: &ReducerContext, display_name: Option<String>) {
+    if let Some(profile) = ctx.db.profile().identity().find(ctx.sender()) {
+        ctx.db.profile().identity().update(Profile {
+            display_name,
+            last_seen_at: ctx.timestamp,
+            ..profile
+        });
+    } else {
+        ctx.db.profile().insert(Profile {
+            identity: ctx.sender(),
+            display_name,
+            created_at: ctx.timestamp,
+            last_seen_at: ctx.timestamp,
+        });
+    }
 }
 
 #[spacetimedb::reducer]

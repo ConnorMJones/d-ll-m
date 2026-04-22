@@ -1,6 +1,6 @@
 use dllm_bindings::{
     dnd_5_e_item_type::Dnd5EItem, dnd_5_e_monster_type::Dnd5EMonster,
-    dnd_5_e_spell_type::Dnd5ESpell, message_type::Message, user_type::User,
+    dnd_5_e_spell_type::Dnd5ESpell, message_type::Message, profile_type::Profile, user_type::User,
 };
 use spacetimedb_sdk::{Identity, Timestamp};
 use std::{collections::BTreeMap, thread::JoinHandle};
@@ -19,6 +19,7 @@ pub enum ConnectionStatus {
 pub struct ClientConfig {
     pub uri: String,
     pub database_name: String,
+    pub identity_label: String,
 }
 
 impl Default for ClientConfig {
@@ -26,6 +27,7 @@ impl Default for ClientConfig {
         Self {
             uri: DEFAULT_URI.to_string(),
             database_name: DEFAULT_DATABASE_NAME.to_string(),
+            identity_label: "default".to_string(),
         }
     }
 }
@@ -35,6 +37,7 @@ pub struct ClientSnapshot {
     pub connection_status: ConnectionStatus,
     pub subscription_applied: bool,
     pub local_identity: Option<String>,
+    pub local_profile: Option<ProfileView>,
     pub users: Vec<UserView>,
     pub messages: Vec<MessageView>,
     pub spells: Vec<SpellView>,
@@ -53,6 +56,20 @@ pub struct UserView {
 impl UserView {
     pub fn display_name(&self) -> &str {
         self.name.as_deref().unwrap_or("anonymous")
+    }
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ProfileView {
+    pub identity: String,
+    pub display_name: Option<String>,
+    pub created_at: String,
+    pub last_seen_at: String,
+}
+
+impl ProfileView {
+    pub fn display_name(&self) -> &str {
+        self.display_name.as_deref().unwrap_or("anonymous")
     }
 }
 
@@ -124,6 +141,7 @@ pub struct RuntimeState {
     pub connection_status: ConnectionStatus,
     pub subscription_applied: bool,
     pub local_identity: Option<Identity>,
+    pub profiles: BTreeMap<String, ProfileRecord>,
     pub users: BTreeMap<String, UserRecord>,
     pub messages: Vec<MessageRecord>,
     pub spells: BTreeMap<u64, SpellRecord>,
@@ -137,6 +155,7 @@ impl RuntimeState {
         self.connection_status = ConnectionStatus::Disconnected;
         self.subscription_applied = false;
         self.local_identity = None;
+        self.profiles.clear();
         self.users.clear();
         self.messages.clear();
         self.spells.clear();
@@ -164,6 +183,25 @@ impl UserRecord {
 
     pub fn display_name(&self) -> String {
         self.name.clone().unwrap_or_else(|| "anonymous".to_string())
+    }
+}
+
+#[derive(Clone)]
+pub struct ProfileRecord {
+    pub identity: Identity,
+    pub display_name: Option<String>,
+    pub created_at: Timestamp,
+    pub last_seen_at: Timestamp,
+}
+
+impl ProfileRecord {
+    pub fn from_row(row: &Profile) -> Self {
+        Self {
+            identity: row.identity,
+            display_name: row.display_name.clone(),
+            created_at: row.created_at,
+            last_seen_at: row.last_seen_at,
+        }
     }
 }
 

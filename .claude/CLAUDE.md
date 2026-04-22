@@ -30,6 +30,14 @@ When resuming existing work:
 3. Read the relevant `design/*.md` docs before changing behavior or schema
 4. Check `git status --short` to identify in-flight user work before editing
 
+For larger multi-feature tracks:
+1. Prefer a dedicated folder under `temp/features/<track>/`
+2. Keep one numbered overview file like `00-overview.md` that defines execution order
+3. Create numbered per-feature plan files only for the next concrete features that are ready to
+   implement
+4. Leave later features as overview entries until earlier dependencies settle
+5. Move completed plan files into `temp/completed/` when the work is done
+
 ## Tech Stack
 
 - **SpacetimeDB** - Server state, persistence, real-time sync

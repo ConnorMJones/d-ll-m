@@ -1,15 +1,16 @@
 mod state;
+mod storage;
 
 use dllm_bindings::{
     DbConnection, dnd_5_e_item_table::Dnd5EItemTableAccess,
     dnd_5_e_monster_table::Dnd5EMonsterTableAccess, dnd_5_e_spell_table::Dnd5ESpellTableAccess,
-    message_table::MessageTableAccess, send_message_reducer::send_message,
-    set_name_reducer::set_name, user_table::UserTableAccess,
+    message_table::MessageTableAccess, profile_table::ProfileTableAccess,
+    send_message_reducer::send_message, set_name_reducer::set_name, user_table::UserTableAccess,
 };
 use spacetimedb_sdk::{DbContext, Identity, Table, TableWithPrimaryKey, Timestamp};
 use state::{
-    ConnectionRuntime, ItemRecord, MessageRecord, MonsterRecord, RuntimeState, SpellRecord,
-    UserRecord,
+    ConnectionRuntime, ItemRecord, MessageRecord, MonsterRecord, ProfileRecord, RuntimeState,
+    SpellRecord, UserRecord,
 };
 use std::{
     fmt,
@@ -18,9 +19,10 @@ use std::{
 use tracing::{error, info};
 
 pub use state::{
-    ClientConfig, ClientSnapshot, ConnectionStatus, ItemView, MessageView, MonsterView, SpellView,
-    UserView,
+    ClientConfig, ClientSnapshot, ConnectionStatus, ItemView, MessageView, MonsterView,
+    ProfileView, SpellView, UserView,
 };
+pub use storage::{IdentityStore, StoredIdentity};
 
 pub const DEFAULT_URI: &str = "http://127.0.0.1:3033";
 pub const DEFAULT_DATABASE_NAME: &str = "dllm";
@@ -75,21 +77,45 @@ impl DllmClient {
     pub fn connect(&self, config: ClientConfig) -> Result<(), ClientError> {
         self.disconnect().ok();
 
+        if config.identity_label.trim().is_empty() {
+            self.record_error("identity label cannot be empty".to_string());
+            return Err(ClientError::Request(
+                "identity label cannot be empty".to_string(),
+            ));
+        }
+
         {
             let mut state = self.inner.state.lock().unwrap();
             state.reset_for_connect();
             state.connection_status = ConnectionStatus::Connecting;
         }
 
+        let identity_label = config.identity_label.trim().to_string();
+        let store = IdentityStore::default_store();
+        let token = if let Some(store) = store.as_ref() {
+            store.load_token(&identity_label).map_err(|err| {
+                self.record_error(err.clone());
+                ClientError::Request(err)
+            })?
+        } else {
+            None
+        };
+
         let shared_state = self.inner.state.clone();
         let conn = DbConnection::builder()
             .with_uri(&config.uri)
             .with_database_name(&config.database_name)
-            .on_connect(move |_ctx, identity, _token| {
+            .with_token(token)
+            .on_connect(move |_ctx, identity, token| {
                 let mut state = shared_state.lock().unwrap();
                 state.connection_status = ConnectionStatus::Connected;
                 state.local_identity = Some(identity);
                 state.last_error = None;
+                if let Some(store) = store.as_ref() {
+                    if let Err(err) = store.save_token(&identity_label, token) {
+                        state.last_error = Some(err);
+                    }
+                }
             })
             .on_connect_error({
                 let shared_state = self.inner.state.clone();
@@ -141,6 +167,7 @@ impl DllmClient {
             })
             .subscribe([
                 "SELECT * FROM user",
+                "SELECT * FROM profile",
                 "SELECT * FROM message",
                 "SELECT * FROM dnd_5_e_spell",
                 "SELECT * FROM dnd_5_e_monster",
@@ -238,6 +265,18 @@ impl DllmClient {
         state.snapshot()
     }
 
+    pub fn stored_identities(&self) -> Vec<StoredIdentity> {
+        IdentityStore::default_store()
+            .and_then(|store| store.list().ok())
+            .unwrap_or_default()
+    }
+
+    pub fn preferred_identity_label(&self) -> String {
+        IdentityStore::default_store()
+            .map(|store| store.preferred_label())
+            .unwrap_or_else(|| ClientConfig::default().identity_label)
+    }
+
     fn record_error(&self, message: String) {
         let mut state = self.inner.state.lock().unwrap();
         state.last_error = Some(message);
@@ -245,6 +284,36 @@ impl DllmClient {
 }
 
 fn register_callbacks(conn: &DbConnection, shared_state: Arc<Mutex<RuntimeState>>) {
+    conn.db.profile().on_insert({
+        let shared_state = shared_state.clone();
+        move |_ctx, profile| {
+            shared_state.lock().unwrap().profiles.insert(
+                identity_key(&profile.identity),
+                ProfileRecord::from_row(profile),
+            );
+        }
+    });
+    conn.db.profile().on_update({
+        let shared_state = shared_state.clone();
+        move |_ctx, _old, new| {
+            shared_state
+                .lock()
+                .unwrap()
+                .profiles
+                .insert(identity_key(&new.identity), ProfileRecord::from_row(new));
+        }
+    });
+    conn.db.profile().on_delete({
+        let shared_state = shared_state.clone();
+        move |_ctx, profile| {
+            shared_state
+                .lock()
+                .unwrap()
+                .profiles
+                .remove(&identity_key(&profile.identity));
+        }
+    });
+
     conn.db.user().on_insert({
         let shared_state = shared_state.clone();
         move |_ctx, user| {
@@ -426,11 +495,25 @@ impl RuntimeState {
             connection_status: self.connection_status,
             subscription_applied: self.subscription_applied,
             local_identity: self.local_identity.as_ref().map(identity_key),
+            local_profile: self.local_identity.as_ref().and_then(|identity| {
+                self.profiles
+                    .get(&identity_key(identity))
+                    .map(|profile| ProfileView {
+                        identity: identity_key(&profile.identity),
+                        display_name: profile.display_name.clone(),
+                        created_at: timestamp_text(&profile.created_at),
+                        last_seen_at: timestamp_text(&profile.last_seen_at),
+                    })
+            }),
             users: users
                 .into_iter()
                 .map(|u| UserView {
                     identity: identity_key(&u.identity),
-                    name: u.name,
+                    name: self
+                        .profiles
+                        .get(&identity_key(&u.identity))
+                        .and_then(|profile| profile.display_name.clone())
+                        .or(u.name),
                     online: u.online,
                 })
                 .collect(),
@@ -440,9 +523,14 @@ impl RuntimeState {
                     id: m.id,
                     sender_identity: identity_key(&m.sender),
                     sender_name: self
-                        .users
+                        .profiles
                         .get(&identity_key(&m.sender))
-                        .and_then(|u| u.name.clone())
+                        .and_then(|profile| profile.display_name.clone())
+                        .or_else(|| {
+                            self.users
+                                .get(&identity_key(&m.sender))
+                                .and_then(|u| u.name.clone())
+                        })
                         .unwrap_or_else(|| "anonymous".to_string()),
                     text: m.text,
                     sent: timestamp_text(&m.sent),
